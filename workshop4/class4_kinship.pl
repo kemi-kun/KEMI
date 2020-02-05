@@ -144,7 +144,6 @@ sister(X,Y) :- sibling(X,Y), female(X).
 brother(X,Y) :- sibling(X,Y), male(X).
 husband(X,Y) :- spouse(X,Y), male(X).
 wife(X,Y) :- spouse(X,Y), female(X).
-
 cousin(X,Y) :- child(X,Z), sibling(Z,W), parent(W,Y).
 niece(X,Y) :- daughter(X,Z), sibling(Z,Y).
 niece(X,Y) :- daughter(X,Z), sibling(Z,W), spouse(W,Y).
@@ -152,13 +151,14 @@ nephew(X,Y) :- son(X,Z), sibling(Z,Y).
 nephew(X,Y) :- son(X,Z), sibling(Z,W), spouse(W,Y).
 grandmother(X,Y) :- mother(X,Z), parent(Z,Y).
 grandfather(X,Y) :- father(X,Z), parent(Z,Y).
-
 aunt(X,Y) :- sister(X,Z), parent(Z,Y).
 aunt(X,Y) :- wife(X,Z), uncle(Z,Y).
 uncle(X,Y) :- brother(X,Z), parent(Z,Y).
 uncle(X,Y) :- husband(X,Z), aunt(Z,Y).
 father-in-law(X,Y) :- father(X,Z), spouse(Z,Y).
 mother-in-law(X,Y) :- mother(X,Z), spouse(Z,Y).
+
+% Tests
 
 :- begin_tests(test).
 
