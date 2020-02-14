@@ -146,7 +146,7 @@ Prolog is used in artificial intelligence applications such as natural language 
     _or in DCG as:_
 
     ```prolog
-    sentence --noun_clause, verb_clause.
+    sentence --> noun_clause, verb_clause.
     ?- sentence(S,[]).
     ```
 
@@ -424,185 +424,24 @@ Prolog provides the standard arithmetic operations as summarized in the followin
 
 Besides the usual boolean predicates, Prolog provides more general comparison operators which compare terms and predicates to test for unifiability and whether terms are identical.
 
-<center>
 
-<table>
-
-<tbody>
-
-<tr>
-
-<td>SYMBOL</td>
-
-<td>OPERATION</td>
-
-<td>ACTION</td>
-
-</tr>
-
-<tr>
-
-<td>A ?= B</td>
-
-<td>unifiable</td>
-
-<td>A and B are unifiable but</td>
-
-<td></td>
-
-<td>does not unify A and B</td>
-
-</tr>
-
-<tr>
-
-<td>A = B</td>
-
-<td>unify</td>
-
-<td>unifys A and B if possible</td>
-
-</tr>
-
-<tr>
-
-<td>A \+= B</td>
-
-<td>not unifiable</td>
-
-<td></td>
-
-</tr>
-
-<tr>
-
-<td>A == B</td>
-
-<td>identical</td>
-
-<td>does not unify A and B</td>
-
-</tr>
-
-<tr>
-
-<td>A \+== B</td>
-
-<td>not identical</td>
-
-<td></td>
-
-</tr>
-
-<tr>
-
-<td>A =:= B</td>
-
-<td>equal (value)</td>
-
-<td>evaluates A and B to</td>
-
-<td></td>
-
-<td>determine if equal</td>
-
-</tr>
-
-<tr>
-
-<td>A =\+= B</td>
-
-<td>not equal (value)</td>
-
-<td></td>
-
-</tr>
-
-<tr>
-
-<td>A < B</td>
-
-<td>less than (numeric)</td>
-
-<td></td>
-
-</tr>
-
-<tr>
-
-<td>A =< B</td>
-
-<td>less or equal (numeric)</td>
-
-<td></td>
-
-</tr>
-
-<tr>
-
-<td>A B</td>
-
-<td>greater than (numeric)</td>
-
-<td></td>
-
-</tr>
-
-<tr>
-
-<td>A >= B</td>
-
-<td>greater or equal (numeric)</td>
-
-<td></td>
-
-</tr>
-
-<tr>
-
-<td>A @< B</td>
-
-<td>less than (terms)</td>
-
-<td></td>
-
-</tr>
-
-<tr>
-
-<td>A @=< B</td>
-
-<td>less or equal (terms)</td>
-
-<td></td>
-
-</tr>
-
-<tr>
-
-<td>A @B</td>
-
-<td>greater than (terms)</td>
-
-<td></td>
-
-</tr>
-
-<tr>
-
-<td>A @>= B</td>
-
-<td>greater or equal (terms)</td>
-
-<td></td>
-
-</tr>
-
-</tbody>
-
-</table>
-
-</center>
+| SYMBOL   | OPERATION     | ACTION |
+|----------|---------------|--------|
+| A ?= B   | unifiable     | A and B are unifiable but does not unify A and B
+| A = B    | unify         | unifys A and B if possible
+| A \+= B  | not unifiable | 
+| A == B   | identical     | does not unify A and B
+| A \+== B | not identical | 
+| A =:= B  | equal (value) | evaluates A and B to determine if equal
+| A =\+= B | not equal (value)          |
+| A < B    | less than (numeric)        |
+| A =< B   | less or equal (numeric)    |
+| A > B    | greater than (numeric)     |
+| A >= B   | greater or equal (numeric) |
+| A @< B   | less than (terms)          |
+| A @=< B  | less or equal (terms)      |
+| A @> B   | greater than (terms)       |
+| A @>= B  | greater or equal (terms)   |
 
 For example, the following are all true.
 
@@ -754,7 +593,7 @@ fac(N,F) :- N 0, M is N - 1,
         fac(M,Fm), F is N * Fm.
 ```
 
-The second rule states that if `N` 0, `M = N - 1`, `Fm` is `(N-1)!`, and `F = N * Fm`, then `F` is `N!`. Notice how ``is`' is used. In this example it resembles an assignment operator however, it may not be used to reassign a variable to a new value. I the logical sense, the order of the clauses in the body of a rule are irrelevant however, the order may matter in a practical sense. `M` must not be a variable in the recursive call otherwise an infinite loop will result. Much of the clumsiness of this definition comes from the fact that `fac` is defined as a relation and thus it cannot be used in an expression. Relations are commonly defined using multiple rules and the order of the rules may determine the result. In this case the rule order is irrelevant since, for each value of `N` only one rule is applicable. Here are the Prolog equivalent of the definitions of the gcd function, Fibonacci function and ackerman's function.
+The second rule states that if `N` 0, `M = N - 1`, `Fm` is `(N-1)!`, and `F = N * Fm`, then `F` is `N!`. Notice how "is" is used. In this example it resembles an assignment operator however, it may not be used to reassign a variable to a new value. I the logical sense, the order of the clauses in the body of a rule are irrelevant however, the order may matter in a practical sense. `M` must not be a variable in the recursive call otherwise an infinite loop will result. Much of the clumsiness of this definition comes from the fact that `fac` is defined as a relation and thus it cannot be used in an expression. Relations are commonly defined using multiple rules and the order of the rules may determine the result. In this case the rule order is irrelevant since, for each value of `N` only one rule is applicable. Here are the Prolog equivalent of the definitions of the gcd function, Fibonacci function and ackerman's function.
 
 ```prolog
 gcd(A,B,GCD) :- A = B, GCD = A.
@@ -864,8 +703,8 @@ Lists are the basic data structure used in logic (and functional) programming. L
 Here is a recursive definition of the list data structure as found in Prolog.
 
 ```prolog
-List --[ ]
-List --[Element|List]
+List --> [ ]
+List --> [Element|List]
 ```
 
 Here are some examples of list representation, the first is the empty list.
@@ -990,13 +829,13 @@ append([X1|L1],L2, [X1|L3]) :- append(L1,L2,L3).
 
 The first rule is the base case. The second rule is the inductive case. In effect the second rule says that
 
-```prolog
+<pre>
 if L1 = [x<sub>2</sub>,...,x<sub>m</sub>],
       L2 = [y<sub>1</sub>,...,y<sub>n</sub>] and 
       L3 = [x<sub>2</sub>,...,x<sub>m</sub>,y<sub>1</sub>,...,y<sub>n</sub>],
 then [x<sub>1</sub>,x<sub>2</sub>,...,x<sub>m</sub>,y<sub>1</sub>,...,y<sub>n</sub>], is the result of
 appending  [x<sub>1</sub>,x<sub>2</sub>,...,x<sub>m</sub>] and L2.
-```
+</pre>
 
 The append relation is quite flexible. It can be used to determine if an object is an element of a list, if a list is a prefix of a list and if a list is a suffix of a list.
 
@@ -1044,7 +883,7 @@ insert(X,[Y|L],[Y|IL]) :-  X Y, insert(X,L,IL).
 
 ## <a name="iteration"></a>Iteration
 
-Recursion is the only iterative method available in Prolog. However, tail recursion can often be implemented as iteration. The following definition of the factorial function is an `iterative' definition because it is `tail recursive.' It corresponds to an implementation using a while-loop in an imperative programming language.
+Recursion is the only iterative method available in Prolog. However, tail recursion can often be implemented as iteration. The following definition of the factorial function is an 'iterative' definition because it is 'tail recursive.' It corresponds to an implementation using a while-loop in an imperative programming language.
 
 ```prolog
 fac(0,1).
@@ -1221,77 +1060,77 @@ action(OldBalance,Transaction) :- Transaction \+= 0,
 
 ```prolog
 % Prompts 
-initialbalance(Balance) :- write('Enter initial balance: \'),
+initialbalance(Balance) :- write('Enter initial balance: '),
    read(Balance).
 
 transaction(Transaction) :- 
    write('Enter Transaction, '),
     write('- for withdrawal, 0 to terminate): '),
    read(Transaction).
-finalbalance(Balance) :- write('Your final balance is: \'),
+finalbalance(Balance) :- write('Your final balance is: '),
    write(Balance), nl.
 ```
 
 #### Files
 
-<dt>see(File)
-<dd>Current input file is now File.
+`see(File)`  
+Current input file is now File.
 
-<dt>seeing(File)
-<dd>File is unified with the name of the current input file.
+`seeing(File)`  
+File is unified with the name of the current input file.
 
-<dt>seen
-<dd>Closes the current input file.
+`seen`  
+Closes the current input file.
 
-<dt>tell(File)
-<dd>Current output file is now File.
+`tell(File)`  
+Current output file is now File.
 
-<dt>telling(File)
-<dd>File is unified with the name of the current output file.
+`telling(File)`  
+File is unified with the name of the current output file.
 
-<dt>told
-<dd>Closes the current output file.</dd>
+`told`  
+Closes the current output file.
 
 #### Term I/O
 
-<dt>read(Term)
-<dd>Reads next full-stop (period) delimited term from the current input stream, if eof then returns the atom 'end_of_file'.
+`read(Term)`  
+Reads next full-stop (period) delimited term from the current input stream, if eof then returns the atom 'end_of_file'.
 
-<dt>write(Term)
-<dd>Writes a term to the current output stream.
+`write(Term)`  
+Writes a term to the current output stream.
 
-<dt>print(Term)
-<dd>Writes a term to the current output stream. Uses a user defined predicate portray/1 to write the term, otherwise uses write.
+`print(Term)`  
+Writes a term to the current output stream. Uses a user defined predicate portray/1 to write the term, otherwise uses write.
 
-<dt>writeq(Term)
-<dd>Writes a term to the current output stream in a form aceptable as input to read.</dd>
+`writeq(Term)`  
+Writes a term to the current output stream in a form aceptable as input to read.</dd>
 
 #### Character I/O
 
-<dt>get(N)
-<dd>N is the ASCII code of the next non-blank printable character on the current input stream. If end of file, then a -1 is returned.
+`get(N)`  
+N is the ASCII code of the next non-blank printable character on the current input stream. If end of file, then a -1 is returned.
 
-<dt>put(N)
-<dd>Puts the character corresponding to ASCII code N on the current output stream.
+`put(N)`  
+Puts the character corresponding to ASCII code N on the current output stream.
 
-<dt>nl
-<dd>Causes the next output to be on a new line.
+`nl`  
+Causes the next output to be on a new line.
 
-<dt>tab(N)
-<dd>N spaces are output to the current output stream.</dd>
+`tab(N)`  
+N spaces are output to the current output stream.
 
 #### Program Access
 
-<dt>consult(SourceFile)
-<dd>Loads SourceFile into the interpreter but, if a predicate is defined accross two or more files, consulting them will result in only the clauses in the file last consulted being used.
+`consult(SourceFile)`  
+Loads SourceFile into the interpreter but, if a predicate is defined accross two or more files, consulting them will result in only the clauses in the file last consulted being used.
 
-<dt>reconsult(File)
-<dd>available in some systems.</dd>
+`reconsult(File)`  
+available in some systems.
 
 #### Other
 
-<dt>name(Atom,ASCII_List)
-<dd>the conversion routine between lists of ASCII codes and atoms.</dd>
+`name(Atom,ASCII_List)`  
+the conversion routine between lists of ASCII codes and atoms.
 
 display, prompt
 
@@ -1340,23 +1179,23 @@ lastword('?').
 
 ### Program Access and Manipulation
 
-<dt>clause(Head,Body)  
+`clause(Head,Body)`  
 
-<dt>assert(Clause)
-<dd>adds clause to the end of the database
+`assert(Clause)`
+adds clause to the end of the database
 
-<dt>asserta(Clause)  
-<dt>retract(Clause_Head)  
-<dt>consult(File_Name)
+`asserta(Clause)`  
+`retract(Clause_Head)`  
+`consult(File_Name)`
 
 ### System Access
 
-<dt>system(Command)
-<dd>Execute Command in the operating system</dd>
+`system(Command)`  
+Execute Command in the operating system
 
 ## <a name="style"></a>Style and Layout
 
-Objective
+Objective  
 Outline
 *   Style and Layout
 *   Debugging
@@ -1364,17 +1203,25 @@ Outline
 Some conventions for comments.
 
 *   Long comments should precede the code they refer to while short comments should be interspersed with the code itself.
+
 *   Program comments should describe what the program does, how it is used (goal predicate and expected results), limitations, system dependent features, performance, and examples of using the program.
+
 *   Predicate comments explain the purpose of the predicate, the meaning and relationship among the arguments, and any restrictions as to argument type.
+
 *   Clause comments add to the description of the case the particular clause deals with and is usefull for documenting cuts.
 
 Some conventions for program layout
 
 *   Group clauses belonging to a relation or ADT together.
+
 *   Clauses should be short. Their body should contain no more than a few goals.
+
 *   Make use of indentation to improve the readability of the body of a clause.
+
 *   Mnemonic names for relations and variables should be used. Names should indicate the meaning of relations and the role of data objects.
+
 *   Clearly separate the clauses defining different relations.
+
 *   The cut operator should be used with care. The use of `red' cuts should be limited to clearly defined mutually exclusive alternatives.
 
 Illustration
@@ -1407,8 +1254,8 @@ trace/notrace, spy/nospy, programmer inserted debugging aids -- write predicates
 
 ## <a name="negation"></a>Negation and Cuts
 
-<dt>Objective
-<dt>Outline
+Objective  
+Outline
 
 *   Negation as failure
 *   Green Cuts
@@ -1435,8 +1282,8 @@ A :- B1,...,Bn,!,Bn1\. % prevents backtracking
 
 ## <a name="dcg"></a>Definite Clause Grammars
 
-<dt>Objective:
-<dt>Outline
+Objective:  
+Outline
 
 *   The parsing problem: Context-free grammars; Construct a parse tree for a sentence given the context-free grammar.
 *   Representing the Parsing Problem in Prolog
@@ -1451,7 +1298,7 @@ Prolog originated from attempts to use logic to express grammar rules and formal
 A context free grammar is a set of rules of the form:
 
 ```
-<nonterminal> -> </nonterminal>
+<nonterminal> --> </nonterminal>
 ```
 
 where `nonterminal` is a nonterminal and `body` is a sequence of one or more items. Each item is either a nonterminal symbol or a sequence of terminal symbols. The meaning of the rule is that the `body` is a possible form for an object of type `nonterminal`.
@@ -1611,8 +1458,8 @@ determiner(X,Prop,Assn,    all(X,Prop =Assn)) --> [every].
 noun(X,man(X))  --> [man].
 noun(X,woman(X))  --> [woman].
 
-intrans_verb(X,paints(X))  --[paints].
-intrans_verb(X,dances(X))  --[dances].
+intrans_verb(X,paints(X))  --> [paints].
+intrans_verb(X,dances(X))  --> [dances].
 
 ```
 
@@ -1681,8 +1528,8 @@ a calculator!!
 
 ## <a name="inc"></a>Incomplete Data Structures
 
-<dt>Objective
-<dt>Outline
+Objective  
+Outline
 
 *   Difference Lists
 *   Dictionaries
@@ -1715,8 +1562,8 @@ inorder(btree(Item,L_T,R_T),Inorder) :-
 
 Meta-programs treat other programs as data. They analyze, transform, and simulate other programs. Prolog clauses may be passed as arguments, added and deleted from the Prolog data base, and may be constructed and then executed by a Prolog program. Implementations may require that the functor and arity of the clause be previously declared to be a dynamic type.
 
-<dt>Objective
-<dt>Outline
+Objective  
+Outline
 
 *   Meta-logical Type Predicates
 *   Assert/Retract
@@ -1724,20 +1571,20 @@ Meta-programs treat other programs as data. They analyze, transform, and simulat
 
 ### Meta-Logical Type Predicates
 
-<dt>var(V)
-<dd>Tests whether V is a variable.
+`var(V)`  
+Tests whether V is a variable.
 
-<dt>nonvar(NV)
-<dd>Tests whether NV is a non-variable term.
+`nonvar(NV)`  
+Tests whether NV is a non-variable term.
 
-<dt>atom(A)
-<dd>Tests whether A is an atom (non-variable term of arity 0 other than a number).
+`atom(A)`  
+Tests whether A is an atom (non-variable term of arity 0 other than a number).
 
-<dt>integer(I)
-<dd>Tests whether I is an integer.
+`integer(I)`  
+Tests whether I is an integer.
 
-<dt>number(N)
-<dd>Tests whether N is a number.</dd>
+`number(N)`  
+Tests whether N is a number.
 
 ### Term Comparison
 
@@ -1747,8 +1594,8 @@ X =:= Y
 
 ### The Meta-Variable Facility
 
-<dt>call(X)
-<dd>this</dd>
+`call(X)`  
+this
 
 ### Assert/Retract
 
@@ -1856,10 +1703,10 @@ F = [a,b,c,d,e]
 
 ## <a name="2ndOrder"></a>Second-Order Programming
 
-<dt>Objective:
-<dd>Second-Order Programming
+Objective:  
+    Second-Order Programming
 
-<dt>Outline:
+Outline:
 
 *   Setof, Bagof, Findall
 *   Other second-order predicates
@@ -1911,11 +1758,10 @@ transitive_closure(Relation,Link,Item2).
 
 ## <a name="database"></a>Database Programming
 
-<dt>Objective:
+Objective:
+    Logic Programming as Database Programming
 
-<dd>Logic Programming as Database Programming
-
-<dt>Outline
+Outline
 
 *   Simple Family Database
 *   Recursive Rules
@@ -2026,113 +1872,18 @@ Expert systems may be programmed in one of two ways in Prolog. One is to constru
 
 Pattern matching: Symbolic differentiation
 
-<table>
-
-<tbody>
-
-<tr>
-
-<td>d(X,X,1)</td>
-
-<td>:-</td>
-
-<td>!.</td>
-
-</tr>
-
-<tr>
-
-<td>d(C,X,0)</td>
-
-<td>:-</td>
-
-<td>atomic(C).</td>
-
-</tr>
-
-<tr>
-
-<td>d(-U,X,-A)</td>
-
-<td>:-</td>
-
-<td>d(U,X,A).</td>
-
-</tr>
-
-<tr>
-
-<td>d(U+V,X,A+B)</td>
-
-<td>:-</td>
-
-<td>d(U,X,A), d(V,X,B).</td>
-
-</tr>
-
-<tr>
-
-<td>d(U-V,X,A-B)</td>
-
-<td>:-</td>
-
-<td>d(U,X,A), d(V,X,B).</td>
-
-</tr>
-
-<tr>
-
-<td>d(C*U,X,C*A)</td>
-
-<td>:-</td>
-
-<td>atomic(C), CX, d(U,X,A),!.</td>
-
-</tr>
-
-<tr>
-
-<td>d(U*V,X,B*U+A*V)</td>
-
-<td>:-</td>
-
-<td>d(U,X,A), D(V,X,B).</td>
-
-</tr>
-
-<tr>
-
-<td>d(U/V,X,A)</td>
-
-<td>:-</td>
-
-<td>d(U*V^-1,X,A)</td>
-
-</tr>
-
-<tr>
-
-<td>d(U^C,X,C*U^(C-1)*W)</td>
-
-<td>:-</td>
-
-<td>atomic(C), CX, d(U,X,W).</td>
-
-</tr>
-
-<tr>
-
-<td>d(log(U),X,A*U^(-1))</td>
-
-<td>:-</td>
-
-<td>d(U,X,A).</td>
-
-</tr>
-
-</tbody>
-
-</table>
+|  |  |  |
+|--|--|--|
+| d(X,X,1)             | :- | !.
+| d(C,X,0)             | :- | atomic(C).
+| d(-U,X,-A)           | :- | d(U,X,A).
+| d(U+V,X,A+B)         | :- | d(U,X,A), d(V,X,B).
+| d(U-V,X,A-B)         | :- | d(U,X,A), d(V,X,B).
+| d(C*U,X,C*A)         | :- | atomic(C), CX, d(U,X,A) !.
+| d(U*V,X,B*U+A*V)     | :- | d(U,X,A), D(V,X,B).
+| d(U/V,X,A)           | :- | d(U*V^-1,X,A)
+| d(U^C,X,C*U^(C-1)*W) | :- | atomic(C), CX, d(U,X,W).
+| d(log(U),X,A*U^(-1)) | :- | d(U,X,A).
 
 ## <a name="oop"></a>Object-Oriented Programming
 
