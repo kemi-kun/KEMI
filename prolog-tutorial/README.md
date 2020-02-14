@@ -1943,11 +1943,11 @@ isa( reg_polygon( Side, N ), polygon( L ) ) :- makelist( Side, N, L ).
 
 The entries in this appendix have the form: `pred/n definition` where `pred` is the name of the built in predicate, `n` is its arity (the number of arguments it takes), and `definition` is a short explanation of the function of the predicate.
 
-ARITHMETIC EXPRESSIONS
+### ARITHMETIC EXPRESSIONS
 
 +, -, *, /, sin, cos, tan, atan, sqrt, pow, exp, log
 
-I/O
+### I/O
 
 `see/1`  
     the current input stream becomes arg1
@@ -1985,7 +1985,7 @@ I/O
 `spaces/1`
     arg1 number of spaces is written to the current output stream.
 
-PROGRAM STATE
+### PROGRAM STATE
 
 `listing/0`
     all the clauses in the Prolog data base are written to the current output stream
@@ -1996,7 +1996,7 @@ PROGRAM STATE
 `clause(H,B)`  
     succeeds if H is a fact or the head of some rule in the data base and B is its body (true in case H is a fact).
 
-PROGRAM MANIPULATION
+### PROGRAM MANIPULATION
 
 `consult/1`  
     the file with name arg1 is consulted (loaded into the Prolog data base)
@@ -2010,7 +2010,7 @@ PROGRAM MANIPULATION
 `retract/1`  
     the first clause which is unifiable with arg1 is retracted from the Prolog data base (functor must be dynamic)
 
-META-LOGICAL
+### META-LOGICAL
 
 `ground/1`  
     succeeds if arg1 is completely instantiated (BIM)
@@ -2039,12 +2039,12 @@ META-LOGICAL
 `not/1`  
     same as \+ but may requires arg1 to be completely instantiated
 
-SYSTEM CONTROL
+### SYSTEM CONTROL
 
 `halt/0, C-d`  
     exit from Prolog
 
-DIRECTIVES
+### DIRECTIVES
 
 `:- dynamic pred/n .`
     the predicate pred of order n is dynamic
@@ -2052,19 +2052,13 @@ DIRECTIVES
 ## <a name="ref"></a>References
 
 -   Clocksin & Mellish, _Programming in Prolog_ 4th ed. Springer-Verlag 1994.
-
 -   Hill, P. & Lloyd, J. W., _The Gödel Programming Language_ MIT Press 1994.
-
 -   Hogger, C. J., _Introduction to Logic Programming_ Academic Press 1984.
-
 -   Lloyd, J. W., _Foundations of Logic Programming_ 2nd ed. Springer-Verlag 1987.
-
 -   Nerode, A. & Shore, R. A., _Logic for Applications_ Springer-Verlag 1993.
-
 -   Robinson, J. A., _Logic: Form and Function_ North-Holland 1979.
-
 -   Sterling and Shapiro, _The Art of Prolog_. MIT Press, Cambridge, Mass. 1986.
 
 * * *
 
-© 1996 by [A. Aaby](Notices.html) Last Updated: Fri May 2 23:24:37 1997 Send comments to: [webmaster@cs.wwc.edu](mailto:webmaster@cs.wwc.edu)
+© 1996 by [A. Aaby](http://cs.wwc.edu/~cs_dept/KU/PR/Notices.html) Last Updated: Fri May 2 23:24:37 1997 Send comments to: [webmaster@cs.wwc.edu](mailto:webmaster@cs.wwc.edu)
