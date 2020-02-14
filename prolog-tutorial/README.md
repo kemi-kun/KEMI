@@ -1074,63 +1074,63 @@ finalbalance(Balance) :- write('Your final balance is: '),
 #### Files
 
 `see(File)`  
-Current input file is now File.
+    Current input file is now File.
 
 `seeing(File)`  
-File is unified with the name of the current input file.
+    File is unified with the name of the current input file.
 
 `seen`  
-Closes the current input file.
+    Closes the current input file.
 
 `tell(File)`  
-Current output file is now File.
+    Current output file is now File.
 
 `telling(File)`  
-File is unified with the name of the current output file.
+    File is unified with the name of the current output file.
 
 `told`  
-Closes the current output file.
+    Closes the current output file.
 
 #### Term I/O
 
 `read(Term)`  
-Reads next full-stop (period) delimited term from the current input stream, if eof then returns the atom 'end_of_file'.
+   Reads next full-stop (period) delimited term from the current input stream, if eof then returns the atom 'end_of_file'.
 
 `write(Term)`  
-Writes a term to the current output stream.
+    Writes a term to the current output stream.
 
 `print(Term)`  
-Writes a term to the current output stream. Uses a user defined predicate portray/1 to write the term, otherwise uses write.
+    Writes a term to the current output stream. Uses a user defined predicate portray/1 to write the term, otherwise uses write.
 
 `writeq(Term)`  
-Writes a term to the current output stream in a form aceptable as input to read.</dd>
+    Writes a term to the current output stream in a form aceptable as input to read.</dd>
 
 #### Character I/O
 
 `get(N)`  
-N is the ASCII code of the next non-blank printable character on the current input stream. If end of file, then a -1 is returned.
+    N is the ASCII code of the next non-blank printable character on the current input stream. If end of file, then a -1 is returned.
 
 `put(N)`  
-Puts the character corresponding to ASCII code N on the current output stream.
+    Puts the character corresponding to ASCII code N on the current output stream.
 
 `nl`  
-Causes the next output to be on a new line.
+    Causes the next output to be on a new line.
 
 `tab(N)`  
-N spaces are output to the current output stream.
+    N spaces are output to the current output stream.
 
 #### Program Access
 
 `consult(SourceFile)`  
-Loads SourceFile into the interpreter but, if a predicate is defined accross two or more files, consulting them will result in only the clauses in the file last consulted being used.
+    Loads SourceFile into the interpreter but, if a predicate is defined accross two or more files, consulting them will result in only the clauses in the file last consulted being used.
 
 `reconsult(File)`  
-available in some systems.
+    available in some systems.
 
 #### Other
 
 `name(Atom,ASCII_List)`  
-the conversion routine between lists of ASCII codes and atoms.
+    the conversion routine between lists of ASCII codes and atoms.
 
 display, prompt
 
@@ -1181,8 +1181,8 @@ lastword('?').
 
 `clause(Head,Body)`  
 
-`assert(Clause)`
-adds clause to the end of the database
+`assert(Clause)`  
+    adds clause to the end of the database
 
 `asserta(Clause)`  
 `retract(Clause_Head)`  
@@ -1191,7 +1191,7 @@ adds clause to the end of the database
 ### System Access
 
 `system(Command)`  
-Execute Command in the operating system
+    Execute Command in the operating system
 
 ## <a name="style"></a>Style and Layout
 
@@ -1943,194 +1943,128 @@ isa( reg_polygon( Side, N ), polygon( L ) ) :- makelist( Side, N, L ).
 
 The entries in this appendix have the form: `pred/n definition` where `pred` is the name of the built in predicate, `n` is its arity (the number of arguments it takes), and `definition` is a short explanation of the function of the predicate.
 
-<dl>
+ARITHMETIC EXPRESSIONS
 
-<dt>ARITHMETIC EXPRESSIONS
++, -, *, /, sin, cos, tan, atan, sqrt, pow, exp, log
 
-<dl>
+I/O
 
-<dt>+, -, *, /, sin, cos, tan, atan, sqrt, pow, exp, log
+`see/1`  
+    the current input stream becomes arg1
 
-</dl>
+`seeing/1`  
+    arg1 unifies with the name of the current input stream.
 
-<dt>I/O
+`seen/0`  
+    close the current input stream
 
-<dl>
+`tell/1`  
+    the current output stream becomes arg1
 
-<dt>see/1
+`telling/1`  
+    arg1 unifies with the name of the current output stream.
 
-<dd>the current input stream becomes arg1
+`told/0`  
+    close current output stream
 
-<dt>seeing/1
+`read/1`
+    arg1 is unified with the next term delimited with a period from the current input stream.
 
-<dd>arg1 unifies with the name of the current input stream.
+`get/1`
+    arg1 is unified with the ASCII code of the next printable character in the current input stream.
 
-<dt>seen/0
+`write/1`  
+    arg1 is written to the current output stream.
 
-<dd>close the current input stream
+`writeq/1`  
+    arg1 is written to the current output stream so that it can be read with `read`.
 
-<dt>tell/1
+`nl/0`
+    an end-of-line character is written to the current output stream.
 
-<dd>the current output stream becomes arg1
+`spaces/1`
+    arg1 number of spaces is written to the current output stream.
 
-<dt>telling/1
+PROGRAM STATE
 
-<dd>arg1 unifies with the name of the current output stream.
+`listing/0`
+    all the clauses in the Prolog data base are written to the current output stream
 
-<dt>told/0
+`listing/1`
+    all the clauses in the Prolog data base whose functor name is equal to arg1 are written to the current output stream
 
-<dd>close current output stream
+`clause(H,B)`  
+    succeeds if H is a fact or the head of some rule in the data base and B is its body (true in case H is a fact).
 
-<dt>read/1
+PROGRAM MANIPULATION
 
-<dd>arg1 is unified with the next term delimited with a period from the current input stream.
+`consult/1`  
+    the file with name arg1 is consulted (loaded into the Prolog data base)
 
-<dt>get/1
+`reconsult/1`  
+    the file with name arg1 is reconsulted
 
-<dd>arg1 is unified with the ASCII code of the next printable character in the current input stream.
+`assert/1`  
+    arg1 is interpreted as a clause and is added to the Prolog data base (functor must be dynamic)
 
-<dt>write/1
+`retract/1`  
+    the first clause which is unifiable with arg1 is retracted from the Prolog data base (functor must be dynamic)
 
-<dd>arg1 is written to the current output stream.
+META-LOGICAL
 
-<dt>writeq/1
+`ground/1`  
+    succeeds if arg1 is completely instantiated (BIM)
 
-<dd>arg1 is written to the current output stream so that it can be read with `read`.
+`functor/3`  
+    succeeds if arg1 is a term, arg2 is the functor, and arg3 is the arity of the term.
 
-<dt>nl/0
+`T =..L`
+    succeeds if T is a term and L is a list whose head is the principle functor of T and whose tail is the list of the arguments of T.
 
-<dd>an end-of-line character is written to the current output stream.
+`name/2`  
+    succeeds if arg1 is an atom and arg2 is a list of the ASCII codes of the characters comprising the name of arg1.
 
-<dt>spaces/1
+`call/1`  
+    succeeds if arg1 is a term in the program.
 
-<dd>arg1 number of spaces is written to the current output stream.
+`setof/3`
+    arg3 is a set (list) of all instances of arg1 for which arg2 holds. Arg3 must be of the form X^T where X is an unbound variables in T other than arg1.
 
-</dl>
+`bagof/3`  
+    arg3 is a list of all instances of arg1 for which arg2 holds. See setof.
 
-<dt>PROGRAM STATE
+`\+/1`  
+    succeeds if arg1 is not provable (Required instead of **not** in some Prologs if arg1 contains variables.
 
-<dl>
+`not/1`  
+    same as \+ but may requires arg1 to be completely instantiated
 
-<dt>listing/0
+SYSTEM CONTROL
 
-<dd>all the clauses in the Prolog data base are written to the current output stream
+`halt/0, C-d`  
+    exit from Prolog
 
-<dt>listing/1
+DIRECTIVES
 
-<dd>all the clauses in the Prolog data base whose functor name is equal to arg1 are written to the current output stream
-
-<dt>clause(H,B)
-
-<dd>succeeds if H is a fact or the head of some rule in the data base and B is its body (true in case H is a fact).
-
-</dl>
-
-<dt>PROGRAM MANIPULATION
-
-<dl>
-
-<dt>consult/1
-
-<dd>the file with name arg1 is consulted (loaded into the Prolog data base)
-
-<dt>reconsult/1
-
-<dd>the file with name arg1 is reconsulted
-
-<dt>assert/1
-
-<dd>arg1 is interpreted as a clause and is added to the Prolog data base (functor must be dynamic)
-
-<dt>retract/1
-
-<dd>the first clause which is unifiable with arg1 is retracted from the Prolog data base (functor must be dynamic)
-
-</dl>
-
-<dt>META-LOGICAL
-
-<dl>
-
-<dt>ground/1
-
-<dd>succeeds if arg1 is completely instantiated (BIM)
-
-<dt>functor/3
-
-<dd>succeeds if arg1 is a term, arg2 is the functor, and arg3 is the arity of the term.
-
-<dt>T =..L
-
-<dd>succeeds if T is a term and L is a list whose head is the principle functor of T and whose tail is the list of the arguments of T.
-
-<dt>name/2
-
-<dd>succeeds if arg1 is an atom and arg2 is a list of the ASCII codes of the characters comprising the name of arg1\.
-
-<dt>call/1
-
-<dd>succeeds if arg1 is a term in the program.
-
-<dt>setof/3
-
-<dd>arg3 is a set (list) of all instances of arg1 for which arg2 holds. Arg3 must be of the form X^T where X is an unbound variables in T other than arg1\.
-
-<dt>bagof/3
-
-<dd>arg3 is a list of all instances of arg1 for which arg2 holds. See setof.
-
-<dt>\+/1
-
-<dd>succeeds if arg1 is not provable (Required instead of **not** in some Prologs if arg1 contains variables.
-
-<dt>not/1
-
-<dd>same as \+ but may requires arg1 to be completely instantiated
-
-</dl>
-
-<dt>SYSTEM CONTROL
-
-<dl>
-
-<dt>halt/0, C-d
-
-<dd>exit from Prolog
-
-</dl>
-
-<dt>DIRECTIVES
-
-<dl>
-
-<dt>:- dynamic pred/n .
-
-<dd>the predicate pred of order n is dynamic
-
-</dl>
-
-</dl>
+`:- dynamic pred/n .`
+    the predicate pred of order n is dynamic
 
 ## <a name="ref"></a>References
 
-<dl>
+-   Clocksin & Mellish, _Programming in Prolog_ 4th ed. Springer-Verlag 1994.
 
-<dt>Clocksin & Mellish, _Programming in Prolog_ 4th ed. Springer-Verlag 1994\.
+-   Hill, P. & Lloyd, J. W., _The Gödel Programming Language_ MIT Press 1994.
 
-<dt>Hill, P. & Lloyd, J. W., _The Gödel Programming Language_ MIT Press 1994\.
+-   Hogger, C. J., _Introduction to Logic Programming_ Academic Press 1984.
 
-<dt>Hogger, C. J., _Introduction to Logic Programming_ Academic Press 1984\.
+-   Lloyd, J. W., _Foundations of Logic Programming_ 2nd ed. Springer-Verlag 1987.
 
-<dt>Lloyd, J. W., _Foundations of Logic Programming_ 2nd ed. Springer-Verlag 1987\.
+-   Nerode, A. & Shore, R. A., _Logic for Applications_ Springer-Verlag 1993.
 
-<dt>Nerode, A. & Shore, R. A., _Logic for Applications_ Springer-Verlag 1993\.
+-   Robinson, J. A., _Logic: Form and Function_ North-Holland 1979.
 
-<dt>Robinson, J. A., _Logic: Form and Function_ North-Holland 1979.
-
-<dt>Sterling and Shapiro, _The Art of Prolog_. MIT Press, Cambridge, Mass. 1986\.
-
-</dl>
+-   Sterling and Shapiro, _The Art of Prolog_. MIT Press, Cambridge, Mass. 1986.
 
 * * *
 
-© 1996 by [A. Aaby](Notices.html)Last Updated: Fri May 2 23:24:37 1997Send comments to: [webmaster@cs.wwc.edu](mailto:webmaster@cs.wwc.edu)
+© 1996 by [A. Aaby](Notices.html) Last Updated: Fri May 2 23:24:37 1997 Send comments to: [webmaster@cs.wwc.edu](mailto:webmaster@cs.wwc.edu)
