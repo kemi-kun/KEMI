@@ -2028,7 +2028,7 @@ The entries in this appendix have the form: `pred/n definition` where `pred` is 
 
 ### DIRECTIVES
 
-`:- dynamic pred/n .`
+`:- dynamic pred/n .`  
     the predicate pred of order n is dynamic
 
 ## <a name="ref"></a>References
