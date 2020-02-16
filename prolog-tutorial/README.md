@@ -290,38 +290,20 @@ The boolean constants are not usually passed as parameters but are propositions.
 
 In Prolog the distinction between programs and data are blurred. Facts and rules are used as data and data is often passed in the arguments to the predicates. Lists are the most common data structure in Prolog. They are much like the array in that they are a sequential list of elements, and much like the stack in that you can only access the list of elements sequentially, that is, from one end only and not in random order. In addition to lists Prolog permits arbitrary patterns as data. The patterns can be used to represent tuples. Prolog does not provide an array type. But arrays may be represented as a list and multidimensional arrays as a list(s) of lists. An alternate representation is to represent an array as a set of facts in a the data base.
 
-<center>
-
-<table><caption>
-
-<center>
-
-TYPE
-
-</center>
-
-</caption>
+<table>
+<caption>TYPE</caption>
 
 <tbody>
-
 <tr>
-
 <td>REPRESENTATION  
 list</td>
-
-<td>[ _comma separated sequence of items_ ]  
+<td>[ <em>comma separated sequence of items</em> ]  
 pattern</td>
-
-<td>_sequence of items_  
-</td>
-
+<td><em>sequence of items</em></td>
 </tr>
-
 </tbody>
 
 </table>
-
-</center>
 
 A list is designated in Prolog by square brackets ([ ]+). An example of a list is
 
