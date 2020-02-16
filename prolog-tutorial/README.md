@@ -311,7 +311,7 @@ A list is designated in Prolog by square brackets ([ ]+). An example of a list i
 [dog,cat,mouse]
 ```
 
-This says that the list contains the elements `dog`, {\tt cat, and `mouse`, in that order. Elements in a Prolog list are ordered, even though there are no indexes. Records or tuples are represented as patterns. Here is an example.
+This says that the list contains the elements `dog`, `cat`, and `mouse`, in that order. Elements in a Prolog list are ordered, even though there are no indexes. Records or tuples are represented as patterns. Here is an example.
 
 ```prolog
 book(author(aaby,anthony),title(labmanual),data(1991))
