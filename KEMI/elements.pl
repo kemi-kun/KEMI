@@ -6,22 +6,15 @@
 % Elements
 chemical_element(hydrogen).
 chemical_element(carbon).
+symbol('H').
 
 % Element names
 element_name(S, E) :- 
     chemical_element(E),
-    S.
+    symbol(S).
 
-element_name('H', chemical_element(hydrogen)).
-element_name('C', chemical_element(carbon)).
+element_name('H', hydrogen).
+element_name('C', carbon).
 
-made_of(methane, chemical_element(hydrogen)).
 
-compound(a, []).
-
-compound(X, [H|T]) :-
-    made_of(X, H),
-    compound(X, T).
-
-compound(methane, [chemical_element(hydrogen), chemical_element(carbon)]).
-% compound(methane, chemical_element(hydrogen), chemical_element(carbon)).
+% % compound(methane, chemical_element(hydrogen), chemical_element(carbon)).
