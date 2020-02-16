@@ -376,9 +376,9 @@ yes
 
 Arithmetic expressions are evaluated with the built in predicate `is` which is used as an infix operator in the following form.
 
-```prolog
-_variable_ is _expression_
-```
+<pre>
+<em>variable</em> is <em>expression</em>
+</pre>
 
 For example,
 
