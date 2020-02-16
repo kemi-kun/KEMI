@@ -1418,7 +1418,7 @@ intrans_verb(Actor,paints(Actor))  --> [paints].
 transitive_verb(Somebody,Something,likes(Somebody,Something)) --> [likes].
 ```
 
-#### Determiners -- `a' and `every'
+#### Determiners –– 'a' and 'every'
 
 ```prolog
 :- op( 100, xfy, and).
@@ -1661,19 +1661,19 @@ upprint(G)   :- write('<'), write(G), nl.
 
 Here is a trace of an append.
 
-```prolog
+<pre>
 ?- trace(append([a,b,c],[d,e],F)).
 >append([a,b,c],[d,e],[a|<sub>1</sub>427104])
 >append([b,c],[d,e],[b|<sub>1</sub>429384])
 >append([c],[d,e],[c|<sub>1</sub>431664])
 >append([ ],[d,e],[d,e])
-<append([ ],[d,e],[d,e])
-<append([c],[d,e],[c,d,e])
-<append([b,c],[d,e],[b,c,d,e])
-<append([a,b,c],[d,e],[a,b,c,d,e])
+&lt;append([ ],[d,e],[d,e])
+&lt;append([c],[d,e],[c,d,e])
+&lt;append([b,c],[d,e],[b,c,d,e])
+&lt;append([a,b,c],[d,e],[a,b,c,d,e])
 
 F = [a,b,c,d,e]
-```
+</pre>
 
 #### Predictates for program manipulation
 
@@ -1751,7 +1751,7 @@ Outline
 
 ### Simple Databases
 
-Basic predicates: `father/2,mother/2, male/1, female/1`.
+Basic predicates: `father/2`, `mother/2`, `male/1`, `female/1`.
 
 ```prolog
 father(Father,Child).
@@ -1969,10 +1969,10 @@ The entries in this appendix have the form: `pred/n definition` where `pred` is 
 
 ### PROGRAM STATE
 
-`listing/0`
+`listing/0`  
     all the clauses in the Prolog data base are written to the current output stream
 
-`listing/1`
+`listing/1`  
     all the clauses in the Prolog data base whose functor name is equal to arg1 are written to the current output stream
 
 `clause(H,B)`  
