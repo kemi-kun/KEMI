@@ -290,38 +290,20 @@ The boolean constants are not usually passed as parameters but are propositions.
 
 In Prolog the distinction between programs and data are blurred. Facts and rules are used as data and data is often passed in the arguments to the predicates. Lists are the most common data structure in Prolog. They are much like the array in that they are a sequential list of elements, and much like the stack in that you can only access the list of elements sequentially, that is, from one end only and not in random order. In addition to lists Prolog permits arbitrary patterns as data. The patterns can be used to represent tuples. Prolog does not provide an array type. But arrays may be represented as a list and multidimensional arrays as a list(s) of lists. An alternate representation is to represent an array as a set of facts in a the data base.
 
-<center>
-
-<table><caption>
-
-<center>
-
-TYPE
-
-</center>
-
-</caption>
+<table>
+<caption>TYPE</caption>
 
 <tbody>
-
 <tr>
-
 <td>REPRESENTATION  
 list</td>
-
-<td>[ _comma separated sequence of items_ ]  
+<td>[ <em>comma separated sequence of items</em> ]  
 pattern</td>
-
-<td>_sequence of items_  
-</td>
-
+<td><em>sequence of items</em></td>
 </tr>
-
 </tbody>
 
 </table>
-
-</center>
 
 A list is designated in Prolog by square brackets ([ ]+). An example of a list is
 
@@ -329,7 +311,7 @@ A list is designated in Prolog by square brackets ([ ]+). An example of a list i
 [dog,cat,mouse]
 ```
 
-This says that the list contains the elements `dog`, {\tt cat, and `mouse`, in that order. Elements in a Prolog list are ordered, even though there are no indexes. Records or tuples are represented as patterns. Here is an example.
+This says that the list contains the elements `dog`, `cat`, and `mouse`, in that order. Elements in a Prolog list are ordered, even though there are no indexes. Records or tuples are represented as patterns. Here is an example.
 
 ```prolog
 book(author(aaby,anthony),title(labmanual),data(1991))
@@ -394,9 +376,9 @@ yes
 
 Arithmetic expressions are evaluated with the built in predicate `is` which is used as an infix operator in the following form.
 
-```prolog
-_variable_ is _expression_
-```
+<pre>
+<em>variable</em> is <em>expression</em>
+</pre>
 
 For example,
 
@@ -577,9 +559,9 @@ deriv(U^+N,X,N*U^+N1*DU) :- N1 is N-1, deriv(U,X,DU).
 
 Prolog code is often bidirectional. In bidirectional code, the arguments may be use either for input or output. For example, this code may be used for both differentiation and integration with queries of the form:
 
-```prolog
-?- deriv(_Integral_,_X_,_Derivative_).
-```
+<pre>
+?- deriv(<em>Integral</em>,<em>X</em>,<em>Derivative</em>).
+</pre>
 
 where either _Integral_ or _Derivative_ may be instantiated to a formula.
 
@@ -1436,7 +1418,7 @@ intrans_verb(Actor,paints(Actor))  --> [paints].
 transitive_verb(Somebody,Something,likes(Somebody,Something)) --> [likes].
 ```
 
-#### Determiners -- `a' and `every'
+#### Determiners –– 'a' and 'every'
 
 ```prolog
 :- op( 100, xfy, and).
@@ -1679,19 +1661,19 @@ upprint(G)   :- write('<'), write(G), nl.
 
 Here is a trace of an append.
 
-```prolog
+<pre>
 ?- trace(append([a,b,c],[d,e],F)).
 >append([a,b,c],[d,e],[a|<sub>1</sub>427104])
 >append([b,c],[d,e],[b|<sub>1</sub>429384])
 >append([c],[d,e],[c|<sub>1</sub>431664])
 >append([ ],[d,e],[d,e])
-<append([ ],[d,e],[d,e])
-<append([c],[d,e],[c,d,e])
-<append([b,c],[d,e],[b,c,d,e])
-<append([a,b,c],[d,e],[a,b,c,d,e])
+&lt;append([ ],[d,e],[d,e])
+&lt;append([c],[d,e],[c,d,e])
+&lt;append([b,c],[d,e],[b,c,d,e])
+&lt;append([a,b,c],[d,e],[a,b,c,d,e])
 
 F = [a,b,c,d,e]
-```
+</pre>
 
 #### Predictates for program manipulation
 
@@ -1769,7 +1751,7 @@ Outline
 
 ### Simple Databases
 
-Basic predicates: `father/2,mother/2, male/1, female/1`.
+Basic predicates: `father/2`, `mother/2`, `male/1`, `female/1`.
 
 ```prolog
 father(Father,Child).
@@ -1872,18 +1854,18 @@ Expert systems may be programmed in one of two ways in Prolog. One is to constru
 
 Pattern matching: Symbolic differentiation
 
-|  |  |  |
-|--|--|--|
-| d(X,X,1)             | :- | !.
-| d(C,X,0)             | :- | atomic(C).
-| d(-U,X,-A)           | :- | d(U,X,A).
-| d(U+V,X,A+B)         | :- | d(U,X,A), d(V,X,B).
-| d(U-V,X,A-B)         | :- | d(U,X,A), d(V,X,B).
-| d(C*U,X,C*A)         | :- | atomic(C), CX, d(U,X,A) !.
-| d(U*V,X,B*U+A*V)     | :- | d(U,X,A), D(V,X,B).
-| d(U/V,X,A)           | :- | d(U*V^-1,X,A)
-| d(U^C,X,C*U^(C-1)*W) | :- | atomic(C), CX, d(U,X,W).
-| d(log(U),X,A*U^(-1)) | :- | d(U,X,A).
+```prolog
+d(X,X,1)             :- !.
+d(C,X,0)             :- atomic(C).
+d(-U,X,-A)           :- d(U,X,A).
+d(U+V,X,A+B)         :- d(U,X,A), d(V,X,B).
+d(U-V,X,A-B)         :- d(U,X,A), d(V,X,B).
+d(CU,X,CA)           :- atomic(C), CX, d(U,X,A) !.
+d(UV,X,BU+A*V)       :- d(U,X,A), D(V,X,B).
+d(U/V,X,A)           :- d(U*V^-1,X,A)
+d(U^C,X,C*U^(C-1)*W) :- atomic(C), CX, d(U,X,W).
+d(log(U),X,A*U^(-1)) :- d(U,X,A).
+```
 
 ## <a name="oop"></a>Object-Oriented Programming
 
@@ -1987,10 +1969,10 @@ The entries in this appendix have the form: `pred/n definition` where `pred` is 
 
 ### PROGRAM STATE
 
-`listing/0`
+`listing/0`  
     all the clauses in the Prolog data base are written to the current output stream
 
-`listing/1`
+`listing/1`  
     all the clauses in the Prolog data base whose functor name is equal to arg1 are written to the current output stream
 
 `clause(H,B)`  
@@ -2046,7 +2028,7 @@ The entries in this appendix have the form: `pred/n definition` where `pred` is 
 
 ### DIRECTIVES
 
-`:- dynamic pred/n .`
+`:- dynamic pred/n .`  
     the predicate pred of order n is dynamic
 
 ## <a name="ref"></a>References
