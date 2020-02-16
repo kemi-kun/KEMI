@@ -559,9 +559,9 @@ deriv(U^+N,X,N*U^+N1*DU) :- N1 is N-1, deriv(U,X,DU).
 
 Prolog code is often bidirectional. In bidirectional code, the arguments may be use either for input or output. For example, this code may be used for both differentiation and integration with queries of the form:
 
-```prolog
-?- deriv(_Integral_,_X_,_Derivative_).
-```
+<pre>
+?- deriv(<em>Integral</em>,<em>X</em>,<em>Derivative</em>).
+</pre>
 
 where either _Integral_ or _Derivative_ may be instantiated to a formula.
 
