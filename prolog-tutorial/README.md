@@ -1854,18 +1854,18 @@ Expert systems may be programmed in one of two ways in Prolog. One is to constru
 
 Pattern matching: Symbolic differentiation
 
-|  |  |  |
-|--|--|--|
-| d(X,X,1)             | :- | !.
-| d(C,X,0)             | :- | atomic(C).
-| d(-U,X,-A)           | :- | d(U,X,A).
-| d(U+V,X,A+B)         | :- | d(U,X,A), d(V,X,B).
-| d(U-V,X,A-B)         | :- | d(U,X,A), d(V,X,B).
-| d(C*U,X,C*A)         | :- | atomic(C), CX, d(U,X,A) !.
-| d(U*V,X,B*U+A*V)     | :- | d(U,X,A), D(V,X,B).
-| d(U/V,X,A)           | :- | d(U*V^-1,X,A)
-| d(U^C,X,C*U^(C-1)*W) | :- | atomic(C), CX, d(U,X,W).
-| d(log(U),X,A*U^(-1)) | :- | d(U,X,A).
+```prolog
+d(X,X,1)             :- !.
+d(C,X,0)             :- atomic(C).
+d(-U,X,-A)           :- d(U,X,A).
+d(U+V,X,A+B)         :- d(U,X,A), d(V,X,B).
+d(U-V,X,A-B)         :- d(U,X,A), d(V,X,B).
+d(CU,X,CA)           :- atomic(C), CX, d(U,X,A) !.
+d(UV,X,BU+A*V)       :- d(U,X,A), D(V,X,B).
+d(U/V,X,A)           :- d(U*V^-1,X,A)
+d(U^C,X,C*U^(C-1)*W) :- atomic(C), CX, d(U,X,W).
+d(log(U),X,A*U^(-1)) :- d(U,X,A).
+```
 
 ## <a name="oop"></a>Object-Oriented Programming
 
