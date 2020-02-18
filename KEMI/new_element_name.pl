@@ -47,23 +47,27 @@ digit(Proton, Name) :-
     digit(T1, N1),
     string_concat(N1, N0, Name).
 
-% replace substring S1 with S2 in String
+% find & replace the first occurance of substring S1 with S2
 replace(String, S1, S2, Result) :-
-    sub_string(String, BS1, S1_len, AS1, S1),
-    sub_string(String, 0, BS1, Z0, SBS1),
-    sub_string(String, Z1, AS1, 0, SAS1),
-    string_concat(SBS1, S2, T0),
-    string_concat(T0, SAS1, Result).
+    sub_string(String, BS1, _, AS1, S1),
+    sub_string(String, 0, BS1, _, Before),
+    sub_string(String, _, AS1, 0, After),
+    string_concat(Before, S2, T0),
+    string_concat(T0, After, Result).
 
 name_check_i(Name, Result) :-
-    replace(Name, "ii", "i", Result).
+    replace(Name, "ii", "i", Result),
+    !.
 name_check_i(Name, Result) :-
     Result = Name.
+
 name_check_n(Name, Result) :-
-    replace(Name, "nnn", "nn", Result).
+    replace(Name, "nnn", "nn", Result),
+    !.
 name_check_n(Name, Result) :-
     Result = Name.
 
+% BUG: doesn't replace more than one occurance (e.g. 9090)
 name(Proton, Name) :-
     digit(Proton, N1),
     string_concat(N1, "ium", T0),
