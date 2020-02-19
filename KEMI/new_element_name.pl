@@ -1,3 +1,5 @@
+:- use_module(str, [replace/4]).
+
 % IR-3.1.1 (pg. 47)
 digit(Proton, Name) :-
     Proton < 10,
@@ -47,22 +49,14 @@ digit(Proton, Name) :-
     digit(T1, N1),
     string_concat(N1, N0, Name).
 
-% find & replace the first occurance of substring S1 with S2
-replace(String, S1, S2, Result) :-
-    sub_string(String, BS1, _, AS1, S1),
-    sub_string(String, 0, BS1, _, Before),
-    sub_string(String, _, AS1, 0, After),
-    string_concat(Before, S2, T0),
-    string_concat(T0, After, Result).
-
 name_check_i(Name, Result) :-
-    replace(Name, "ii", "i", Result),
+    str:replace(Name, "ii", "i", Result),
     !.
 name_check_i(Name, Result) :-
     Result = Name.
 
 name_check_n(Name, Result) :-
-    replace(Name, "nnn", "nn", Result),
+    str:replace(Name, "nnn", "nn", Result),
     !.
 name_check_n(Name, Result) :-
     Result = Name.
