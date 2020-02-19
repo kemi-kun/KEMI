@@ -23,4 +23,3 @@ capitalize(String, Result) :-
     sub_string(String, 1, _, 0, Sub),
     string_upper(First, FirstUpper),
     string_concat(FirstUpper, Sub, Result).
-    
