@@ -19,7 +19,7 @@ element_name('C', carbon).
 
 %
 %
-%
+% TODO: validate each element
 %
 
 extract_elements(Formula, Elements) :-
