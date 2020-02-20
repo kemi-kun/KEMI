@@ -1,5 +1,5 @@
 :- use_module('str', [replace/4, capitalize/2]).
-:- use_module('elements', [metal/1, nonmetal/1, extract_elements_from_formula/2]).
+:- use_module('elements', [element_name/2, metal/1, nonmetal/1, extract_elements_from_formula/2]).
 
 basic_metal_cation(Symbol, Name) :-
     metal(Symbol),
@@ -17,7 +17,7 @@ basic_nonmetal_anion(Symbol, Name) :-
 %   Given the molecular formula of an ionic compound,
 %   then resolve its name.
 %
-%   TODO: more complications
+%   TODO: more sophistication
 symbol_to_name_ionic(Formula, Name) :-
     extract_elements_from_formula(Formula, [H, T|_]),
     atom_string(H, Next),

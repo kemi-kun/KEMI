@@ -2,7 +2,7 @@
     Facts
 
 */
-:- module(elements,[metal/1,nonmetal/1, extract_elements_from_formula/2]).
+:- module(elements,[element_name/2, metal/1,nonmetal/1, extract_elements_from_formula/2]).
 
 
 % Elements
