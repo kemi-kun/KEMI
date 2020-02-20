@@ -3,6 +3,9 @@
 
 */
 
+:- use_module('str', [replace/4, capitalize/2]).
+
+
 % Elements
 chemical_element(hydrogen).
 chemical_element(carbon).
@@ -15,7 +18,31 @@ element_name(S, E) :-
 
 element_name('H', hydrogen).
 element_name('C', carbon).
+element_name("Na", sodium).
+element_name("Cl", chlorine).
 
+metal("Na").
+nonmetal("Cl").
+
+basic_metal_cation(Symbol, Name) :-
+    metal(Symbol),
+    element_name(Symbol, Name).
+
+basic_nonmetal_anion(Symbol, Name) :-
+    nonmetal(Symbol),
+    element_name(Symbol, ElementName),
+    replace(ElementName, "ine", "", NextPrefix),
+    string_concat(NextPrefix, "ide", Name).
+
+spell_ionic_compound_from_binary_atoms_symbol(Formula, Name) :-
+    extract_elements(Formula, [H, T|_]),
+    atom_string(H, Next),
+    basic_metal_cation(Next, Prefix),
+    capitalize(Prefix, Caps),
+    atom_string(T, Anion),
+    basic_nonmetal_anion(Anion, Suffix),
+    string_concat(Caps, " ", Then),
+    string_concat(Then, Suffix, Name).
 
 %
 %
