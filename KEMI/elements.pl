@@ -34,7 +34,13 @@ basic_nonmetal_anion(Symbol, Name) :-
     replace(ElementName, "ine", "", NextPrefix),
     string_concat(NextPrefix, "ide", Name).
 
-spell_ionic_compound_from_binary_atoms_symbol(Formula, Name) :-
+%!  symbol_to_name_ionic(+Formula: string, -Name: string) 
+%
+%   Given a molecular formula,
+%   then resolve its name.
+%
+%   TODO: more complications
+symbol_to_name_ionic(Formula, Name) :-
     extract_elements(Formula, [H, T|_]),
     atom_string(H, Next),
     basic_metal_cation(Next, Prefix),
@@ -49,7 +55,7 @@ spell_ionic_compound_from_binary_atoms_symbol(Formula, Name) :-
 % TODO: validate each element
 %
 
-extract_elements(Formula, Elements) :-
+extract_elements_from_formula(Formula, Elements) :-
     extract_elements_(Formula, 0, "", Elements).
 
 extract_elements_(Formula, Start, _, _) :-
