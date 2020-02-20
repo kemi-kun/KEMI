@@ -55,7 +55,7 @@ symbol_to_name_ionic(Formula, Name) :-
 % TODO: validate each element
 %
 
-extract_elements(Formula, Elements) :-
+extract_elements_from_formula(Formula, Elements) :-
     extract_elements_(Formula, 0, "", Elements).
 
 extract_elements_(Formula, Start, _, _) :-
