@@ -1,5 +1,6 @@
 def load_data() -> dict:    
     data = {}
+    # TODO: Use module argparse to add + parse cmd options
     with open('../assets/multiplicative-prefixes.csv') as f:
         lines = f.read().splitlines()
         for line in lines:
