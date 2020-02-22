@@ -1,8 +1,20 @@
 :- module('ion', [binary_stoichiometric_name/2]).
 :- use_module('str', [replace/4, capitalize/2]).
-:- use_module('elements',[en/2, element_name/2, extract_elements_from_formula/2]).
+:- use_module('elements',[en/2, element_name/2, extract_elements_from_formula/2, halogen/1]).
 :- use_module('utilities', [extract_term/2]).
 :- use_module('facts', [multiplicative_prefix/2]).
+
+sub_suffix(carbon, "on").
+sub_suffix(phosphorus, "orus").
+sub_suffix(hydrogen, "ogen").
+sub_suffix(oxygen, "ygen").
+sub_suffix(sulfur, "fur").
+
+type1_anion_name(ElementName, Result) :-
+    (halogen(ElementName) -> replace(ElementName, "ine", "", Name);
+    sub_suffix(ElementName, Sub) -> replace(ElementName, Sub, "", Name); 
+    Name = ElementName),
+    string_concat(Name, "ide", Result).
 
 basic_cation(Term, Name) :-
     extract_term(Term, [Symbol, Quantity|_]),
@@ -19,17 +31,15 @@ basic_anion(Term, Name) :-
     extract_term(Term, [Symbol, Quantity|_]),
     Quantity > 1,
     element_name(Symbol, ElementName),
-    replace(ElementName, "ine", "", NextPrefix),
-    string_concat(NextPrefix, "ide", Final),
+    type1_anion_name(ElementName, AnionName),
     multiplicative_prefix(Quantity, Prefix),
-    string_concat(Prefix, Final, Name).
+    string_concat(Prefix, AnionName, Name).
 
 basic_anion(Term, Name) :-
     extract_term(Term, [Symbol, Quantity|_]),
     Quantity = 1,
     element_name(Symbol, ElementName),
-    replace(ElementName, "ine", "", NextPrefix),
-    string_concat(NextPrefix, "ide", Name).
+    type1_anion_name(ElementName, Name).
 
 %!  symbol_to_name_ionic(+Formula: string, -Name: string) 
 %
@@ -40,7 +50,6 @@ basic_anion(Term, Name) :-
 binary_stoichiometric_name(Formula, Name) :-
     extract_elements_from_formula(Formula, [Cation, Anion|_]),
     basic_cation(Cation, Prefix),
-    % capitalize(Prefix, Caps),
     Caps = Prefix,
     basic_anion(Anion, Suffix),
     string_concat(Caps, " ", Then),

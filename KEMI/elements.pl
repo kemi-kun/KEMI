@@ -2,7 +2,7 @@
     Facts
 
 */
-:- module(elements,[en/2, element_name/2, extract_elements_from_formula/2]).
+:- module(elements,[en/2, element_name/2, extract_elements_from_formula/2, halogen/1]).
 :- use_module(utilities, [extract_term/2]).
 
 
@@ -15,7 +15,7 @@ element_name("B", boron).
 element_name("C", carbon).
 element_name("N", nitrogen).
 element_name("O", oxygen).
-element_name("F", flourine).
+element_name("F", fluorine).
 element_name("Ne", neon).
 element_name("Na", sodium).
 element_name("Mg", magnesium).
@@ -251,6 +251,12 @@ en("Og", 0).
 %
 % TODO: validate each element
 %
+
+halogen(fluorine).
+halogen(chlorine).
+halogen(bromine).
+halogen(iodine).
+halogen(astatine).
 
 element_quantity(Symbol, Quantity) :-
     Quantity > 0,
