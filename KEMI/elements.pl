@@ -2,7 +2,8 @@
     Facts
 
 */
-:- module(elements,[en/2,element_name/2,metal/1,nonmetal/1,extract_elements_from_formula/2]).
+:- module(elements,[en/2, element_name/2, extract_elements_from_formula/2]).
+:- use_module(utilities, [extract_term/2]).
 
 
 % Element
@@ -246,17 +247,32 @@ en("Lv", 0).
 en("Ts", 0).
 en("Og", 0).
 
-
-metal("Na").
-nonmetal("Cl").
-
 %
 %
 % TODO: validate each element
 %
 
+element_quantity(Symbol, Quantity) :-
+    Quantity > 0,
+    element_name(Symbol, _).
+    
+formula_to_quantified(Raw, Elements) :-
+    re_split("([1-9][0-9]*)"/n, Raw, [RawSymbol, Quantity|_], []),
+    element_name(Symbol, _),
+    Elements =.. [element_quantity, Symbol, Quantity],
+    call(Elements),
+    atom_string(RawSymbol, Symbol).
+
 extract_elements_from_formula(Formula, Elements) :-
     extract_elements_(Formula, 0, "", Elements).
+
+determine_multiplicity(Formula, Result) :- 
+    formula_to_quantified(Formula, Result).
+
+determine_multiplicity(Formula, Result) :- 
+    Result =.. [element_quantity, Formula, 1],
+    call(Result).
+   
 
 extract_elements_(Formula, Start, _, _) :-
     string_length(Formula, Length),
@@ -274,11 +290,5 @@ extract_elements_(Formula, Start, String, End) :-
         extract_elements_(Formula, Trim, "", End2); 
         extract_elements_(Formula, Trim, ConcatString, End2),
     !) ,
-    (is_upper(Out) -> Sth = [ConcatString]; Sth = []),
+    (is_upper(Out) -> determine_multiplicity(ConcatString, Result), Sth = [Result]; Sth = []),
     append(End2, Sth, End).
-
-    
-
-
-
-

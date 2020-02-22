@@ -1,4 +1,4 @@
-%
+:- module(facts,[multiplicative_prefix/2]).
 
 % multiplicative prefixes
 multiplicative_prefix(1, "mono").

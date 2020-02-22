@@ -1,16 +1,34 @@
 :- use_module('str', [replace/4, capitalize/2]).
-:- use_module('elements',[en/2, element_name/2, metal/1, nonmetal/1, extract_elements_from_formula/2]).
+:- use_module('elements',[en/2, element_name/2, extract_elements_from_formula/2]).
+:- use_module('utilities', [extract_term/2]).
+:- use_module('facts', [multiplicative_prefix/2]).
 
-basic_metal_cation(Symbol, Name) :-
-    metal(Symbol),
+basic_cation(Term, Name) :-
+    extract_term(Term, [Symbol, Quantity|_]),
+    Quantity > 1,
+    element_name(Symbol, ElementName),
+    multiplicative_prefix(Quantity, Prefix),
+    string_concat(Prefix, ElementName, Name).
+
+basic_cation(Term, Name) :-
+    extract_term(Term, [Symbol|_]),
     element_name(Symbol, Name).
 
-basic_nonmetal_anion(Symbol, Name) :-
-    nonmetal(Symbol),
+basic_anion(Term, Name) :-
+    extract_term(Term, [Symbol, Quantity|_]),
+    Quantity > 1,
+    element_name(Symbol, ElementName),
+    replace(ElementName, "ine", "", NextPrefix),
+    string_concat(NextPrefix, "ide", Final),
+    multiplicative_prefix(Quantity, Prefix),
+    string_concat(Prefix, Final, Name).
+
+basic_anion(Term, Name) :-
+    extract_term(Term, [Symbol, Quantity|_]),
+    Quantity = 1,
     element_name(Symbol, ElementName),
     replace(ElementName, "ine", "", NextPrefix),
     string_concat(NextPrefix, "ide", Name).
-
 
 %!  symbol_to_name_ionic(+Formula: string, -Name: string) 
 %
@@ -18,13 +36,11 @@ basic_nonmetal_anion(Symbol, Name) :-
 %   then resolve its name.
 %
 %   TODO: more sophistication
-symbol_to_name_ionic(Formula, Name) :-
-    extract_elements_from_formula(Formula, [H, T|_]),
-    atom_string(H, Next),
-    basic_metal_cation(Next, Prefix),
+binary_stoichiometric_name(Formula, Name) :-
+    extract_elements_from_formula(Formula, [Cation, Anion|_]),
+    basic_cation(Cation, Prefix),
     capitalize(Prefix, Caps),
-    atom_string(T, Anion),
-    basic_nonmetal_anion(Anion, Suffix),
+    basic_anion(Anion, Suffix),
     string_concat(Caps, " ", Then),
     string_concat(Then, Suffix, Name).
 
