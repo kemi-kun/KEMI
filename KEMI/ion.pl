@@ -5,10 +5,11 @@
 :- use_module('facts', [multiplicative_prefix/2]).
 
 sub_suffix(carbon, "on").
+sub_suffix(nitrogen, "ogen").
 sub_suffix(phosphorus, "orus").
 sub_suffix(hydrogen, "ogen").
 sub_suffix(oxygen, "ygen").
-sub_suffix(sulfur, "fur").
+sub_suffix(sulfur, "ur").
 
 type1_anion_name(ElementName, Result) :-
     (halogen(ElementName) -> replace(ElementName, "ine", "", Name);
