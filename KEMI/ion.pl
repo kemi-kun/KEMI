@@ -1,5 +1,5 @@
 :- use_module('str', [replace/4, capitalize/2]).
-:- use_module('elements', [element_name/2, metal/1, nonmetal/1, extract_elements_from_formula/2]).
+:- use_module('elements',[en/2, element_name/2, metal/1, nonmetal/1, extract_elements_from_formula/2]).
 
 basic_metal_cation(Symbol, Name) :-
     metal(Symbol),
@@ -27,3 +27,22 @@ symbol_to_name_ionic(Formula, Name) :-
     basic_nonmetal_anion(Anion, Suffix),
     string_concat(Caps, " ", Then),
     string_concat(Then, Suffix, Name).
+
+
+%!  engt(+Element1: string, +Element2: string, -Result: string) is det
+%   
+%   Given element symbols, compare their electronegativity (EN),
+%   then return the symbol of element with the highest EN.
+%   
+engt(Element1, Element2, Result) :-
+    en(Element1, En1),
+    en(Element2, En2),
+    En1 > En2,
+    Result = Element1,
+    !.
+engt(Element1, Element2, Result) :-
+    en(Element1, En1),
+    en(Element2, En2),
+    En1 < En2,
+    Result = Element2,
+    !.
