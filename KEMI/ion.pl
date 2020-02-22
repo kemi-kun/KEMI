@@ -1,3 +1,4 @@
+:- module('ion', [binary_stoichiometric_name/2]).
 :- use_module('str', [replace/4, capitalize/2]).
 :- use_module('elements',[en/2, element_name/2, extract_elements_from_formula/2]).
 :- use_module('utilities', [extract_term/2]).
@@ -39,7 +40,8 @@ basic_anion(Term, Name) :-
 binary_stoichiometric_name(Formula, Name) :-
     extract_elements_from_formula(Formula, [Cation, Anion|_]),
     basic_cation(Cation, Prefix),
-    capitalize(Prefix, Caps),
+    % capitalize(Prefix, Caps),
+    Caps = Prefix,
     basic_anion(Anion, Suffix),
     string_concat(Caps, " ", Then),
     string_concat(Then, Suffix, Name).
