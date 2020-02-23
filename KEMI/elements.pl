@@ -2,7 +2,7 @@
     Facts
 
 */
-:- module(elements,[en/2, element_name/2, extract_elements_from_formula/2, halogen/1]).
+:- module(elements,[en/2, element_name/2, element_quantity/2, extract_elements_from_formula/2, halogen/1]).
 :- use_module(utilities, [extract_term/2]).
 
 
