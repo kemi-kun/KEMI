@@ -28,21 +28,22 @@ formula_to_quantified(Raw, Elements) :-
     call(Elements),
     atom_string(RawSymbol, Symbol).
 
+%!  extract_elements_from_formula(+Formula:string, -Elements:list) is det.
+%
+%   Retur
+%
 extract_elements_from_formula(Formula, Elements) :-
     extract_elements_(Formula, 0, "", Elements).
 
 determine_multiplicity(Formula, Result) :- 
     formula_to_quantified(Formula, Result).
-
 determine_multiplicity(Formula, Result) :- 
     Result =.. [element_quantity, Formula, 1],
     call(Result).
-   
 
 extract_elements_(Formula, Start, _, _) :-
     string_length(Formula, Length),
     Start = Length.
-
 extract_elements_(Formula, Start, String, End) :-
     string_length(Formula, Length),
     Start < Length,
@@ -51,11 +52,14 @@ extract_elements_(Formula, Start, String, End) :-
     Trim is Start + 1,
     string_concat(Out, String, ConcatString),
     (
-        is_upper(Out) -> 
-        extract_elements_(Formula, Trim, "", End2); 
-        extract_elements_(Formula, Trim, ConcatString, End2),
-    !) ,
-    (is_upper(Out) -> determine_multiplicity(ConcatString, Result), Sth = [Result]; Sth = []),
+        is_upper(Out) -> extract_elements_(Formula, Trim, "", End2); 
+        extract_elements_(Formula, Trim, ConcatString, End2), !
+    ),
+    (
+        is_upper(Out) -> determine_multiplicity(ConcatString, Result), 
+                         Sth = [Result];
+        Sth = []
+    ),
     append(End2, Sth, End).
 
 %! period(+Element:string, -Period:integer) is det.
