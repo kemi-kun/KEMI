@@ -1,5 +1,10 @@
-:- module(str,[capitalize/2,replace/4]).
+:- module(str,[capitalize/2,contains/2,remove/3,replace/4]).
 
+contains(String, Substring) :-
+    sub_string(String, _,_,_, Substring), !.
+
+remove(String, Removed, Result) :-
+    replace(String, Removed, "", Result), !.
 
 %!  replace(String: string, S1: string, S2: string, -Result: string) is nondet
 %
