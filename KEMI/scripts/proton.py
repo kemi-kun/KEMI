@@ -8,11 +8,11 @@ def read_file(file_path) -> dict:
     return data
 
 
-def print_element_name(data: dict):
+def print_num_protons(data: dict):
     for symbol, val in data.items():
-        print(f'element_name("{symbol}", {val[0].lower()}).')
+        print(f'num_protons("{symbol}", {val[3]}).')
 
 
 if __name__ == '__main__':
     data = read_file('../assets/element.csv')
-    print_element_name(data)
+    print_num_protons(data)

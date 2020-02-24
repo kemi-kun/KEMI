@@ -4,7 +4,7 @@
 */
 :- module(elements,[element_quantity/2, extract_elements_from_formula/2, halogen/1]).
 :- use_module(utils, [extract_term/2]).
-:- use_module(facts, [element_name/2]).
+:- use_module(facts, [num_protons/2, element_name/2]).
 
 %
 %
@@ -57,3 +57,39 @@ extract_elements_(Formula, Start, String, End) :-
     !) ,
     (is_upper(Out) -> determine_multiplicity(ConcatString, Result), Sth = [Result]; Sth = []),
     append(End2, Sth, End).
+
+period(A, R) :-
+    num_protons(A, Z),
+    Z =< 2,
+    R is 1,
+    !.
+period(A, R) :-
+    num_protons(A, Z),
+    Z =< 10,
+    R is 2,
+    !.
+period(A, R) :-
+    num_protons(A, Z),
+    Z =< 18,
+    R is 3,
+    !.
+period(A, R) :-
+    num_protons(A, Z),
+    Z =< 36,
+    R is 4,
+    !.
+period(A, R) :-
+    num_protons(A, Z),
+    Z =< 54,
+    R is 5,
+    !.
+period(A, R) :-
+    num_protons(A, Z),
+    Z =< 86,
+    R is 6,
+    !.
+period(A, R) :-
+    num_protons(A, Z),
+    Z > 86,
+    R is 7,
+    !.
