@@ -55,7 +55,7 @@ heteropolyatomic_cation_name([First, Second|_], Name) :-
     % Quantified is -Charge,
     extract_term(First, [FSymbol, FQ|_]),
     extract_term(Second, [SSymbol, SQ|_]),
-    engt(FSymbol, SSymbol, Terminal),
+    en_gt(FSymbol, SSymbol, Terminal),
     (FSymbol == Terminal, Q = FQ; Q = SQ),
     delete([FSymbol, SSymbol], Terminal, [Central|_]),
     element_prefix_(Terminal, Prefix),
@@ -90,7 +90,7 @@ homopolyatomic_anion_name(Term, Result) :-
 heteropolyatomic_anion_name([First, Second|_], Name) :-
     extract_term(First, [FSymbol, FQ|_]),
     extract_term(Second, [SSymbol, SQ|_]),
-    engt(FSymbol, SSymbol, Terminal),
+    en_gt(FSymbol, SSymbol, Terminal),
     (FSymbol == Terminal, Q = FQ; Q = SQ),
     delete([FSymbol, SSymbol], Terminal, [Central|_]),
     element_prefix_(Terminal, Prefix),
@@ -129,12 +129,12 @@ binary_stoichiometric_name(Formula, Name) :-
     string_concat(Then, Suffix, Name).
 
 
-%!  engt(+Element1: string, +Element2: string, -Result: string) is det
+%!  en_gt(+Element1: string, +Element2: string, -Result: string) is det
 %   
 %   Given element symbols, compare their electronegativity (EN),
 %   then return the symbol of element with the highest EN.
 %   
-engt(Element1, Element2, Result) :-
+en_gt(Element1, Element2, Result) :-
     en(Element1, En1),
     en(Element2, En2),
     (
@@ -178,5 +178,5 @@ classify_anion(Any, Anion) :-
     !.
 
 % heteropolyatomic_anion([First, Second|_], Name) :-
-%     engt(First, Second, R),
+%     en_gt(First, Second, R),
 %     extract_term(Term, [Symbol, Quantity|_]).
