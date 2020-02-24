@@ -3,7 +3,7 @@
 
 */
 :- module(elements,[element_quantity/2, extract_elements_from_formula/2, halogen/1]).
-:- use_module(utilities, [extract_term/2]).
+:- use_module(utils, [extract_term/2]).
 :- use_module(facts, [element_name/2]).
 
 %

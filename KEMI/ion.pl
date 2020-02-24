@@ -1,7 +1,7 @@
 :- module('ion', [binary_stoichiometric_name/2]).
 :- use_module('str', [replace/4, capitalize/2, contains/2, remove/3]).
 :- use_module('elements',[element_quantity/2, extract_elements_from_formula/2, halogen/1]).
-:- use_module('utilities', [extract_term/2]).
+:- use_module('utils', [extract_term/2]).
 :- use_module('facts', [en/2, element_name/2, multiplicative_prefix/2]).
 
 replace_ending_(ElementName, [], Result):-

@@ -2,7 +2,7 @@
 
 Implements rule IR-3.1.1 in IUPAC Red Book (pg. 47).
 */
-:- use_module(str, [replace/4, capitalize/2]).
+:- use_module(str,[capitalize/2,replace/4]).
 
 %!	name(+NumProtons:integer, -Name: string) is det.
 %
