@@ -1,6 +1,6 @@
 # Project KEMI
 
-[Insert descriptino here]
+[Insert description here]
 
 ## Members
 
@@ -13,8 +13,4 @@
 
 ## Documents
 
-- [Project Proposal](https://docs.google.com/document/d/1wo9b8ocNn99qE2xN5cMn5LZQyt680k-0VzMTvHjt_pM/edit)
-
-## Coding Guidlines
-
-TBD
+- [Documentation](https://docs.google.com/document/d/1oVAO5Ec0O07aKVBQjbCefTHt8IgDOOiH0QsNNldN5rE/edit)
