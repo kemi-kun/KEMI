@@ -1,7 +1,19 @@
-% IR-3.1.1 (pg. 47)
+/** <module> Unnamed Elements
+
+Implements rule IR-3.1.1 in IUPAC Red Book (pg. 47).
+*/
 :- use_module(str, [replace/4, capitalize/2]).
 
-% BUG: doesn't replace more than one occurance (e.g. 9090)
+%!	name(+NumProtons:integer, -Name: string) is det.
+%
+%   True if Name is the IUPAC temporary name for unnamed element with
+%   NumProtons protons.
+%
+%   @arg NumProtons The number of protons of the element.
+%   @arg Name The IUPAC temporary name of the element.
+%   @bug Doesn't replace more than one occurance (e.g. 9090)
+%   @tbd Causes error if NumProton is queried instead.
+%
 name(NumProtons, Name) :-
     digit_symbol__name_(NumProtons, N1),
     string_concat(N1, "ium", T0),
@@ -9,6 +21,15 @@ name(NumProtons, Name) :-
     name_check_n_(T1, Name),
     !.
 
+%!	symbol(+NumProtons:integer, -Symbol: string) is det.
+%
+%   True if Symbol is the IUPAC temporary symbol for unnamed element
+%   with NumProtons protons.
+%
+%   @arg NumProtons The number of protons of the element.
+%   @arg Name The IUPAC temporary name of the element.
+%   @tbd Causes error if NumProton is queried instead.
+%
 symbol(NumProtons, Symbol) :-
     digit_symbol_(NumProtons, T0),
     str:capitalize(T0, Symbol),
