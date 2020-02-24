@@ -1,6 +1,7 @@
 /**
 Tests functions in elements.pl
 */
+:- use_module(elements,[atoms/2,contains/2]).
 :- begin_tests(test).
 
 test(param) :-
@@ -49,7 +50,7 @@ test(param) :-
     % assertion(contains("(Mg)[Cr2]O4", [])),
     % State/Phase
     assertion(contains("HCl(g)", [atoms("H", 1), atoms("Cl", 1)])),
-    assertion(contains("ClOO*", [atoms("Cl", 1), atoms("O", 2)])])),
+    assertion(contains("ClOO*", [atoms("Cl", 1), atoms("O", 2)])),
     % Addition compounds
     assertion(contains("3CdSO4·8H2O", [atoms("Cd", 3), atoms("S", 1), atoms("O", 12), atoms("H", 16)])),
     % Roman numerals
