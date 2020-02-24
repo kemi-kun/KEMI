@@ -58,38 +58,19 @@ extract_elements_(Formula, Start, String, End) :-
     (is_upper(Out) -> determine_multiplicity(ConcatString, Result), Sth = [Result]; Sth = []),
     append(End2, Sth, End).
 
-period(A, R) :-
-    num_protons(A, Z),
-    Z =< 2,
-    R is 1,
-    !.
-period(A, R) :-
-    num_protons(A, Z),
-    Z =< 10,
-    R is 2,
-    !.
-period(A, R) :-
-    num_protons(A, Z),
-    Z =< 18,
-    R is 3,
-    !.
-period(A, R) :-
-    num_protons(A, Z),
-    Z =< 36,
-    R is 4,
-    !.
-period(A, R) :-
-    num_protons(A, Z),
-    Z =< 54,
-    R is 5,
-    !.
-period(A, R) :-
-    num_protons(A, Z),
-    Z =< 86,
-    R is 6,
-    !.
-period(A, R) :-
-    num_protons(A, Z),
-    Z > 86,
-    R is 7,
-    !.
+%! period(+Element:string, -Period:integer) is det.
+%! period(-Element:string, +Period:integer) is multi.
+%
+%  True if element Element is in period Period.
+%
+period(Element, Period) :-
+    num_protons(Element, Z),
+    (
+        Z =<  2 -> Period is 1;
+        Z =< 10 -> Period is 2;
+        Z =< 18 -> Period is 3;
+        Z =< 36 -> Period is 4;
+        Z =< 54 -> Period is 5;
+        Z =< 86 -> Period is 6;
+        Period is 7
+    ).
