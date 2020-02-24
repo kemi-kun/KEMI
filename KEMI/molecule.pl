@@ -1,6 +1,6 @@
 :- module(molecule, []).
 :- use_module(facts, [element_name/2]).
-:- use_module(utilities, [extract_term/2]).
+:- use_module(utils, [extract_term/2]).
 
 homonuclear_molecule(Element, Quantity) :-
     element_name(_, Element),

@@ -1,7 +1,7 @@
 :- module('ion', [binary_stoichiometric_name/2]).
 :- use_module('str', [replace/4, capitalize/2, contains/2, remove/3]).
 :- use_module('elements',[element_quantity/2, extract_elements_from_formula/2, halogen/1]).
-:- use_module('utilities', [extract_term/2]).
+:- use_module('utils', [extract_term/2]).
 :- use_module('facts', [en/2, element_name/2, multiplicative_prefix/2]).
 
 replace_ending_(ElementName, [], Result):-
@@ -117,15 +117,10 @@ binary_stoichiometric_name(Formula, Name) :-
 engt(Element1, Element2, Result) :-
     en(Element1, En1),
     en(Element2, En2),
-    En1 > En2,
-    Result = Element1,
-    !.
-engt(Element1, Element2, Result) :-
-    en(Element1, En1),
-    en(Element2, En2),
-    En1 < En2,
-    Result = Element2,
-    !.
+    (
+        En1 > En2 -> Result = Element1;
+        En2 > En1 -> Result = Element2
+    ).
 
 classify_cation(Any, Cation) :-
     % length(Any, 1),

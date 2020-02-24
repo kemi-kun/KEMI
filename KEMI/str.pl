@@ -19,7 +19,7 @@ replace(String, S1, S2, Result) :-
     string_concat(Before, S2, T0),
     string_concat(T0, After, Result).
 
-%!	capitalize(String: string, -Result: string) is det
+%!	capitalize(+String: string, -Result: string) is det.
 %
 %   Capitalize the first letter in `String`.
 %
