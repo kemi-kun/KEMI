@@ -4,7 +4,7 @@
 */
 :- module(elements,[element_quantity/2, extract_elements_from_formula/2, halogen/1]).
 :- use_module(utils, [extract_term/2]).
-:- use_module(facts, [num_protons/2, element_name/2]).
+:- use_module(facts, [en/2, num_protons/2, element_name/2]).
 
 %
 %
@@ -74,3 +74,20 @@ period(Element, Period) :-
         Z =< 86 -> Period is 6;
         Period is 7
     ).
+
+delta(X, Y, R) :- 
+    (
+        X > Y -> R is X - Y;
+        Y > X -> R is Y - X
+    ).
+
+%! delta_en(+Element1:string, +Element2:string, -Result:float) is det.
+%! delta_en(-Element1:string, -Element2:string, +Result:float) is multi.
+%
+%  Compute delta EN between Element1 and Element2
+%
+delta_en(Element1, Element2, Result) :- 
+    en(Element1, En1), 
+    en(Element2, En2),
+    delta(En1, En2, Result),
+    !.
