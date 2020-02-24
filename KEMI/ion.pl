@@ -4,6 +4,9 @@
 :- use_module('utils', [extract_term/2]).
 :- use_module('facts', [en/2, element_name/2, multiplicative_prefix/2]).
 
+other_name("N", "az").
+other_name("O", "oxid").
+
 replace_ending_(ElementName, [], Result):-
     Result = ElementName, !.
 
@@ -22,6 +25,10 @@ replace_ending_ma_(ElementName, Result) :-
 element_prefix_(Symbol, Prefix) :-
     element_name(Symbol, Name),
     replace_ending_ma_(Name, Prefix).
+
+% TODO: Parent hydride ions
+% -- Polyatomic parent hydride ions
+
 
 %
 % IR-5.3.2.2
@@ -94,6 +101,17 @@ heteropolyatomic_anion_name([First, Second|_], Name) :-
     string_concat(S2, Suffix, S3),
     string_concat(S3, "ate", Name).
 
+parent_from_hydride(First, Second, Parent) :-
+    extract_term(First, [FirstSymbol, _|_]),
+    extract_term(Second, [SecondSymbol, _|_]),
+    (element_name(FirstSymbol, hydrogen) -> Parent = SecondSymbol; 
+     element_name(SecondSymbol, hydrogen) -> Parent = FirstSymbol; fail).
+
+parent_hydride_cation_name([F,S|_], Name) :-
+    parent_from_hydride(F, S, Symbol),
+    (other_name(Symbol, Prefix); element_prefix_(Symbol, Prefix)),
+    string_concat(Prefix, "anium", Name).
+
 %!  binary_stoichiometric_name(+Formula: string, -Name: string) 
 %
 %   Given the molecular formula of an ionic compound,
@@ -101,11 +119,13 @@ heteropolyatomic_anion_name([First, Second|_], Name) :-
 %
 %   TODO: more sophistication
 binary_stoichiometric_name(Formula, Name) :-
-    extract_elements_from_formula(Formula, [Cation|Anion]),
-    classify_cation(Cation, Prefix),
-    Caps = Prefix,
+    extract_elements_from_formula(Formula, X),
+    ([F, S|Anion] = X, parent_from_hydride(F, S, _), Cation = [F, S], 
+    parent_hydride_cation_name(Cation, Prefix), !; 
+    [Cation|Anion] = X, classify_cation(Cation, Prefix)),
+    % classify_cation(Cation, Prefix),
     classify_anion(Anion, Suffix),
-    string_concat(Caps, " ", Then),
+    string_concat(Prefix, " ", Then),
     string_concat(Then, Suffix, Name).
 
 
@@ -128,18 +148,15 @@ classify_cation(Any, Cation) :-
     extract_term(Any, [Symbol, Quantity|_]),
     Quantity = 1,
     element_name(Symbol, ElementName),
-    monatomic_cation_name(ElementName, Cation),
-    !.
+    monatomic_cation_name(ElementName, Cation), !.
 
 classify_cation(Any, Cation) :-
     length(Any, 1),
     [H|_] = Any,
-    homopolyatomic_cation_name(H, Cation),
-    !.
+    homopolyatomic_cation_name(H, Cation), !.
 
 classify_cation(Any, Cation) :-
-    heteropolyatomic_cation_name(Any, Cation),
-    !.
+    heteropolyatomic_cation_name(Any, Cation), !.
 
 classify_anion(Any, Anion) :-
     length(Any, 1),
