@@ -1,14 +1,18 @@
-file_element = open('element.txt', 'r')
-contents = []
-elements = []
-name = []
-if file_element.mode == 'r':
-    contents = file_element.readlines()
+def read_file(file_path) -> dict:
+    data = {}
+    file = open(file_path)
+    lines = file.read().splitlines()
+    for line in lines:
+        element, symbol, atomic_mass, num_neutrons, num_protons, num_electrons, period = line.split(',')
+        data[symbol] = [element, atomic_mass, num_neutrons, num_protons, num_electrons, period]
+    return data
 
-for i in contents:
-    all_contents = i.split()
-    name.append(all_contents[0])
-    elements.append(all_contents[1])
 
-for j in range(len(elements)):
-    print(f'element_name("{elements[j]}", {name[j].lower()}).')
+def print_element_name(data: dict):
+    for symbol, val in data.items():
+        print(f'element_name("{symbol}", {val[0].lower()}).')
+
+
+if __name__ == '__main__':
+    data = read_file('../assets/element.csv')
+    print_element_name(data)
