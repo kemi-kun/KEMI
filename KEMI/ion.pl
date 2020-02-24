@@ -71,15 +71,10 @@ binary_stoichiometric_name(Formula, Name) :-
 engt(Element1, Element2, Result) :-
     en(Element1, En1),
     en(Element2, En2),
-    En1 > En2,
-    Result = Element1,
-    !.
-engt(Element1, Element2, Result) :-
-    en(Element1, En1),
-    en(Element2, En2),
-    En1 < En2,
-    Result = Element2,
-    !.
+    (
+        En1 > En2 -> Result = Element1;
+        En2 > En1 -> Result = Element2
+    ).
 
 classify_anion(Any, Anion) :-
     length(Any, 1),
