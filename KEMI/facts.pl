@@ -405,9 +405,9 @@ num_protons("Sg", 106).
 num_protons("Bh", 107).
 num_protons("Hs", 108).
 num_protons("Mt", 109).
-num_protons("Ds ", 110).
-num_protons("Rg ", 111).
-num_protons("Cn ", 112).
+num_protons("Ds", 110).
+num_protons("Rg", 111).
+num_protons("Cn", 112).
 num_protons("Nh", 113).
 num_protons("Fl", 114).
 num_protons("Mc", 115).
