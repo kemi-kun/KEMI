@@ -66,13 +66,14 @@ extract_elements_(Formula, Start, String, End) :-
 period(Element, Period) :-
     num_protons(Element, Z),
     (
-        Z =<  2 -> Period is 1;
-        Z =< 10 -> Period is 2;
-        Z =< 18 -> Period is 3;
-        Z =< 36 -> Period is 4;
-        Z =< 54 -> Period is 5;
-        Z =< 86 -> Period is 6;
-        Period is 7
+        Z =<   2 -> Period is 1;
+        Z =<  10 -> Period is 2;
+        Z =<  18 -> Period is 3;
+        Z =<  36 -> Period is 4;
+        Z =<  54 -> Period is 5;
+        Z =<  86 -> Period is 6;
+        Z =< 118 -> Period is 7;
+        Period is 8
     ).
 
 delta(X, Y, R) :- 
