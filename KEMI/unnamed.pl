@@ -15,7 +15,7 @@ Implements rule IR-3.1.1 in IUPAC Red Book (pg. 47).
 %   @tbd Causes error if NumProton is queried instead.
 %
 name(NumProtons, Name) :-
-    digit_symbol__name_(NumProtons, N1),
+    digit_name_(NumProtons, N1),
     string_concat(N1, "ium", T0),
     name_check_i_(T0, T1),
     name_check_n_(T1, Name),
@@ -35,52 +35,52 @@ symbol(NumProtons, Symbol) :-
     str:capitalize(T0, Symbol),
     !.
 
-digit_symbol__name_(NumProtons, Name) :-
+digit_name_(NumProtons, Name) :-
     NumProtons < 10,
     NumProtons = 0,
     Name = "nil".
-digit_symbol__name_(NumProtons, Name) :-
+digit_name_(NumProtons, Name) :-
     NumProtons < 10,
     NumProtons = 1,
     Name = "un".
-digit_symbol__name_(NumProtons, Name) :-
+digit_name_(NumProtons, Name) :-
     NumProtons < 10,
     NumProtons = 2,
     Name = "bi".
-digit_symbol__name_(NumProtons, Name) :-
+digit_name_(NumProtons, Name) :-
     NumProtons < 10,
     NumProtons = 3,
     Name = "tri".
-digit_symbol__name_(NumProtons, Name) :-
+digit_name_(NumProtons, Name) :-
     NumProtons < 10,
     NumProtons = 4,
     Name = "quad".
-digit_symbol__name_(NumProtons, Name) :-
+digit_name_(NumProtons, Name) :-
     NumProtons < 10,
     NumProtons = 5,
     Name = "pent".
-digit_symbol__name_(NumProtons, Name) :-
+digit_name_(NumProtons, Name) :-
     NumProtons < 10,
     NumProtons = 6,
     Name = "hex".
-digit_symbol__name_(NumProtons, Name) :-
+digit_name_(NumProtons, Name) :-
     NumProtons < 10,
     NumProtons = 7,
     Name = "sept".
-digit_symbol__name_(NumProtons, Name) :-
+digit_name_(NumProtons, Name) :-
     NumProtons < 10,
     NumProtons = 8,
     Name = "oct".
-digit_symbol__name_(NumProtons, Name) :-
+digit_name_(NumProtons, Name) :-
     NumProtons < 10,
     NumProtons = 9,
     Name = "enn".
-digit_symbol__name_(NumProtons, Name) :-
+digit_name_(NumProtons, Name) :-
     NumProtons >= 10,
     T0 is NumProtons mod 10,
     T1 is NumProtons // 10,
-    digit_symbol__name_(T0, N0),
-    digit_symbol__name_(T1, N1),
+    digit_name_(T0, N0),
+    digit_name_(T1, N1),
     string_concat(N1, N0, Name).
 
 name_check_i_(Name, Result) :-
