@@ -96,3 +96,32 @@ delta_en(Element1, Element2, Result) :-
     en(Element2, En2),
     delta(En1, En2, Result),
     !.
+
+%! ionic(+Element1:string, +Element2:string) is det.
+%
+%  True if both element form an ionic bond.
+%
+%  TODO: take formula instead of element
+ionic(Element1, Element2) :-
+    delta_en(Element1, Element2, Result),
+    Result > 1.7.
+
+%! polar_covalent(+Element1:string, +Element2:string) is det.
+%
+%  True if both element form a polar covalent bond.
+%
+%  TODO: take formula instead of element
+polar_covalent(Element1, Element2) :-
+    delta_en(Element1, Element2, Result),
+    Result > 0.4,
+    Result < 1.5.
+
+%! nonpolar_covalent(+Element1:string, +Element2:string) is det.
+%
+%  True if both element form a nonpolar covalent bond.
+%
+%  TODO: take formula instead of element
+nonpolar_covalent(Element1, Element2) :-
+    delta_en(Element1, Element2, Result),
+    Result > 0,
+    Result < 0.4.
