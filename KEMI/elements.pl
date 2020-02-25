@@ -125,3 +125,79 @@ nonpolar_covalent(Element1, Element2) :-
     delta_en(Element1, Element2, Result),
     Result > 0,
     Result < 0.4.
+
+%  Facts for group 18
+noble("He", 18).
+noble("Ne", 18).
+noble("Ar", 18).
+noble("Kr", 18).
+noble("Xe", 18).
+noble("Rn", 18).
+noble("Og", 18).
+
+%! group(+Element:string, -Group:integer) is det.
+%! group(-Element:string, +Group:integer) is multi.
+%
+%  True if element is group 18.
+%
+group(Element, Group) :-
+    (
+        Element = "He" -> Group is 18, !;
+        Element = "Ne" -> Group is 18, !;
+        Element = "Ar" -> Group is 18, !;
+        Element = "Kr" -> Group is 18, !;
+        Element = "Xe" -> Group is 18, !;
+        Element = "Rn" -> Group is 18, !;
+        Element = "Og" -> Group is 18, !;
+        fail
+    ).
+
+%! group(+Element:string, -Group:integer) is det.
+%! group(-Element:string, +Group:integer) is multi.
+%
+%  True if element has group.
+%
+group(Element, Group) :-
+    num_protons(Element, Z),
+    noble(NobleElement, 18),
+    num_protons(NobleElement, Z2),
+    T0 is 1,
+    T1 is Z2 + 1,
+    T2 is Z2 + 2,
+    T3 is Z2 + 3,
+    T17 is Z2 - 1,
+    T16 is Z2 - 2,
+    T15 is Z2 - 3,
+    T14 is Z2 - 4,
+    T13 is Z2 - 5,
+    T12 is Z2 - 6,
+    T11 is Z2 - 7,
+    T10 is Z2 - 8,
+    T9 is Z2 - 9,
+    T8 is Z2 - 10,
+    T7 is Z2 - 11,
+    T6 is Z2 - 12,
+    T5 is Z2 - 13,
+    T4 is Z2 - 14,
+    (  
+        Z = T0 -> Group is 1;
+        Z = T1 -> Group is 1;
+        Z = T2 -> Group is 2;
+        Z = T3 -> Group is 3;
+        Z = T17 -> Group is 17;
+        Z = T16 -> Group is 16;
+        Z = T15 -> Group is 15;
+        Z = T14 -> Group is 14;
+        Z = T13-> Group is 13;
+        Z = T12 -> Group is 12;
+        Z = T11 -> Group is 11;
+        Z = T10 -> Group is 10;
+        Z = T9 -> Group is 9;
+        Z = T8 -> Group is 8;
+        Z = T7 -> Group is 7;
+        Z = T6 -> Group is 6;
+        Z = T5 -> Group is 5;
+        Z = T4 -> Group is 4      
+    ),
+    !.
+    
