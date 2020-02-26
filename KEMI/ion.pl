@@ -129,7 +129,7 @@ binary_stoichiometric_name(Formula, Name) :-
     string_concat(Then, Suffix, Name).
 
 
-%!  en_gt(+Element1: string, +Element2: string, -Result: string) is det
+%!  en_gt(+Element1: string, +Element2: string, -Result: string) is det.
 %   
 %   Given element symbols, compare their electronegativity (EN),
 %   then return the symbol of element with the highest EN.
@@ -180,3 +180,33 @@ classify_anion(Any, Anion) :-
 % heteropolyatomic_anion([First, Second|_], Name) :-
 %     en_gt(First, Second, R),
 %     extract_term(Term, [Symbol, Quantity|_]).
+
+%! get_electronegative_from_binary_compound(+Formula: string, -Result: compound<string, integer>) is det.
+%
+%  Given a formula of binary compound, 
+%  then return electronegative element.
+%
+get_electronegative_from_binary_compound(Formula, Result) :- 
+    extract_elements_from_formula(Formula, [Element1, Element2|_]),
+    extract_term(Element1, [Symbol1|_]),
+    extract_term(Element2, [Symbol2|_]),
+    en_gt(Symbol1, Symbol2, E),
+    (
+        Symbol1 = E -> Result = Element1;
+        Result = Element2
+    ).
+
+%! get_electropositive_from_binary_compound(+Formula: string, -Result: compound<string, integer>) is det.
+%
+%  Given a formula of binary compound, 
+%  then return electropositive element.
+%
+get_electropositive_from_binary_compound(Formula, Result) :- 
+    extract_elements_from_formula(Formula, [Element1, Element2|_]),
+    extract_term(Element1, [Symbol1|_]),
+    extract_term(Element2, [Symbol2|_]),
+    en_gt(Symbol1, Symbol2, E),
+    (
+        Symbol1 = E -> Result = Element2;
+        Result = Element1
+    ).
