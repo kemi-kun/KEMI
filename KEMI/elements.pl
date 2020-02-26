@@ -11,11 +11,6 @@
 % TODO: validate each element
 %
 
-halogen(fluorine).
-halogen(chlorine).
-halogen(bromine).
-halogen(iodine).
-halogen(astatine).
 
 element_quantity(Symbol, Quantity) :-
     Quantity > 0,
@@ -200,4 +195,38 @@ group(Element, Group) :-
         Z = T4 -> Group is 4      
     ),
     !.
-    
+
+alkali(Element) :-
+    alkali(Element, 1).
+
+alkali(Element, Group) :-
+    Group = 1,
+    group(Element, Group).
+
+alkali_earth(Element) :-
+    alkali_earth(Element, 2).
+
+alkali_earth(Element, Group) :-
+    Group = 2,
+    group(Element, Group).
+
+pnictogen(Element) :-
+    pnictogen(Element, 15).
+
+pnictogen(Element, Group) :-
+    Group = 15,
+    group(Element, Group).
+
+chalcogen(Element) :-
+    chalcogen(Element, 16).
+
+chalcogen(Element, Group) :-
+    group(Element, Group),
+    Group = 16.
+
+halogen(Element) :-
+    halogen(Element, 17).
+
+halogen(Element, Group) :-
+    group(Element, Group),
+    Group = 17.
