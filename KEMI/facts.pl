@@ -428,3 +428,4 @@ synonymous("Ag", argentum).
 synonymous("Na", natrium).
 synonymous("Sn", stannum).
 synonymous("W", wolfram).
+synonymous("Al", aluminium).
