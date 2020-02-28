@@ -1,4 +1,4 @@
-:- module(facts,[num_protons/2,en/2,element_name/2,multiplicative_prefix/2]).
+:- module(facts,[synonymous/2,num_protons/2,en/2,element_name/2,multiplicative_prefix/2]).
 
 
 
@@ -414,3 +414,18 @@ num_protons("Mc", 115).
 num_protons("Lv", 116).
 num_protons("Ts", 117).
 num_protons("Og", 118).
+
+
+% alternate names 
+synonymous("Sb", stibium).
+synonymous("Cu", cuprum).
+synonymous("Au", aurum).
+synonymous("Fe", ferrum).
+synonymous("Pb", plumbum).
+synonymous("Hg", hydragyrum).
+synonymous("K", kalium).
+synonymous("Ag", argentum).
+synonymous("Na", natrium).
+synonymous("Sn", stannum).
+synonymous("W", wolfram).
+synonymous("Al", aluminium).
