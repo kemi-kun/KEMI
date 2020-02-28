@@ -2,7 +2,7 @@
     Facts
 
 */
-:- module(elements,[element_quantity/2, extract_elements_from_formula/2, halogen/1]).
+:- module(elements,[element_quantity/2, extract_elements_from_formula/2, octet_rule_oxidation_number/2, halogen/1]).
 :- use_module(utils, [extract_term/2]).
 :- use_module(facts, [en/2, num_protons/2, element_name/2]).
 
@@ -230,3 +230,32 @@ halogen(Element) :-
 halogen(Element, Group) :-
     group(Element, Group),
     Group = 17.
+
+transition(Element) :-
+    transition(Element, _).
+
+transition(Element, Group) :-
+    group(Element, Group),
+    Group > 2, 
+    Group < 13,
+    not(lanthanide(Element)),
+    not(actinide(Element)).
+
+lanthanide(Element) :-
+    num_protons(Element, Proton),
+    Proton > 56, Proton < 72.
+
+actinide(Element) :-
+    num_protons(Element, Proton),
+    Proton > 88, Proton < 104.
+
+valence(Element, Valence) :-
+    not(transition(Element)),
+    group(Element, Group),
+    (Group > 12, Valence is Group - 10, !; Valence = Group).
+
+octet_rule_oxidation_number(Element, O) :-
+    valence(Element, V),
+    (V > 0, V < 4 -> O is V; 
+    V > 4 -> O is -(8-V); O is 4; 
+    O is -4).

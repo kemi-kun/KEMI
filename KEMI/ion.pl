@@ -1,12 +1,14 @@
 :- module('ion', [binary_stoichiometric_name/2]).
 :- use_module('str', [replace/4, capitalize/2, contains/2, remove/3]).
-:- use_module('elements',[element_quantity/2, extract_elements_from_formula/2, halogen/1]).
+:- use_module('elements',[element_quantity/2, extract_elements_from_formula/2, octet_rule_oxidation_number/2, halogen/1]).
 :- use_module('molecule', [homonuclear_polyatomic_name/2]).
 :- use_module('utils', [extract_term/2]).
 :- use_module('facts', [en/2, element_name/2, synonymous/2, multiplicative_prefix/2]).
 
 other_name("N", "az").
 other_name("O", "oxid").
+
+anion("H", hydride, -1).
 
 replace_ending_(ElementName, [], Result):-
     Result = ElementName, !.
@@ -38,13 +40,25 @@ element_prefix_ha_(Symbol, Prefix) :-
 % TODO: Parent hydride ions
 % -- Polyatomic parent hydride ions
 
+% +Element, -Name, -Charge
+common_monatomic_ion(Element, Name, Charge) :-
+    octet_rule_oxidation_number(Element, Charge),
+    (Charge > 0 -> monatomic_cation_name(Element, Name);
+    Charge < 0 -> monatomic_anion_name(Element, Name);
+    fail).
 
 %
 % IR-5.3.2.2
+%  
+monatomic_cation(Symbol, Name, Charge) :-
+    Charge > 0,
+    common_monatomic_ion(Symbol, Name, Charge).
 %
-monatomic_cation_name(ElementName, Result) :-
-    element_name(_, ElementName),
-    Result = ElementName.
+% IR-5.3.2.2
+%
+monatomic_cation_name(Symbol, Result) :-
+    element_name(Symbol, ElementName),
+    atom_string(ElementName, Result).
 
 %
 % IR-5.3.2.3
@@ -55,6 +69,17 @@ homopolyatomic_cation_name(Term, Result) :-
     element_name(Symbol, E),
     multiplicative_prefix(Quantity, Prefix),
     string_concat(Prefix, E, Result).
+
+
+heteropolyatomic_ion([First, Second|_], Name, Charge) :- 
+    extract_term(First, [FSymbol, FQ|_]),
+    extract_term(Second, [SSymbol, SQ|_]),
+    en_gt(FSymbol, SSymbol, _),
+    octet_rule_oxidation_number(FSymbol, C1),
+    octet_rule_oxidation_number(SSymbol, C2),
+    Charge is (C1*FQ) + (C2*SQ),
+    (Charge > 0 -> heteropolyatomic_cation_name([First, Second], Name);
+    heteropolyatomic_anion_name([First, Second], Name)).
 
 %
 % IR-5.3.2.4
@@ -77,9 +102,8 @@ heteropolyatomic_cation_name([First, Second|_], Name) :-
 %
 % IR-5.3.3.2
 %
-monatomic_anion_name(ElementName, Result) :-
-    element_name(Sym, ElementName),
-    element_prefix_(Sym, Name),
+monatomic_anion_name(Symbol, Result) :-
+    element_prefix_(Symbol, Name),
     string_concat(Name, "ide", Result).
 
 %
@@ -199,8 +223,7 @@ classify_cation(Any, Cation) :-
     
     extract_term(Any, [Symbol, Quantity|_]),
     Quantity = 1,
-    element_name(Symbol, ElementName),
-    monatomic_cation_name(ElementName, Cation), !.
+    monatomic_cation_name(Symbol, Cation), !.
 
 classify_cation(Any, Cation) :-
     % length(Any, 1),
@@ -216,8 +239,7 @@ classify_anion(Any, Anion) :-
     [H|_] = Any,
     extract_term(H, [Symbol, Quantity|_]),
     Quantity = 1,
-    element_name(Symbol, ElementName),
-    monatomic_anion_name(ElementName, Anion),
+    monatomic_anion_name(Symbol, Anion),
     !.
 
 classify_anion(Any, Anion) :-
