@@ -259,3 +259,16 @@ octet_rule_oxidation_number(Element, O) :-
     (V > 0, V < 4 -> O is V; 
     V > 4 -> O is -(8-V); O is 4; 
     O is -4).
+
+%! isotope(+Element1, +Element2) is det.
+%
+%  True if Element1 and Element2 are isotopes, false otherwise.
+%
+isotope(Element1, Element2) :-
+    sub_string(Element1, 1, _, 0, E1),
+    sub_string(Element2, 1, _, 0, E2),
+    num_protons(E1, Z1),
+    num_protons(E2, Z2),
+    Z1 = Z2.
+
+% sub_string(Str, IndexFromLeft, Length, IndexFromRight, SubString).
