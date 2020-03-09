@@ -1,5 +1,21 @@
-:- module(facts,[synonymous/2,num_protons/2,en/2,element_name/2,multiplicative_prefix/2]).
+/* Contains facts for the KEMI knowledge base
 
+Contents:
+- multiplicative prefixes
+- element names (IUPAC)
+- element ENs
+- element #protons
+- alternate element names
+- parent names of mononuclear hydrides
+*/
+:- module(facts,[
+        synonymous/2,
+        num_protons/2,
+        en/2,
+        element_name/2,
+        multiplicative_prefix/2,
+        parent_hydride_name/2
+    ]).
 
 
 % multiplicative prefixes
@@ -429,3 +445,20 @@ synonymous("Na", natrium).
 synonymous("Sn", stannum).
 synonymous("W", wolfram).
 synonymous("Al", aluminium).
+
+
+% parent hydride
+parent_hydride_name("AlH3", "alumane").
+parent_hydride_name("GaH3", "gallane").
+parent_hydride_name("InH3", "indigane").
+parent_hydride_name("TlH3", "thallane").
+parent_hydride_name("CH4", "methane").
+parent_hydride_name("SiH4", "silane").
+parent_hydride_name("GeH4", "germane").
+parent_hydride_name("SnH4", "stannane").
+parent_hydride_name("PbH4", "plumbane").
+parent_hydride_name("NH3", "azane").
+parent_hydride_name("PH3", "phosphane").
+parent_hydride_name("AsH3", "arsane").
+parent_hydride_name("SbH3", "stibane").
+parent_hydride_name("BiH3", "bismuthane").
