@@ -2,7 +2,7 @@
     Facts
 
 */
-:- module(elements,[element_quantity/2, extract_elements_from_formula/2, group/2, standard_bonding_number_of/2, halogen/1]).
+:- module(elements,[element_quantity/2, extract_elements_from_formula/2, group/2, halogen/1, standard_bonding_number_of/2]).
 :- use_module(utils, [extract_term/2]).
 :- use_module(facts, [en/2, num_protons/2, element_name/2]).
 
@@ -254,11 +254,20 @@ valence(Element, Valence) :-
     group(Element, Group),
     (Group > 12, Valence is Group - 10, !; Valence = Group).
 
-standard_bonding_number_of(Element, O) :-
+octet_rule_oxidation_number(Element, O) :-
     valence(Element, V),
     (V > 0, V < 4 -> O is V; 
     V > 4 -> O is -(8-V); O is 4; 
     O is -4).
+
+%! StandardBondingNumberOf(+parent_of_hydride: string, -number: integer) .
+%
+% ...
+%
+standard_bonding_number_of(Element, BondingNumber) :-
+    octet_rule_oxidation_number(Element, O),
+    (O > 0, BondingNumber is O, !;
+     O < 0, BondingNumber is -O).
 
 %! isotope(+Element1, +Element2) is det.
 %
