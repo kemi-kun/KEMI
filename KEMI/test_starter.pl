@@ -1,9 +1,9 @@
 
 
-:- begin_tests(test).
+:- begin_tests(test_starter).
 :- use_module(ion, [binary_stoichiometric_name/2]).
 
-test(param) :-
+test(binary_stoichiometric_name) :-
     assertion(binary_stoichiometric_name("NaCl", "sodium chloride")),
     % Red book IR-5.2 tests
     assertion(binary_stoichiometric_name("HCl", "hydrogen chloride")),
@@ -20,4 +20,4 @@ test(param) :-
     assertion(binary_stoichiometric_name("Cu5Zn8", "pentacopper octazincide")),
     assertion(binary_stoichiometric_name("Cr23C6", "tricosachromium hexacarbide")).
 
-:- end_tests(test).
+:- end_tests(test_starter).

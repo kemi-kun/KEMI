@@ -1,9 +1,7 @@
-
-:- begin_tests(test).
+:- begin_tests(test_group).
 :- use_module(elements,[group/2]).
 
-test(param) :-
-    
+test(group) :-
     assertion(group("H", 1)),
     assertion(group("He", 18)),
     assertion(group("Li", 1)),
@@ -95,4 +93,4 @@ test(param) :-
     assertion(group("Ts", 17)),
     assertion(group("Og", 18)).
 
-:- end_tests(test).
+:- end_tests(test_group).

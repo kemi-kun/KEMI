@@ -1,13 +1,14 @@
 /**
 Tests functions in elements.pl
 */
+:- begin_tests(test_elements).
 :- use_module(elements,[atoms/2,contains/2]).
-:- begin_tests(test).
 
-test(param) :-
+test('[elements.pl] Generic') :-
     assertion(contains("NaCl", [atoms("Na", 1), atoms("Cl", 1)])),
-    assertion(contains("S8", [atoms("S", 8)])),
-    % Red book IR-5.2 tests 
+    assertion(contains("S8", [atoms("S", 8)])).
+
+test('[elements.pl] Red book IR-5.2') :-
     assertion(contains("HCl", [atoms("H", 1), atoms("Cl", 1)])),
     assertion(contains("NO", [atoms("N", 1), atoms("O", 1)])),
     assertion(contains("NO2", [atoms("N", 1), atoms("O", 2)])),
@@ -20,8 +21,9 @@ test(param) :-
     assertion(contains("Ca3P2", [atoms("Ca", 3), aoms("P", 2)])),
     assertion(contains("NiSn", [atoms("Ni", 1), atoms("Sn", 1)])),
     assertion(contains("Cu5Zn8", [atoms("Cu", 5), atoms("Zn", 8)])),
-    assertion(contains("Cr23C6", [atoms("Cr", 23), atoms("C", 6)])),
-    % enclosing marks IR-2.2
+    assertion(contains("Cr23C6", [atoms("Cr", 23), atoms("C", 6)])).
+
+test('[elements.pl] enclosing marks IR-2.2') :-
     assertion(contains("[Rh3Cl(μ-Cl)(CO)3{μ3-Ph2PCH2P(Ph)CH2PPh2}2]+", [atoms("Rh", 13), atoms("Cl", 2), atoms("C", 7), atoms("O", 3), atoms("Ph", 10), atoms("P", 6), atoms("H", 8)])),
     assertion(contains("[Fe(η5-C5H5)2]", [atoms("Fe", 1), atoms("C", 10), atoms("H", 10)])),
     assertion(contains("[Pt(η2-C2H4)Cl2(NH3)]", [atoms("Pt", 1), atoms("C", 2), atoms("H", 7), atoms("Cl", 2), atoms("N", 1)])),
@@ -59,4 +61,4 @@ test(param) :-
     assertion(contains("[MnVIIO4]-", [atoms("Mn", 1), atoms("O", 4)])),
     assertion(contains("[Pt(PPh3)4]", [atoms("Pt", 1), atoms("P", 4), atoms("Ph", 12)])).
 
-:- end_tests(test).
+:- end_tests(test_elements).
