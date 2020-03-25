@@ -6,8 +6,7 @@
 %   Return false if `Element` is not in `In`
 %  
 list_remove(In, Element, Out) :-
-    select(Element, In, Out), 
-    !.
+    selectchk(Element, In, Out).
 
 %!  reversed(+In: list, -Out: list) is det.
 %  
