@@ -54,3 +54,11 @@ number_to_character(Number, Character) :-
 split_decimal(Number, Numbers) :-
     number_chars(Number, Numbers_),
     maplist(atom_number, Numbers_, Numbers).
+
+%! append_element(+List: list, +Element: atom, -Result: list) is det.
+%! append_element(+List: list, -Element: atom, +Result: list) is det.
+%
+%  Append `Element` to a list `List`
+%
+append_element(List, Element, Result) :-
+    append(List, [Element], Result).
