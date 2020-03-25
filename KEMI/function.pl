@@ -32,3 +32,16 @@ enumerate_([H1|T1], [H2|T2]) :-
     enumerate_(T1, T2),
     nth0(0, T2, N_0),
     H2 is N_0 + 1.
+
+%!  split(+In: String, -Out: list) is det.
+%  
+%   Split string `In` to list
+%   and return the result list as `Out`.
+%
+split(In, Out) :-
+    string_codes(In, Code),
+    maplist(number_to_character,
+       Code, Out).
+
+number_to_character(Number, Character) :-
+    string_codes(Character,[Number]).
