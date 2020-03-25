@@ -17,3 +17,16 @@ list_remove(In, Element, Out) :-
 reversed(In, Out) :-
     reverse(In, Out),
     !.
+
+%!  split(+In: String, -Out: list) is det.
+%  
+%   Split string `In` to list
+%   and return the result list as `Out`.
+%
+split(In, Out) :-
+    string_codes(In, Code),
+    maplist(number_to_character,
+       Code, Out).
+
+number_to_character(Number, Character) :-
+    string_codes(Character,[Number]).
