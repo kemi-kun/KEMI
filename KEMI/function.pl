@@ -16,3 +16,19 @@ list_remove(In, Element, Out) :-
 reversed(In, Out) :-
     reverse(In, Out),
     !.
+
+%!  enumerate(+List: list, -Pairs: list(Key-Value)) is det.
+%!  enumerate(-List: list, +Pairs: list(Key-Value)) is det.
+%  
+%   True when =Pairs= is a _Pairs_ with index as key and element as value.
+%
+enumerate(List, Pairs) :-
+    pairs_keys_values(Pairs, Keys, List),
+    enumerate_(List, Keys).
+enumerate_([H1], [H2]) :-
+    H2 is 0,
+    !.
+enumerate_([H1|T1], [H2|T2]) :-
+    enumerate_(T1, T2),
+    nth0(0, T2, N_0),
+    H2 is N_0 + 1.
