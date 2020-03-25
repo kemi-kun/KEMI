@@ -8,3 +8,13 @@
 list_remove(In, Element, Out) :-
     select(Element, In, Out), 
     !.
+
+%! reversed(+In: list, -Out: list) is det.
+%  
+%  Reverse list `In`and return the result list as `Out`.
+%  Return false if `In` is not list
+%
+reversed(In, Out) :-
+    reverse(In, Out),
+    !.
+
