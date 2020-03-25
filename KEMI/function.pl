@@ -33,6 +33,27 @@ enumerate_([H1|T1], [H2|T2]) :-
     nth0(0, T2, N_0),
     H2 is N_0 + 1.
 
+%!  range(+Start: integer, +Start: integer, +Start: integer, -Range: list) is det.
+%
+%   True when `Range` is a list with range [Start, Stop).
+%   Currently only one way.
+%
+range(Start, Stop, Step, Range) :-
+    range_(Stop, Step, [Start|T]),
+    append([Start], T, Range).
+range_(Stop, Step, [H|T]) :-
+    not(var(Step)),
+    T = [],
+    High is Stop-1,
+    Low is Stop-Step,
+    between(Low, High, H),
+    !.
+range_(Stop, Step, [H|T]) :-
+    nth0(0, T, T0),
+    T0 is H + Step,
+    T0 < Stop,
+    range_(Stop, Step, T).
+ 
 %!  split(+In: String, -Out: list) is det.
 %  
 %   Split string `In` to list
