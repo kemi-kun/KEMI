@@ -45,3 +45,12 @@ split(In, Out) :-
 
 number_to_character(Number, Character) :-
     string_codes(Character,[Number]).
+
+%! split_decimal(+Number, -Numbers) is det.
+% 
+%  Return the number splitted into digits.
+%  
+%  split_decimal(1234, [1, 2, 3, 4]).
+split_decimal(Number, Numbers) :-
+    number_chars(Number, Numbers_),
+    maplist(atom_number, Numbers_, Numbers).
