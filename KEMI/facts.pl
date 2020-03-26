@@ -15,7 +15,8 @@ Contents:
         element_name/2,
         multiplicative_prefix/2,
         parent_hydride_name/2,
-        numerical_roots/2
+        numerical_roots/2,
+        multiplicative_affix_fact/2
     ]).
 
 
@@ -476,3 +477,15 @@ numerical_roots(7, "sept").
 numerical_roots(8, "oct").
 numerical_roots(9, "enn").
 numerical_roots(0, "nil").
+
+
+% multiplicative affix
+multiplicative_affix_fact(1, "hen").
+multiplicative_affix_fact(2, "do").
+multiplicative_affix_fact(3, "tri").
+multiplicative_affix_fact(4, "tetra").
+multiplicative_affix_fact(5, "penta").
+multiplicative_affix_fact(6, "hexa").
+multiplicative_affix_fact(7, "hepta").
+multiplicative_affix_fact(8, "octa").
+multiplicative_affix_fact(9, "nona").
