@@ -14,7 +14,8 @@ Contents:
         en/2,
         element_name/2,
         multiplicative_prefix/2,
-        parent_hydride_name/2
+        parent_hydride_name/2,
+        numerical_roots/2
     ]).
 
 
@@ -462,3 +463,16 @@ parent_hydride_name("PH3", "phosphane").
 parent_hydride_name("AsH3", "arsane").
 parent_hydride_name("SbH3", "stibane").
 parent_hydride_name("BiH3", "bismuthane").
+
+
+% numerical root
+numerical_roots(1, "un").
+numerical_roots(2, "bi").
+numerical_roots(3, "tri").
+numerical_roots(4, "quad").
+numerical_roots(5, "pent").
+numerical_roots(6, "hex").
+numerical_roots(7, "sept").
+numerical_roots(8, "oct").
+numerical_roots(9, "enn").
+numerical_roots(0, "nil").
