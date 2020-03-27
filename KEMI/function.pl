@@ -161,6 +161,12 @@ sorted_by_en_(List, SortedList) :-
     keysort(ElementEnPairs, ElementEnSorted),
     pairs_values(ElementEnSorted, SortedList).
 
+%! sorted(+Key: string, +List: list, -SortedList: list) is det.
+%
+%  Sort list `List` by `Key`
+%  TODO: sort by alphabet
+%
+%  sorted("en", ["Na", "Cl", "H"], ["Na", "H", "Cl"]).
 sorted(Key, List, SortedList) :-
     (
         Key = "en", sorted_by_en_(List, SortedList);
