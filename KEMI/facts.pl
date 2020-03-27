@@ -24,7 +24,7 @@ element_name_fact(fluorine, "fluorine").
 element_name_fact(neon, "neon").
 element_name_fact(sodium, "sodium").
 element_name_fact(magnesium, "magnesium").
-element_name_fact(aluminum, "aluminum").
+element_name_fact(aluminium, "aluminium").
 element_name_fact(silicon, "silicon").
 element_name_fact(phosphorus, "phosphorus").
 element_name_fact(sulfur, "sulfur").
@@ -66,7 +66,7 @@ element_name_fact(antimony, "antimony").
 element_name_fact(tellurium, "tellurium").
 element_name_fact(iodine, "iodine").
 element_name_fact(xenon, "xenon").
-element_name_fact(cesium, "cesium").
+element_name_fact(caesium, "caesium").
 element_name_fact(barium, "barium").
 element_name_fact(lanthanum, "lanthanum").
 element_name_fact(cerium, "cerium").
@@ -146,7 +146,7 @@ element_symbol_fact(fluorine, "F").
 element_symbol_fact(neon, "Ne").
 element_symbol_fact(sodium, "Na").
 element_symbol_fact(magnesium, "Mg").
-element_symbol_fact(aluminum, "Al").
+element_symbol_fact(aluminium, "Al").
 element_symbol_fact(silicon, "Si").
 element_symbol_fact(phosphorus, "P").
 element_symbol_fact(sulfur, "S").
@@ -188,7 +188,7 @@ element_symbol_fact(antimony, "Sb").
 element_symbol_fact(tellurium, "Te").
 element_symbol_fact(iodine, "I").
 element_symbol_fact(xenon, "Xe").
-element_symbol_fact(cesium, "Cs").
+element_symbol_fact(caesium, "Cs").
 element_symbol_fact(barium, "Ba").
 element_symbol_fact(lanthanum, "La").
 element_symbol_fact(cerium, "Ce").
@@ -288,10 +288,11 @@ alternative_element_name_fact(copper, "cuprum").
 alternative_element_name_fact(gold, "aurum").
 alternative_element_name_fact(iron, "ferrum").
 alternative_element_name_fact(lead, "plumbum").
-alternative_element_name_fact(mercury, "hydragyrum").
+alternative_element_name_fact(mercury, "hydrargyrum.").
 alternative_element_name_fact(potassium, "kalium").
 alternative_element_name_fact(silver, "argentum").
 alternative_element_name_fact(sodium, "natrium").
 alternative_element_name_fact(tin, "stannum").
 alternative_element_name_fact(tungsten, "wolfram").
 alternative_element_name_fact(aluminium, "aluminum").
+alternative_element_name_fact(caesium, "cesium").
