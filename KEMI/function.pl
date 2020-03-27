@@ -91,10 +91,10 @@ append_element(List, Element, Result) :-
 %
 %  Remove "(", ")", "[", "]", "{" and "}" from `String`.
 %
-% remove_parentheses("NaCl", "NaCl").
-% remove_parentheses("[Al(POCl3)6]3+", "AlPOCl363+").
-% remove_parentheses("H2[PtCl6]", "H2PtCl6").
-% remove_parentheses("ab[(c)][d2](3)", "abcd23").
+% remove_parentheses_("NaCl", "NaCl").
+% remove_parentheses_("[Al(POCl3)6]3+", "AlPOCl363+").
+% remove_parentheses_("H2[PtCl6]", "H2PtCl6").
+% remove_parentheses_("ab[(c)][d2](3)", "abcd23").
 remove_parentheses_(String, Result) :-
     re_split("[(\\)\\[\\]\\{\\}]", String, R1, []),
     delete(R1, "(", R2),
