@@ -57,7 +57,7 @@ range_(Stop, Step, [H|T]) :-
     T0 < Stop,
     range_(Stop, Step, T).
  
-%!  split(+In: String, -Out: list) is det.
+%!  split(+In: string, -Out: list) is det.
 %  
 %   Split string `In` to list
 %   and return the result list as `Out`.
@@ -70,7 +70,7 @@ split(In, Out) :-
 number_to_character(Number, Character) :-
     string_codes(Character,[Number]).
 
-%! split_decimal(+Number, -Numbers) is det.
+%! split_decimal(+Number: integer, -Numbers: list) is det.
 % 
 %  Return the number splitted into digits.
 %  
@@ -87,13 +87,33 @@ split_decimal(Number, Numbers) :-
 append_element(List, Element, Result) :-
     append(List, [Element], Result).
 
-%! get_element(+Formula: string, +Index: integer, -Element: string)
+%! remove_parentheses_(+String: string, -Result: string) is det.
+%
+%  Remove "(", ")", "[", "]", "{" and "}" from `String`.
+%
+% remove_parentheses("NaCl", "NaCl").
+% remove_parentheses("[Al(POCl3)6]3+", "AlPOCl363+").
+% remove_parentheses("H2[PtCl6]", "H2PtCl6").
+% remove_parentheses("ab[(c)][d2](3)", "abcd23").
+remove_parentheses_(String, Result) :-
+    re_split("[(\\)\\[\\]\\{\\}]", String, R1, []),
+    delete(R1, "(", R2),
+    delete(R2, ")", R3),
+    delete(R3, "[", R4),
+    delete(R4, "]", R5),
+    delete(R5, "{", R6),
+    delete(R6, "}", R7),
+    delete(R7, "", Result_),
+    atomics_to_string(Result_, Result).
+
+%! get_element(+Formula: string, +Index: integer, -Element: string) is det.
 %
 %  Get element at `Index` position in formula `Formula`.
 %  (index starts at 0)
 %  Return false if there's no element at `Index`
 %
 get_element(Formula, Index, Element) :-
-    extract_elements_from_formula(Formula, Elements),
+    remove_parentheses_(Formula, Formula_),
+    extract_elements_from_formula(Formula_, Elements),
     nth0(Index, Elements, ElementQuantity),
     extract_term(ElementQuantity, [Element|_]).
