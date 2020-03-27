@@ -141,3 +141,13 @@ extract_element_quantity(ElementQuantities, Elements) :-
 
 % get_all_elements("ClOF", R).
 % get_all_elements("PH5", R).
+
+%! get_num_elements(+Formula: string, -Amount: integer) is det.
+%
+%  Return total number (num of type) of elements in
+%  formula `Formula`
+%
+get_num_elements(Formula, Amount) :-
+    remove_parentheses_(Formula, Formula_),
+    extract_elements_from_formula(Formula_, Elements),
+    length(Elements, Amount).
