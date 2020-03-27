@@ -1,5 +1,6 @@
 :- use_module('elements',[element_quantity/2, extract_elements_from_formula/2]).
 :- use_module('utils', [extract_term/2]).
+:- use_module('facts', [en/2]).
 
 %!  list_remove(+In: list, +Element: atom, -Out: list) is det.
 %!  list_remove(-In: list, +Element: atom, +Out: list) is det.
@@ -153,4 +154,17 @@ get_num_elements(Formula, Amount) :-
     extract_element_quantity(ElementQuantities, ElementList),
     list_to_set(ElementList, ElementSet),
     length(ElementSet, Amount),
+    !.
+
+sorted_by_en_(List, SortedList) :-
+    map_list_to_pairs(en, List, ElementEnPairs),
+    keysort(ElementEnPairs, ElementEnSorted),
+    pairs_values(ElementEnSorted, SortedList).
+
+sorted(Key, List, SortedList) :-
+    (
+        Key = "en", sorted_by_en_(List, SortedList);
+        Key = "alphabet", SortedList = [];
+        Key = "", false
+    ),
     !.
