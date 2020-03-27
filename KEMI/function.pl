@@ -149,5 +149,8 @@ extract_element_quantity(ElementQuantities, Elements) :-
 %
 get_num_elements(Formula, Amount) :-
     remove_parentheses_(Formula, Formula_),
-    extract_elements_from_formula(Formula_, Elements),
-    length(Elements, Amount).
+    extract_elements_from_formula(Formula_, ElementQuantities),
+    extract_element_quantity(ElementQuantities, ElementList),
+    list_to_set(ElementList, ElementSet),
+    length(ElementSet, Amount),
+    !.
