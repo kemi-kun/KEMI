@@ -1,3 +1,6 @@
+:- use_module('elements',[element_quantity/2, extract_elements_from_formula/2]).
+:- use_module('utils', [extract_term/2]).
+
 %!  list_remove(+In: list, +Element: atom, -Out: list) is det.
 %!  list_remove(-In: list, +Element: atom, +Out: list) is det.
 %  
@@ -83,3 +86,14 @@ split_decimal(Number, Numbers) :-
 %
 append_element(List, Element, Result) :-
     append(List, [Element], Result).
+
+%! get_element(+Formula: string, +Index: integer, -Element: string)
+%
+%  Get element at `Index` position in formula `Formula`.
+%  (index starts at 0)
+%  Return false if there's no element at `Index`
+%
+get_element(Formula, Index, Element) :-
+    extract_elements_from_formula(Formula, Elements),
+    nth0(Index, Elements, ElementQuantity),
+    extract_term(ElementQuantity, [Element|_]).
