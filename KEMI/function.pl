@@ -117,3 +117,27 @@ get_element(Formula, Index, Element) :-
     extract_elements_from_formula(Formula_, Elements),
     nth0(Index, Elements, ElementQuantity),
     extract_term(ElementQuantity, [Element|_]).
+
+%! get_all_elements(+Formula: string, -ElementSet: list) is det.
+%
+%  Return a set (a list without duplicate) of elements in
+%  formula `Formula`
+%
+get_all_elements(Formula, ElementSet) :-
+    remove_parentheses_(Formula, Formula_),
+    extract_elements_from_formula(Formula_, ElementQuantities),
+    extract_element_quantity(ElementQuantities, ElementList),
+    list_to_set(ElementList, ElementSet),
+    !.
+
+% [element_quantity("Na", 1), element_quantity("Cl", 1)] => ["Na", "Cl"]
+extract_element_quantity([], []).
+extract_element_quantity(ElementQuantities, Elements) :-
+    ElementQuantities = [EleQuanH|EleQuanT],
+    extract_term(EleQuanH, [EleH|_]),
+    extract_element_quantity(EleQuanT, EleT),
+    append([EleH], EleT, Elements),
+    !.
+
+% get_all_elements("ClOF", R).
+% get_all_elements("PH5", R).
