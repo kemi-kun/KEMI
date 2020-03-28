@@ -4,15 +4,15 @@ def read_file(file_path) -> dict:
     file = open(file_path)
     lines = file.read().splitlines()
     for line in lines:
-        symbol, en = line.split(',')
-        data[symbol] = en
+        element, en = line.split(',')
+        data[element] = en
     return data
 
 
 def print_en_fact(data: dict):
-    for symbol in data:
-        en = data[symbol]
-        print(f'en("{symbol}", {en}).')
+    for element in data:
+        en = data[element]
+        print(f'en_fact({element.lower()}, {en}).')
 
 
 if __name__ == '__main__':
