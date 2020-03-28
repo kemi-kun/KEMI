@@ -29,14 +29,16 @@ def add_comma(s):
 
 
 def print_element_facts(data: dict):
-    max_lens = [max(map(len, map(str, map(itemgetter(i), data.values())))) for i in range(6)]
+    sdata = {}
     for symbol, val in data.items():
         element, atomic_mass, num_neutrons, num_protons, num_electrons, period = val
-        print((f'element_fact({{:<{max_lens[0]+1}}} {{:<{max_lens[0]+3}}} {{:<{2+3}}} {{:<{max_lens[3]+1}}} {atomic_mass}).')
-              .format(*map(add_comma, [element.lower(), _ps(element.lower()), _ps(symbol), num_protons])))
+        sdata[atomic_mass] = list(map(add_comma, [element.lower(), _ps(element.lower()), _ps(symbol), num_protons]))
+    max_lens = [max(map(len, map(str, map(itemgetter(i), sdata.values())))) for i in range(4)]
+    for last, row in sdata.items():
+        s = ' '.join((f'{{:<{max_lens[i]}}}').format(e) for i, e in enumerate(row))
+        print(f'element_fact({s} {last}).')
 
 
 if __name__ == '__main__':
-    import sys
     data = read_file('../assets/element.csv')
     print_element_facts(data)
