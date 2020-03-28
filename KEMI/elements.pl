@@ -191,6 +191,16 @@ group(Element, Group) :-
     Group is 1.
 group(Element, Group) :-
     var(Element),
+    group_(Element, Group).
+group(Element, Group) :-
+    nonvar(Element),
+    group_(Element, Group),
+    !.
+group(Element, Group) :-
+    element_fact(Element, _, _, Z, _),
+    full_orbital(Z),
+    Group is 18.
+group_(Element, Group) :-
     (nonvar(Group) -> Group \= 18; true),   % skip this if Group is given = 18
     element_fact(Element, _, _, Z, _),
     not(full_orbital(Z)),                   % skip if is group 18
@@ -232,51 +242,3 @@ group(Element, Group) :-
         Z = T5 -> Group is 5;
         Z = T4 -> Group is 4      
     ).
-group(Element, Group) :-
-    nonvar(Element),
-    (nonvar(Group) -> Group \= 18; true),   % skip this if Group is given = 18
-    element_fact(Element, _, _, Z, _),
-    not(full_orbital(Z)),                   % skip if is group 18
-    group(NobleElement, 18),
-    element_fact(NobleElement, _, _, Z2, _),
-    T1 is Z2 + 1,
-    T2 is Z2 + 2,
-    T3 is Z2 + 3,
-    T17 is Z2 - 1,
-    T16 is Z2 - 2,
-    T15 is Z2 - 3,
-    T14 is Z2 - 4,
-    T13 is Z2 - 5,
-    T12 is Z2 - 6,
-    T11 is Z2 - 7,
-    T10 is Z2 - 8,
-    T9 is Z2 - 9,
-    T8 is Z2 - 10,
-    T7 is Z2 - 11,
-    T6 is Z2 - 12,
-    T5 is Z2 - 13,
-    T4 is Z2 - 14,
-    (  
-        Z = T1 -> Group is 1;
-        Z = T2 -> Group is 2;
-        Z = T3 -> Group is 3;
-        Z = T17 -> Group is 17;
-        Z = T16 -> Group is 16;
-        Z = T15 -> Group is 15;
-        Z = T14 -> Group is 14;
-        Z = T13-> Group is 13;
-        Z = T12 -> Group is 12;
-        Z = T11 -> Group is 11;
-        Z = T10 -> Group is 10;
-        Z = T9 -> Group is 9;
-        Z = T8 -> Group is 8;
-        Z = T7 -> Group is 7;
-        Z = T6 -> Group is 6;
-        Z = T5 -> Group is 5;
-        Z = T4 -> Group is 4      
-    ),
-    !.
-group(Element, Group) :-
-    element_fact(Element, _, _, Z, _),
-    full_orbital(Z),
-    Group is 18.
