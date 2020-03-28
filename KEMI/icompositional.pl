@@ -1,5 +1,5 @@
 :- module(icompositional,[boron_hydride_stoichiometric/2,general_stoichiometric/2,addition_compound_cn/2,ion_cn/2,binary_compound_cn/2,homonuclear_cn/2]).
-:- use_module(chemutils,[get_element/3,get_all_elements/2,get_num_atoms/3]).
+:- use_module(uchem,[get_element/3,get_all_elements/2,get_num_atoms/3]).
 :- use_module(elements,[element_name/2,group/2]).
 :- use_module(support,[multiplicative_prefix/2,mul_prefix_except_mono/2]).
 

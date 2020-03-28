@@ -1,4 +1,4 @@
-:- module(strutils,[join/3,split/2,capitalize/2,contains/2,remove/3,replace/4]).
+:- module(ustr,[join/3,split/2,capitalize/2,contains/2,remove/3,replace/4]).
 
 
 contains(String, Substring) :-

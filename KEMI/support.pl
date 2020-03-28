@@ -1,7 +1,7 @@
 :- module(support,[multiplicative_prefix/2]).
 :- use_module(utils,[split_decimal/2]).
-:- use_module(strutils,[join/3]).
-:- use_module(listutils,[enumerate/2,range/4]).
+:- use_module(ustr,[join/3]).
+:- use_module(ulist,[enumerate/2,range/4]).
 :- use_module(facts,[multiplicative_prefix_fact/2,multiplicative_affix_fact/2]).
 
 

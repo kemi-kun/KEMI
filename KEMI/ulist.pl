@@ -1,4 +1,4 @@
-:- module(listutils,[enumerate/2]).
+:- module(ulist,[enumerate/2]).
 
 
 %!  reversed(+In: list, -Out: list) is det.
