@@ -47,17 +47,17 @@ new_element_atomic_number(Element, Z) :-
     split_decimal(Z, L0),
     !.
 
-%!  numerical_root_symbol(+Number:integer, -Symbol:atom) is det.
-%!  numerical_root_symbol(-Number:integer, +Symbol:atom) is det.
 %!  numerical_root_symbol(+Number:integer, +Symbol:atom) is det.
+%!  numerical_root_symbol(+Number:integer, -Symbol:atom) is det.
+%!  numerical_root_symbol(-Number:integer, -Symbol:atom) is multi.
+%!  numerical_root_symbol(-Number:integer, +Symbol:atom) is det.
 %
 %   True when `Symbol` is the first character of the numerical root of `Number`.
 %
 numerical_root_symbol(Number, Symbol) :-
-    var(Number), var(Symbol),
-    numerical_root_fact(Number, Root),
-    string_chars(Root, [Symbol|_]).
-numerical_root_symbol(Number, Symbol) :-
+    (var(Number), var(Symbol)) ->
+        numerical_root_fact(Number, Root),
+        string_chars(Root, [Symbol|_]);
     numerical_root_fact(Number, Root),
     string_chars(Root, [Symbol|_]),
     !.
