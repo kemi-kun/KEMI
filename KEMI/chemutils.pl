@@ -1,5 +1,6 @@
 % :- use_module('facts', [en/2]).
 :- use_module('facts',[en/2,element_fact/5]).
+:- module(chemutils,[get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
 
 
 %! remove_parentheses_(+String: string, -Result: string) is det.
@@ -147,12 +148,12 @@ sorted(Key, List, SortedList) :-
     !.
 
 
-%! get_num_atom(+Formula: string,+Element: atom, -Amount: integer) is det.
+%! get_num_atoms(+Formula: string,+Element: atom, -Amount: integer) is det.
 %
 %  Return amount of element in 
 %  formula `Formula`
 %
-get_num_atom(Formula, Element, Amount) :-
+get_num_atoms(Formula, Element, Amount) :-
     remove_parentheses_(Formula, Formula_),
     extract_elements_from_formula(Formula_, ElementQuantities),
     extract_quantity_from_element(ElementQuantities,Element, Amount).
