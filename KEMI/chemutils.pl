@@ -1,6 +1,5 @@
-% :- use_module('facts', [en/2]).
-:- use_module('facts',[en/2,element_fact/5]).
 :- module(chemutils,[get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
+:- use_module('facts',[en/2,element_fact/5]).
 
 
 %! remove_parentheses_(+String: string, -Result: string) is det.
