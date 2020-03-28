@@ -17,9 +17,9 @@ Implements:
 
 
 element_name(Element, ElementName) :-
+    alternative_element_name_fact(Element, ElementName);
     element_fact(Element, ElementName, _, _, _) -> true;
-    new_element_name(Element, ElementName);
-    alternative_element_name_fact(Element, ElementName).
+    new_element_name(Element, ElementName).
 
 atomic_number(Element, Z) :-
     element_fact(Element, _, _, Z, _) -> true;
