@@ -1,10 +1,10 @@
 :- module(utils,[split_decimal/2]).
 
 
-%!  split_decimal(+Number:integer, +Numbers:list) is det.
-%!  split_decimal(+Number:integer, -Numbers:list) is det.
-%!  split_decimal(-Number:integer, -Numbers:list) is failure.
-%!  split_decimal(-Number:integer, +Numbers:list) is det.
+%!  split_decimal(+Number:int, +Numbers:list) is det.
+%!  split_decimal(+Number:int, -Numbers:list) is det.
+%!  split_decimal(-Number:int, -Numbers:list) is failure.
+%!  split_decimal(-Number:int, +Numbers:list) is det.
 %
 %   Return the number splitted into digits.
 %
