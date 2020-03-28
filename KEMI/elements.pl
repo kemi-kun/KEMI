@@ -30,7 +30,7 @@ atomic_number(Element, Z) :-
 %!  new_element_atomic_number(-Element:string, -Z:integer) is failure.
 %!  new_element_atomic_number(-Element:string, +Z:integer) is det.
 %
-%   True when `Z` is the atomic number of new element `Element`
+%   True when `Z` is the atomic number of "new" element `Element`.
 %
 new_element_atomic_number(Element, Z) :-
     nonvar(Z),
@@ -51,7 +51,7 @@ new_element_atomic_number(Element, Z) :-
 %!  numerical_root_symbol(-Number:integer, +Symbol:atom) is det.
 %!  numerical_root_symbol(+Number:integer, +Symbol:atom) is det.
 %
-%   True when `Symbol` is the first character of the numerical root of `Number`
+%   True when `Symbol` is the first character of the numerical root of `Number`.
 %
 numerical_root_symbol(Number, Symbol) :-
     var(Number), var(Symbol),
@@ -95,3 +95,63 @@ period2(Element, Period) :-
         nth1(Period, List, Proton0),
         Z > Proton0,
         Z =< Proton.
+
+% Group(Element, Number) ← {
+% 	Group(Noble, 18) ∧ 
+% 	AtomicNumber(Element, Proton) ∧
+% 	AtomicNumber(Noble, NProton) ∧ [ (
+% 			Proton = NProton + Number ∧
+% 			1 ≤ Number ≤ 3
+% 		) ∨ (
+% 			Proton = NProton - 18 + Number ∧
+% 			4 ≤ Number ≤ 17
+% 		) ∨ (
+% 			Element = "H" ∧ Number = 1
+% 		)
+% 	]
+% } ∨ {
+% 	AtomicNumber(Element, Proton) ∧
+% 	FullOrbital(Proton) ∧
+% 	Number = 18
+% }
+ 
+% FullOrbital(Proton) ← {
+% 	Proton in {2, 10, 18, 36, 54, 86, 118}
+% }
+
+% group(Element, Group) :-
+%     Element = hydrogen, 
+%     Group = 1,
+%     !.
+% group(Element, Group) :-
+%     nonvar(Element),
+%     element_fact(Element, _, _, Z, _),
+%     full_orbital(Z),
+%     Group is 18,
+%     !.
+% group(Element, Group) :-
+%     (var(Group);nonvar(Group), Group \= 18),
+%     atomic_number(Element, Z),
+%     group(Noble, 18),
+%     write(Noble),
+%     atomic_number(Noble, NZ),
+%     write(NZ),
+%     ((
+%         plus(NZ, X, Z),
+%         between(1, X, 3),
+%         Group is X
+%     );(
+%         plus(NZ, -18, T0),
+%         plus(T0, Y, Z),
+%         between(4, Y, 17),
+%         Group is Y
+%     )).
+% group(Element, Group) :-
+%     nonvar(Group),
+%     Group = 18,
+%     element_fact(Element, _, _, Z, _),
+%     full_orbital(Z).
+
+% full_orbital(NumProtons) :-
+%     member(NumProtons, [2, 10, 18, 36, 54, 86, 118]),
+%     !.
