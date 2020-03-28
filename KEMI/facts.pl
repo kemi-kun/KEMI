@@ -8,10 +8,6 @@ Contents:
 - complex multiplicative prefixes (e.g. bis, tris, ...)
 - pauling's electronegativity
 */
-
-
-% From KEMI base: ElementFact
-% element_fact(Element: atom, Name: string, Symbol: string, AtomicNumber: integer, AtomicWeight: real)
 :- module(facts,[
     parent_name_exception/2,
     complex_multiplicative_prefix_fact/2,
@@ -24,6 +20,8 @@ Contents:
     ]).
 
 
+% From KEMI base: ElementFact
+% element_fact(Element: atom, Name: string, Symbol: string, AtomicNumber: integer, AtomicWeight: real)
 element_fact(hydrogen,      "hydrogen",      "H",  1,   1.007).
 element_fact(helium,        "helium",        "He", 2,   4.002).
 element_fact(lithium,       "lithium",       "Li", 3,   6.941).
