@@ -29,15 +29,27 @@ replace(String, S1, S2, Result) :-
 
 
 %!	capitalize(+String: string, -Result: string) is det.
-%!	capitalize(-String: string, +Result: string) is ERROR.
+%!	capitalize(-String: string, +Result: string) is det.
 %
-%   Capitalize the first letter in `String`.
+%   True when first letter in `String` is upper and the rest is lower,
+%   and all leters in `Result` is lower.
 %
 capitalize(String, Result) :-
+    var(Result),
     sub_string(String, 0, 1, _, First),
     sub_string(String, 1, _, 0, Sub),
-    string_upper(First, FirstUpper),  % one-way
-    string_concat(FirstUpper, Sub, Result).
+    string_upper(First, FirstUpper),    % one-way
+    string_lower(Sub, Sub),
+    string_concat(FirstUpper, Sub, Result),
+    !.
+capitalize(String, Result) :-
+    var(String),
+    sub_string(Result, 0, 1, _, First),
+    sub_string(Result, 1, _, 0, Sub),
+    string_lower(First, FirstLower),    % one-way
+    string_lower(Sub, Sub),
+    string_concat(FirstLower, Sub, String),
+    !.
 
 
 %!  split(+In: string, -Out: list) is det.
