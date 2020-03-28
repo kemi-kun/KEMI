@@ -15,7 +15,11 @@ Implements:
     numerical_root_fact/2
     ]).
 
-
+%!  element_name(+Element:atom, +ElementName:string) is semidet.
+%!  element_name(+Element:atom, -ElementName:string) is multi.
+%!  element_name(-Element:atom, -ElementName:string) is multi.      # TODO: fix (shows only one element fact)
+%!  element_name(-Element:atom, +ElementName:string) is multi.      # TODO: Remove last false choice point
+%
 element_name(Element, ElementName) :-
     alternative_element_name_fact(Element, ElementName);
     element_fact(Element, ElementName, _, _, _) -> true;
