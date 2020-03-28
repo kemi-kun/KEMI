@@ -141,3 +141,25 @@ sorted(Key, List, SortedList) :-
         Key = "", false
     ),
     !.
+
+
+%! get_num_atom(+Formula: string,+Element: atom, -Amount: integer) is det.
+%
+%  Return amount of element in 
+%  formula `Formula`
+%
+get_num_atom(Formula, Element, Amount) :-
+    remove_parentheses_(Formula, Formula_),
+    extract_elements_from_formula(Formula_, ElementQuantities),
+    extract_quantity_from_element(ElementQuantities,Element, Amount).
+ 
+extract_quantity_from_element([],_,_).
+extract_quantity_from_element(ElementQuantities,Element,Amount) :-
+    ElementQuantities = [EleQuanH|EleQuanT],
+    element_fact(Element, _, Symbol, _, _),
+    extract_term(EleQuanH, [EleH|Num]),
+    (EleH = Symbol -> Amount is Num ;
+    extract_quantity_from_element(EleQuanT, Element, Amount)
+    ),
+    !.
+
