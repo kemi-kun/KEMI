@@ -164,7 +164,7 @@ numerical_root_fact(0, "nil").
 
 
 % From KEMI base: MultiplicativePrefixFact
-% multiplicative_prefix_fact()
+% multiplicative_prefix_fact(number: integer, prefix: string)
 multiplicative_prefix_fact(1, "mono").
 multiplicative_prefix_fact(2, "di").
 multiplicative_prefix_fact(3, "tri").
@@ -228,3 +228,10 @@ complex_multiplicative_prefix_fact(7, "heptakis").
 complex_multiplicative_prefix_fact(8, "octakis").
 complex_multiplicative_prefix_fact(9, "nonakis").
 complex_multiplicative_prefix_fact(10, "decakis").
+
+
+% From KEMI base: ParentNameException
+% parent_name_exception(Formula: string, Name: string)
+parent_name_exception("CH4", "methane").
+parent_name_exception("NH3", "azane").
+parent_name_exception("InH3", "indigane").
