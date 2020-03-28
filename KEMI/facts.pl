@@ -252,9 +252,12 @@ parent_name_exception("InH3", "indigane").
 % From KEMI base: EN
 % en(Element: atom, EN: real)
 en(Element, EN) :-
-    pauling_electronegativity_fact(Element, EN).
+    (
+        pauling_electronegativity_fact(Element, EN), !;
+        element_fact(Element, _, _, _, _), EN is 0, !;
+        false
+    ).
 pauling_electronegativity_fact(hydrogen, 2.2).
-pauling_electronegativity_fact(helium, 0).
 pauling_electronegativity_fact(lithium, 0.98).
 pauling_electronegativity_fact(beryllium, 1.57).
 pauling_electronegativity_fact(boron, 2.04).
@@ -262,7 +265,6 @@ pauling_electronegativity_fact(carbon, 2.55).
 pauling_electronegativity_fact(nitrogen, 3.04).
 pauling_electronegativity_fact(oxygen, 3.44).
 pauling_electronegativity_fact(fluorine, 3.98).
-pauling_electronegativity_fact(neon, 0).
 pauling_electronegativity_fact(sodium, 0.93).
 pauling_electronegativity_fact(magnesium, 1.31).
 pauling_electronegativity_fact(aluminum, 1.61).
@@ -270,7 +272,6 @@ pauling_electronegativity_fact(silicon, 1.9).
 pauling_electronegativity_fact(phosphorus, 2.19).
 pauling_electronegativity_fact(sulfur, 2.58).
 pauling_electronegativity_fact(chlorine, 3.16).
-pauling_electronegativity_fact(argon, 0).
 pauling_electronegativity_fact(potassium, 0.82).
 pauling_electronegativity_fact(calcium, 1).
 pauling_electronegativity_fact(scandium, 1.36).
@@ -313,16 +314,12 @@ pauling_electronegativity_fact(lanthanum, 1.1).
 pauling_electronegativity_fact(cerium, 1.12).
 pauling_electronegativity_fact(praseodymium, 1.13).
 pauling_electronegativity_fact(neodymium, 1.14).
-pauling_electronegativity_fact(promethium, 0).
 pauling_electronegativity_fact(samarium, 1.17).
-pauling_electronegativity_fact(europium, 0).
 pauling_electronegativity_fact(gadolinium, 1.2).
-pauling_electronegativity_fact(terbium, 0).
 pauling_electronegativity_fact(dysprosium, 1.22).
 pauling_electronegativity_fact(holmium, 1.23).
 pauling_electronegativity_fact(erbium, 1.24).
 pauling_electronegativity_fact(thulium, 1.25).
-pauling_electronegativity_fact(ytterbium, 0).
 pauling_electronegativity_fact(lutetium, 1.27).
 pauling_electronegativity_fact(hafnium, 1.3).
 pauling_electronegativity_fact(tantalum, 1.5).
@@ -338,7 +335,6 @@ pauling_electronegativity_fact(lead, 2.33).
 pauling_electronegativity_fact(bismuth, 2.02).
 pauling_electronegativity_fact(polonium, 2).
 pauling_electronegativity_fact(astatine, 2.2).
-pauling_electronegativity_fact(radon, 0).
 pauling_electronegativity_fact(francium, 0.7).
 pauling_electronegativity_fact(radium, 0.9).
 pauling_electronegativity_fact(actinium, 1.1).
@@ -356,18 +352,4 @@ pauling_electronegativity_fact(fermium, 1.3).
 pauling_electronegativity_fact(mendelevium, 1.3).
 pauling_electronegativity_fact(nobelium, 1.3).
 pauling_electronegativity_fact(lawrencium, 1.3).
-pauling_electronegativity_fact(rutherfordium, 0).
-pauling_electronegativity_fact(dubnium, 0).
-pauling_electronegativity_fact(seaborgium, 0).
-pauling_electronegativity_fact(bohrium, 0).
-pauling_electronegativity_fact(hassium, 0).
-pauling_electronegativity_fact(meitnerium, 0).
-pauling_electronegativity_fact(darmstadtium, 0).
-pauling_electronegativity_fact(roentgenium, 0).
-pauling_electronegativity_fact(copernicium, 0).
-pauling_electronegativity_fact(nihonium, 0).
-pauling_electronegativity_fact(flerovium, 0).
-pauling_electronegativity_fact(moscovium, 0).
-pauling_electronegativity_fact(livermorium, 0).
-pauling_electronegativity_fact(tennessine, 0).
-pauling_electronegativity_fact(oganesson, 0).
+
