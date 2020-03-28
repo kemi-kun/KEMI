@@ -178,12 +178,13 @@ get_all_elements(Formula, ElementSet) :-
     list_to_set(ElementList, ElementSet),
     !.
 
-% [element_quantity("Na", 1), element_quantity("Cl", 1)] => ["Na", "Cl"]
+% [element_quantity("Na", 1), element_quantity("Cl", 1)] => [sodium, chlorine]
 extract_element_quantity([], []).
 extract_element_quantity(ElementQuantities, Elements) :-
     ElementQuantities = [EleQuanH|EleQuanT],
-    extract_term(EleQuanH, [EleH|_]),
+    extract_term(EleQuanH, [SymbolH|_]),
     extract_element_quantity(EleQuanT, EleT),
+    element_fact(EleH, _, SymbolH, _, _),
     append([EleH], EleT, Elements),
     !.
 
