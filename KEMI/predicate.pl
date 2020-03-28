@@ -1,4 +1,5 @@
-:- use_module(elements, [group/2,element_name/2]).
+:- use_module(elements, [group/2, element_name/2]).
+:- use_module(facts, [alternative_element_name_fact/2]).
 
 
 %! append_suffix(+Element: atom, +Suffix: string, -Result: string) is det.
@@ -30,7 +31,7 @@ idify_(ElementName, SuffixList, Result) :-
 %! idify(+Element: atom, +Result: string) is semidet.
 %
 %  Add suffix -ide to the name of `Element`
-%  TODO: -Element, +Result
+%  TODO: (-Element, +Result)
 idify(Element, Result) :-
     % Add -ide to the end of Group 18 which ends with -on
     group(Element, 18),
@@ -50,12 +51,49 @@ idify(Element, Result) :-
     !.
 
 
+anify_(ElementName, [], Result) :-
+    % ElemntName doesn't match any suffix in SuffixList
+    Result = ElementName,
+    !.
+anify_(ElementName, SuffixList, Result) :-
+    SuffixList = [ESuffixH|ESuffixT],
+    (
+        string_concat(Root, ESuffixH, ElementName) -> Result = Root, !;
+        anify_(ElementName, ESuffixT, Result)
+    ).
+%! anify(+Element: atom, -Result: string) is det.
+%! anify(+Element: atom, +Result: string) is semidet.
+%
+%  Add suffix -ane to the name of `Element`
+%  TODO: (-Element, +Result)
 anify(Element, Result) :-
-    false.
+    (
+        alternative_element_name_fact(Element, Name_) -> Name = Name_;
+        not(alternative_element_name_fact(Element, _)),
+        element_name(Element, Name)
+    ),
+    SuffixList = [
+        "inium", "onium", "urium", "aium", "eium", "enic",
+        "icon", "inum", "ogen", "orus", "gen", "ine", "ium",
+        "on", "um", "ur"
+    ],
+    anify_(Name, SuffixList, Root_),
+    (
+        string_concat(TempStr, "e", Root_) ->
+            string_concat(TempStr, "i", Root);
+        Root = Root_
+    ),
+    string_concat(Root, "ane", Result).
 
 
 ylify(Element, Result) :-
     false.
+    % element_name(Element, Name),
+    % (
+    %     string_concat(NameElideE, "e", Name) -> Name_ = NameElideE;
+    %     Name_ = Name
+    % ),
+    % string_concat(Name_, "yl", Result).
 
 
 ylidenify(Element, Result) :-
