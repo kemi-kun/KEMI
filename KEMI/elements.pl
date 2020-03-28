@@ -6,6 +6,7 @@ Implements:
 - Group
 - Period
 */
+:- module(elements,[group/2,element_name/2]).
 :- use_module(strutils,[capitalize/2,join/3]).
 :- use_module(utils,[split_decimal/2]).
 :- use_module(facts,[
