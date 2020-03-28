@@ -6,7 +6,7 @@ Implements:
 - Group
 - Period
 */
-:- use_module(strutils,[capitalize/2]).
+:- use_module(strutils,[capitalize/2,join/3]).
 :- use_module(utils,[split_decimal/2]).
 :- use_module(facts,[
     element_fact/5,
@@ -25,32 +25,42 @@ atomic_number(Element, Z) :-
     new_element_atomic_number(Element, Z).
 
 
-%!  new_element_atomic_number(+Element:string, +Z:integer) is det.
-%!  new_element_atomic_number(+Element:string, -Z:integer) is det.
-%!  new_element_atomic_number(-Element:string, -Z:integer) is failure.
-%!  new_element_atomic_number(-Element:string, +Z:integer) is det.
+%!  new_element_atomic_number(+Element:atom, +Z:int) is semidet.
+%!  new_element_atomic_number(+Element:atom, -Z:int) is failure.    # TODO: fix
+%!  new_element_atomic_number(-Element:atom, -Z:int) is failure.
+%!  new_element_atomic_number(-Element:atom, +Z:int) is det.
 %
 %   True when `Z` is the atomic number of "new" element `Element`.
 %
 new_element_atomic_number(Element, Z) :-
-    nonvar(Z),
     split_decimal(Z, L0),
-    maplist(numerical_root_symbol, L0, L1),
-    string_chars(T0, L1),
-    capitalize(T0, Element),
-    !.
-new_element_atomic_number(Element, Z) :-
-    nonvar(Element),
-    capitalize(T0, Element),
-    string_chars(T0, L1),
-    maplist(numerical_root_symbol, L0, L1),
-    split_decimal(Z, L0),
-    !.
+    maplist(numerical_root_fact, L0, L1),
+    join("", L1, T0),
+    (
+        sub_string(T0, _, 1, 0, "i") ->
+            string_concat(T0, um, Element_);
+        string_concat(T0, ium, Element_)
+    ),
+    atom_string(Element, Element_).
+% new_element_atomic_number(Symbol, Z) :-
+%     nonvar(Z),
+%     split_decimal(Z, L0),
+%     maplist(numerical_root_symbol, L0, L1),
+%     string_chars(T0, L1),
+%     capitalize(T0, Symbol),
+%     !.
+% new_element_atomic_number(Symbol, Z) :-
+%     nonvar(Symbol),
+%     capitalize(T0, Symbol),
+%     string_chars(T0, L1),
+%     maplist(numerical_root_symbol, L0, L1),
+%     split_decimal(Z, L0),
+%     !.
 
-%!  numerical_root_symbol(+Number:integer, +Symbol:atom) is det.
-%!  numerical_root_symbol(+Number:integer, -Symbol:atom) is det.
-%!  numerical_root_symbol(-Number:integer, -Symbol:atom) is multi.
-%!  numerical_root_symbol(-Number:integer, +Symbol:atom) is det.
+%!  numerical_root_symbol(+Number:int, +Symbol:atom) is semidet.
+%!  numerical_root_symbol(+Number:int, -Symbol:atom) is det.
+%!  numerical_root_symbol(-Number:int, -Symbol:atom) is multi.
+%!  numerical_root_symbol(-Number:int, +Symbol:atom) is det.
 %
 %   True when `Symbol` is the first character of the numerical root of `Number`.
 %
@@ -63,9 +73,17 @@ numerical_root_symbol(Number, Symbol) :-
     !.
 
 
-%!  period(+Element:string, -Period:integer) is det.
-%!  period(-Element:string, +Period:integer) is multi.
-%!  period(-Element:string, -Period:integer) is multi.
+new_element_name(Element, ElementName) :-
+    not(element_fact(Element, ElementName, _, _, _)),
+    new_element_atomic_number(Element, Z),
+    split_decimal(Z, L0),
+    maplist(numerical_root_fact, L0, L1),
+    ElementName = L1.
+
+
+%!  period(+Element:atom, -Period:int) is det.
+%!  period(-Element:atom, +Period:int) is multi.
+%!  period(-Element:atom, -Period:int) is multi.
 %
 %   True if element Element is in period Period.
 %
@@ -82,9 +100,9 @@ period(Element, Period) :-
         Period is 8
     ).
 
-%! period2(+Element:string, -Period:integer) is multi.
-%! period2(-Element:string, +Period:integer) is multi.
-%! period2(-Element:string, -Period:integer) is multi.
+%! period2(+Element:atom, -Period:int) is multi.
+%! period2(-Element:atom, +Period:int) is multi.
+%! period2(-Element:atom, -Period:int) is multi.
 %
 %  True if element Element is in period Period.
 %
@@ -157,10 +175,10 @@ full_orbital(NumProtons) :-
     member(NumProtons, [2, 10, 18, 36, 54, 86, 118]),
     !.
 
-%! group(+Element:string, +Group:integer) is det.
-%! group(+Element:string, -Group:integer) is det.
-%! group(-Element:string, +Group:integer) is multi.
-%! group(-Element:string, -Group:integer) is WRONG. # TODO: Fix
+%! group(+Element:atom, +Group:int) is semidet.
+%! group(+Element:atom, -Group:int) is det.
+%! group(-Element:atom, +Group:int) is multi.
+%! group(-Element:atom, -Group:int) is WRONG.   # TODO: Fix
 %
 %  True if element is group 18.
 %
