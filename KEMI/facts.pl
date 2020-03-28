@@ -10,248 +10,143 @@ Contents:
 */
 
 
-% From KEMI base: ElementNameFact
-% element_name_fact(Element: atom, Name: string)
-element_name_fact(hydrogen, "hydrogen").
-element_name_fact(helium, "helium").
-element_name_fact(lithium, "lithium").
-element_name_fact(beryllium, "beryllium").
-element_name_fact(boron, "boron").
-element_name_fact(carbon, "carbon").
-element_name_fact(nitrogen, "nitrogen").
-element_name_fact(oxygen, "oxygen").
-element_name_fact(fluorine, "fluorine").
-element_name_fact(neon, "neon").
-element_name_fact(sodium, "sodium").
-element_name_fact(magnesium, "magnesium").
-element_name_fact(aluminium, "aluminium").
-element_name_fact(silicon, "silicon").
-element_name_fact(phosphorus, "phosphorus").
-element_name_fact(sulfur, "sulfur").
-element_name_fact(chlorine, "chlorine").
-element_name_fact(argon, "argon").
-element_name_fact(potassium, "potassium").
-element_name_fact(calcium, "calcium").
-element_name_fact(scandium, "scandium").
-element_name_fact(titanium, "titanium").
-element_name_fact(vanadium, "vanadium").
-element_name_fact(chromium, "chromium").
-element_name_fact(manganese, "manganese").
-element_name_fact(iron, "iron").
-element_name_fact(cobalt, "cobalt").
-element_name_fact(nickel, "nickel").
-element_name_fact(copper, "copper").
-element_name_fact(zinc, "zinc").
-element_name_fact(gallium, "gallium").
-element_name_fact(germanium, "germanium").
-element_name_fact(arsenic, "arsenic").
-element_name_fact(selenium, "selenium").
-element_name_fact(bromine, "bromine").
-element_name_fact(krypton, "krypton").
-element_name_fact(rubidium, "rubidium").
-element_name_fact(strontium, "strontium").
-element_name_fact(yttrium, "yttrium").
-element_name_fact(zirconium, "zirconium").
-element_name_fact(niobium, "niobium").
-element_name_fact(molybdenum, "molybdenum").
-element_name_fact(technetium, "technetium").
-element_name_fact(ruthenium, "ruthenium").
-element_name_fact(rhodium, "rhodium").
-element_name_fact(palladium, "palladium").
-element_name_fact(silver, "silver").
-element_name_fact(cadmium, "cadmium").
-element_name_fact(indium, "indium").
-element_name_fact(tin, "tin").
-element_name_fact(antimony, "antimony").
-element_name_fact(tellurium, "tellurium").
-element_name_fact(iodine, "iodine").
-element_name_fact(xenon, "xenon").
-element_name_fact(caesium, "caesium").
-element_name_fact(barium, "barium").
-element_name_fact(lanthanum, "lanthanum").
-element_name_fact(cerium, "cerium").
-element_name_fact(praseodymium, "praseodymium").
-element_name_fact(neodymium, "neodymium").
-element_name_fact(promethium, "promethium").
-element_name_fact(samarium, "samarium").
-element_name_fact(europium, "europium").
-element_name_fact(gadolinium, "gadolinium").
-element_name_fact(terbium, "terbium").
-element_name_fact(dysprosium, "dysprosium").
-element_name_fact(holmium, "holmium").
-element_name_fact(erbium, "erbium").
-element_name_fact(thulium, "thulium").
-element_name_fact(ytterbium, "ytterbium").
-element_name_fact(lutetium, "lutetium").
-element_name_fact(hafnium, "hafnium").
-element_name_fact(tantalum, "tantalum").
-element_name_fact(tungsten, "tungsten").
-element_name_fact(rhenium, "rhenium").
-element_name_fact(osmium, "osmium").
-element_name_fact(iridium, "iridium").
-element_name_fact(platinum, "platinum").
-element_name_fact(gold, "gold").
-element_name_fact(mercury, "mercury").
-element_name_fact(thallium, "thallium").
-element_name_fact(lead, "lead").
-element_name_fact(bismuth, "bismuth").
-element_name_fact(polonium, "polonium").
-element_name_fact(astatine, "astatine").
-element_name_fact(radon, "radon").
-element_name_fact(francium, "francium").
-element_name_fact(radium, "radium").
-element_name_fact(actinium, "actinium").
-element_name_fact(thorium, "thorium").
-element_name_fact(protactinium, "protactinium").
-element_name_fact(uranium, "uranium").
-element_name_fact(neptunium, "neptunium").
-element_name_fact(plutonium, "plutonium").
-element_name_fact(americium, "americium").
-element_name_fact(curium, "curium").
-element_name_fact(berkelium, "berkelium").
-element_name_fact(californium, "californium").
-element_name_fact(einsteinium, "einsteinium").
-element_name_fact(fermium, "fermium").
-element_name_fact(mendelevium, "mendelevium").
-element_name_fact(nobelium, "nobelium").
-element_name_fact(lawrencium, "lawrencium").
-element_name_fact(rutherfordium, "rutherfordium").
-element_name_fact(dubnium, "dubnium").
-element_name_fact(seaborgium, "seaborgium").
-element_name_fact(bohrium, "bohrium").
-element_name_fact(hassium, "hassium").
-element_name_fact(meitnerium, "meitnerium").
-element_name_fact(darmstadtium, "darmstadtium").
-element_name_fact(roentgenium, "roentgenium").
-element_name_fact(copernicium, "copernicium").
-element_name_fact(nihonium, "nihonium").
-element_name_fact(flerovium, "flerovium").
-element_name_fact(moscovium, "moscovium").
-element_name_fact(livermorium, "livermorium").
-element_name_fact(tennessine, "tennessine").
-element_name_fact(oganesson, "oganesson").
+% From KEMI base: ElementFact
+% element_fact(Element: atom, Name: string, Symbol: string, AtomicNumber: integer, AtomicWeight: real)
+element_fact(hydrogen,      "hydrogen",      "H",  1,   1.007).
+element_fact(helium,        "helium",        "He", 2,   4.002).
+element_fact(lithium,       "lithium",       "Li", 3,   6.941).
+element_fact(beryllium,     "beryllium",     "Be", 4,   9.012).
+element_fact(boron,         "boron",         "B",  5,   10.811).
+element_fact(carbon,        "carbon",        "C",  6,   12.011).
+element_fact(nitrogen,      "nitrogen",      "N",  7,   14.007).
+element_fact(oxygen,        "oxygen",        "O",  8,   15.999).
+element_fact(fluorine,      "fluorine",      "F",  9,   18.998).
+element_fact(neon,          "neon",          "Ne", 10,  20.18).
+element_fact(sodium,        "sodium",        "Na", 11,  22.99).
+element_fact(magnesium,     "magnesium",     "Mg", 12,  24.305).
+element_fact(aluminium,     "aluminium",     "Al", 13,  26.982).
+element_fact(silicon,       "silicon",       "Si", 14,  28.086).
+element_fact(phosphorus,    "phosphorus",    "P",  15,  30.974).
+element_fact(sulfur,        "sulfur",        "S",  16,  32.065).
+element_fact(chlorine,      "chlorine",      "Cl", 17,  35.453).
+element_fact(argon,         "argon",         "Ar", 18,  39.948).
+element_fact(potassium,     "potassium",     "K",  19,  39.098).
+element_fact(calcium,       "calcium",       "Ca", 20,  40.078).
+element_fact(scandium,      "scandium",      "Sc", 21,  44.956).
+element_fact(titanium,      "titanium",      "Ti", 22,  47.867).
+element_fact(vanadium,      "vanadium",      "V",  23,  50.942).
+element_fact(chromium,      "chromium",      "Cr", 24,  51.996).
+element_fact(manganese,     "manganese",     "Mn", 25,  54.938).
+element_fact(iron,          "iron",          "Fe", 26,  55.845).
+element_fact(cobalt,        "cobalt",        "Co", 27,  58.933).
+element_fact(nickel,        "nickel",        "Ni", 28,  58.693).
+element_fact(copper,        "copper",        "Cu", 29,  63.546).
+element_fact(zinc,          "zinc",          "Zn", 30,  65.38).
+element_fact(gallium,       "gallium",       "Ga", 31,  69.723).
+element_fact(germanium,     "germanium",     "Ge", 32,  72.64).
+element_fact(arsenic,       "arsenic",       "As", 33,  74.922).
+element_fact(selenium,      "selenium",      "Se", 34,  78.96).
+element_fact(bromine,       "bromine",       "Br", 35,  79.904).
+element_fact(krypton,       "krypton",       "Kr", 36,  83.798).
+element_fact(rubidium,      "rubidium",      "Rb", 37,  85.468).
+element_fact(strontium,     "strontium",     "Sr", 38,  87.62).
+element_fact(yttrium,       "yttrium",       "Y",  39,  88.906).
+element_fact(zirconium,     "zirconium",     "Zr", 40,  91.224).
+element_fact(niobium,       "niobium",       "Nb", 41,  92.906).
+element_fact(molybdenum,    "molybdenum",    "Mo", 42,  95.96).
+element_fact(technetium,    "technetium",    "Tc", 43,  98).
+element_fact(ruthenium,     "ruthenium",     "Ru", 44,  101.07).
+element_fact(rhodium,       "rhodium",       "Rh", 45,  102.906).
+element_fact(palladium,     "palladium",     "Pd", 46,  106.42).
+element_fact(silver,        "silver",        "Ag", 47,  107.868).
+element_fact(cadmium,       "cadmium",       "Cd", 48,  112.411).
+element_fact(indium,        "indium",        "In", 49,  114.818).
+element_fact(tin,           "tin",           "Sn", 50,  118.71).
+element_fact(antimony,      "antimony",      "Sb", 51,  121.76).
+element_fact(tellurium,     "tellurium",     "Te", 52,  127.6).
+element_fact(iodine,        "iodine",        "I",  53,  126.904).
+element_fact(xenon,         "xenon",         "Xe", 54,  131.293).
+element_fact(caesium,       "caesium",       "Cs", 55,  132.905).
+element_fact(barium,        "barium",        "Ba", 56,  137.327).
+element_fact(lanthanum,     "lanthanum",     "La", 57,  138.905).
+element_fact(cerium,        "cerium",        "Ce", 58,  140.116).
+element_fact(praseodymium,  "praseodymium",  "Pr", 59,  140.908).
+element_fact(neodymium,     "neodymium",     "Nd", 60,  144.242).
+element_fact(promethium,    "promethium",    "Pm", 61,  145).
+element_fact(samarium,      "samarium",      "Sm", 62,  150.36).
+element_fact(europium,      "europium",      "Eu", 63,  151.964).
+element_fact(gadolinium,    "gadolinium",    "Gd", 64,  157.25).
+element_fact(terbium,       "terbium",       "Tb", 65,  158.925).
+element_fact(dysprosium,    "dysprosium",    "Dy", 66,  162.5).
+element_fact(holmium,       "holmium",       "Ho", 67,  164.93).
+element_fact(erbium,        "erbium",        "Er", 68,  167.259).
+element_fact(thulium,       "thulium",       "Tm", 69,  168.934).
+element_fact(ytterbium,     "ytterbium",     "Yb", 70,  173.054).
+element_fact(lutetium,      "lutetium",      "Lu", 71,  174.967).
+element_fact(hafnium,       "hafnium",       "Hf", 72,  178.49).
+element_fact(tantalum,      "tantalum",      "Ta", 73,  180.948).
+element_fact(tungsten,      "tungsten",      "W",  74,  183.84).
+element_fact(rhenium,       "rhenium",       "Re", 75,  186.207).
+element_fact(osmium,        "osmium",        "Os", 76,  190.23).
+element_fact(iridium,       "iridium",       "Ir", 77,  192.217).
+element_fact(platinum,      "platinum",      "Pt", 78,  195.084).
+element_fact(gold,          "gold",          "Au", 79,  196.967).
+element_fact(mercury,       "mercury",       "Hg", 80,  200.59).
+element_fact(thallium,      "thallium",      "Tl", 81,  204.383).
+element_fact(lead,          "lead",          "Pb", 82,  207.2).
+element_fact(bismuth,       "bismuth",       "Bi", 83,  208.98).
+element_fact(polonium,      "polonium",      "Po", 84,  210).
+element_fact(astatine,      "astatine",      "At", 85,  210).
+element_fact(radon,         "radon",         "Rn", 86,  222).
+element_fact(francium,      "francium",      "Fr", 87,  223).
+element_fact(radium,        "radium",        "Ra", 88,  226).
+element_fact(actinium,      "actinium",      "Ac", 89,  227).
+element_fact(thorium,       "thorium",       "Th", 90,  232.038).
+element_fact(protactinium,  "protactinium",  "Pa", 91,  231.036).
+element_fact(uranium,       "uranium",       "U",  92,  238.029).
+element_fact(neptunium,     "neptunium",     "Np", 93,  237).
+element_fact(plutonium,     "plutonium",     "Pu", 94,  244).
+element_fact(americium,     "americium",     "Am", 95,  243).
+element_fact(curium,        "curium",        "Cm", 96,  247).
+element_fact(berkelium,     "berkelium",     "Bk", 97,  247).
+element_fact(californium,   "californium",   "Cf", 98,  251).
+element_fact(einsteinium,   "einsteinium",   "Es", 99,  252).
+element_fact(fermium,       "fermium",       "Fm", 100, 257).
+element_fact(mendelevium,   "mendelevium",   "Md", 101, 258).
+element_fact(nobelium,      "nobelium",      "No", 102, 259).
+element_fact(lawrencium,    "lawrencium",    "Lr", 103, 262).
+element_fact(rutherfordium, "rutherfordium", "Rf", 104, 261).
+element_fact(dubnium,       "dubnium",       "Db", 105, 262).
+element_fact(seaborgium,    "seaborgium",    "Sg", 106, 266).
+element_fact(bohrium,       "bohrium",       "Bh", 107, 264).
+element_fact(hassium,       "hassium",       "Hs", 108, 267).
+element_fact(meitnerium,    "meitnerium",    "Mt", 109, 268).
+element_fact(darmstadtium,  "darmstadtium",  "Ds", 110, 271).
+element_fact(roentgenium,   "roentgenium",   "Rg", 111, 272).
+element_fact(copernicium,   "copernicium",   "Cn", 112, 285).
+element_fact(nihonium,      "nihonium",      "Nh", 113, 284).
+element_fact(flerovium,     "flerovium",     "Fl", 114, 289).
+element_fact(moscovium,     "moscovium",     "Mc", 115, 288).
+element_fact(livermorium,   "livermorium",   "Lv", 116, 292).
+element_fact(tennessine,    "tennessine",    "Ts", 117, 295).
+element_fact(oganesson,     "oganesson",     "Og", 118, 294).
 
 
-% not in KEMI base
-% element_symbol_fact(Element: atom, Symbol: string).
-element_symbol_fact(hydrogen, "H").
-element_symbol_fact(helium, "He").
-element_symbol_fact(lithium, "Li").
-element_symbol_fact(beryllium, "Be").
-element_symbol_fact(boron, "B").
-element_symbol_fact(carbon, "C").
-element_symbol_fact(nitrogen, "N").
-element_symbol_fact(oxygen, "O").
-element_symbol_fact(fluorine, "F").
-element_symbol_fact(neon, "Ne").
-element_symbol_fact(sodium, "Na").
-element_symbol_fact(magnesium, "Mg").
-element_symbol_fact(aluminium, "Al").
-element_symbol_fact(silicon, "Si").
-element_symbol_fact(phosphorus, "P").
-element_symbol_fact(sulfur, "S").
-element_symbol_fact(chlorine, "Cl").
-element_symbol_fact(argon, "Ar").
-element_symbol_fact(potassium, "K").
-element_symbol_fact(calcium, "Ca").
-element_symbol_fact(scandium, "Sc").
-element_symbol_fact(titanium, "Ti").
-element_symbol_fact(vanadium, "V").
-element_symbol_fact(chromium, "Cr").
-element_symbol_fact(manganese, "Mn").
-element_symbol_fact(iron, "Fe").
-element_symbol_fact(cobalt, "Co").
-element_symbol_fact(nickel, "Ni").
-element_symbol_fact(copper, "Cu").
-element_symbol_fact(zinc, "Zn").
-element_symbol_fact(gallium, "Ga").
-element_symbol_fact(germanium, "Ge").
-element_symbol_fact(arsenic, "As").
-element_symbol_fact(selenium, "Se").
-element_symbol_fact(bromine, "Br").
-element_symbol_fact(krypton, "Kr").
-element_symbol_fact(rubidium, "Rb").
-element_symbol_fact(strontium, "Sr").
-element_symbol_fact(yttrium, "Y").
-element_symbol_fact(zirconium, "Zr").
-element_symbol_fact(niobium, "Nb").
-element_symbol_fact(molybdenum, "Mo").
-element_symbol_fact(technetium, "Tc").
-element_symbol_fact(ruthenium, "Ru").
-element_symbol_fact(rhodium, "Rh").
-element_symbol_fact(palladium, "Pd").
-element_symbol_fact(silver, "Ag").
-element_symbol_fact(cadmium, "Cd").
-element_symbol_fact(indium, "In").
-element_symbol_fact(tin, "Sn").
-element_symbol_fact(antimony, "Sb").
-element_symbol_fact(tellurium, "Te").
-element_symbol_fact(iodine, "I").
-element_symbol_fact(xenon, "Xe").
-element_symbol_fact(caesium, "Cs").
-element_symbol_fact(barium, "Ba").
-element_symbol_fact(lanthanum, "La").
-element_symbol_fact(cerium, "Ce").
-element_symbol_fact(praseodymium, "Pr").
-element_symbol_fact(neodymium, "Nd").
-element_symbol_fact(promethium, "Pm").
-element_symbol_fact(samarium, "Sm").
-element_symbol_fact(europium, "Eu").
-element_symbol_fact(gadolinium, "Gd").
-element_symbol_fact(terbium, "Tb").
-element_symbol_fact(dysprosium, "Dy").
-element_symbol_fact(holmium, "Ho").
-element_symbol_fact(erbium, "Er").
-element_symbol_fact(thulium, "Tm").
-element_symbol_fact(ytterbium, "Yb").
-element_symbol_fact(lutetium, "Lu").
-element_symbol_fact(hafnium, "Hf").
-element_symbol_fact(tantalum, "Ta").
-element_symbol_fact(tungsten, "W").
-element_symbol_fact(rhenium, "Re").
-element_symbol_fact(osmium, "Os").
-element_symbol_fact(iridium, "Ir").
-element_symbol_fact(platinum, "Pt").
-element_symbol_fact(gold, "Au").
-element_symbol_fact(mercury, "Hg").
-element_symbol_fact(thallium, "Tl").
-element_symbol_fact(lead, "Pb").
-element_symbol_fact(bismuth, "Bi").
-element_symbol_fact(polonium, "Po").
-element_symbol_fact(astatine, "At").
-element_symbol_fact(radon, "Rn").
-element_symbol_fact(francium, "Fr").
-element_symbol_fact(radium, "Ra").
-element_symbol_fact(actinium, "Ac").
-element_symbol_fact(thorium, "Th").
-element_symbol_fact(protactinium, "Pa").
-element_symbol_fact(uranium, "U").
-element_symbol_fact(neptunium, "Np").
-element_symbol_fact(plutonium, "Pu").
-element_symbol_fact(americium, "Am").
-element_symbol_fact(curium, "Cm").
-element_symbol_fact(berkelium, "Bk").
-element_symbol_fact(californium, "Cf").
-element_symbol_fact(einsteinium, "Es").
-element_symbol_fact(fermium, "Fm").
-element_symbol_fact(mendelevium, "Md").
-element_symbol_fact(nobelium, "No").
-element_symbol_fact(lawrencium, "Lr").
-element_symbol_fact(rutherfordium, "Rf").
-element_symbol_fact(dubnium, "Db").
-element_symbol_fact(seaborgium, "Sg").
-element_symbol_fact(bohrium, "Bh").
-element_symbol_fact(hassium, "Hs").
-element_symbol_fact(meitnerium, "Mt").
-element_symbol_fact(darmstadtium, "Ds").
-element_symbol_fact(roentgenium, "Rg").
-element_symbol_fact(copernicium, "Cn").
-element_symbol_fact(nihonium, "Nh").
-element_symbol_fact(flerovium, "Fl").
-element_symbol_fact(moscovium, "Mc").
-element_symbol_fact(livermorium, "Lv").
-element_symbol_fact(tennessine, "Ts").
-element_symbol_fact(oganesson, "Og").
+% From KEMI base: AlternativeElementNameFact
+% alternative_element_name_fact(Element: atom, Name: string)
+alternative_element_name_fact(antimony,  "stibium").
+alternative_element_name_fact(copper,    "cuprum").
+alternative_element_name_fact(gold,      "aurum").
+alternative_element_name_fact(iron,      "ferrum").
+alternative_element_name_fact(lead,      "plumbum").
+alternative_element_name_fact(mercury,   "hydrargyrum").
+alternative_element_name_fact(potassium, "kalium").
+alternative_element_name_fact(silver,    "argentum").
+alternative_element_name_fact(sodium,    "natrium").
+alternative_element_name_fact(tin,       "stannum").
+alternative_element_name_fact(tungsten,  "wolfram").
+alternative_element_name_fact(aluminium, "aluminum").
+alternative_element_name_fact(caesium,   "cesium").
 
 
 % From KEMI base: NumericalRootFact
@@ -268,6 +163,48 @@ numerical_root_fact(9, "enn").
 numerical_root_fact(0, "nil").
 
 
+% From KEMI base: MultiplicativePrefixFact
+% multiplicative_prefix_fact()
+multiplicative_prefix_fact(1, "mono").
+multiplicative_prefix_fact(2, "di").
+multiplicative_prefix_fact(3, "tri").
+multiplicative_prefix_fact(4, "tetra").
+multiplicative_prefix_fact(5, "penta").
+multiplicative_prefix_fact(6, "hexa").
+multiplicative_prefix_fact(7, "hepta").
+multiplicative_prefix_fact(8, "octa").
+multiplicative_prefix_fact(9, "nona").
+multiplicative_prefix_fact(10, "deca").
+multiplicative_prefix_fact(11, "undeca").
+multiplicative_prefix_fact(12, "dodeca").
+multiplicative_prefix_fact(13, "trideca").
+multiplicative_prefix_fact(14, "tetradeca").
+multiplicative_prefix_fact(15, "pentadeca").
+multiplicative_prefix_fact(16, "hexadeca").
+multiplicative_prefix_fact(17, "heptadeca").
+multiplicative_prefix_fact(18, "octadeca").
+multiplicative_prefix_fact(19, "nonadeca").
+multiplicative_prefix_fact(20, "icosa").
+multiplicative_prefix_fact(21, "henicosa").
+multiplicative_prefix_fact(22, "docosa").
+multiplicative_prefix_fact(23, "tricosa").
+multiplicative_prefix_fact(30, "triaconta").
+multiplicative_prefix_fact(31, "hentriaconta").
+multiplicative_prefix_fact(35, "pentatriaconta").
+multiplicative_prefix_fact(40, "tetraconta").
+multiplicative_prefix_fact(48, "octatetraconta").
+multiplicative_prefix_fact(50, "pentaconta").
+multiplicative_prefix_fact(52, "dopentaconta").
+multiplicative_prefix_fact(60, "hexaconta").
+multiplicative_prefix_fact(70, "heptaconta").
+multiplicative_prefix_fact(80, "octaconta").
+multiplicative_prefix_fact(90, "nonaconta").
+multiplicative_prefix_fact(100, "hecta").
+multiplicative_prefix_fact(200, "dicta").
+multiplicative_prefix_fact(500, "pentacta").
+multiplicative_prefix_fact(1000, "kilia").
+multiplicative_prefix_fact(2000, "dilia").
+
 % From KEMI base: MultiplicativeAffixFact
 % multiplicative_affix_fact(Number: integer, Prefix: string)
 multiplicative_affix_fact(1, "hen").
@@ -280,19 +217,14 @@ multiplicative_affix_fact(7, "hepta").
 multiplicative_affix_fact(8, "octa").
 multiplicative_affix_fact(9, "nona").
 
-
-% From KEMI base: AlternativeElementNameFact
-% alternative_element_name_fact(Element: atom, Name: string)
-alternative_element_name_fact(antimony, "stibium").
-alternative_element_name_fact(copper, "cuprum").
-alternative_element_name_fact(gold, "aurum").
-alternative_element_name_fact(iron, "ferrum").
-alternative_element_name_fact(lead, "plumbum").
-alternative_element_name_fact(mercury, "hydrargyrum.").
-alternative_element_name_fact(potassium, "kalium").
-alternative_element_name_fact(silver, "argentum").
-alternative_element_name_fact(sodium, "natrium").
-alternative_element_name_fact(tin, "stannum").
-alternative_element_name_fact(tungsten, "wolfram").
-alternative_element_name_fact(aluminium, "aluminum").
-alternative_element_name_fact(caesium, "cesium").
+% From KEMI base: ComplexMultiplicativePrefixFact
+% complex_multiplicative_prefix_fact(Number: integer, Prefix: string)
+complex_multiplicative_prefix_fact(2, "bis").
+complex_multiplicative_prefix_fact(3, "tris").
+complex_multiplicative_prefix_fact(4, "tetrakis").
+complex_multiplicative_prefix_fact(5, "pentakis").
+complex_multiplicative_prefix_fact(6, "hexakis").
+complex_multiplicative_prefix_fact(7, "heptakis").
+complex_multiplicative_prefix_fact(8, "octakis").
+complex_multiplicative_prefix_fact(9, "nonakis").
+complex_multiplicative_prefix_fact(10, "decakis").
