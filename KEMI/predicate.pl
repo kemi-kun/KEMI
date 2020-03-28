@@ -102,3 +102,22 @@ ylidenify(Element, Result) :-
 
 ylidynify(Element, Result) :-
     false.
+
+
+%! replace_prefix(
+%                   +Name1: string, -Name2: string, 
+%                   +Prefix1: string, +Prefix2: string
+%                ) is det.
+%! replace_prefix(-Name1, +Name2, +Prefix1, +Prefix2) is det.
+%! replace_prefix(+Name1, +Name2, +Prefix1, +Prefix2) is semidet.
+%
+%  Replace `Prefix1` in `Name1` with `Prefix2` in `Name2`
+%
+replace_prefix(Name1, Name2, Prefix1, Prefix2) :-
+    nonvar(Name1),
+    string_concat(Root, Prefix1, Name1),
+    string_concat(Root, Prefix2, Name2),
+    !.
+replace_prefix(Name1, Name2, Prefix1, Prefix2) :-
+    string_concat(Root, Prefix2, Name2),
+    string_concat(Root, Prefix1, Name1).
