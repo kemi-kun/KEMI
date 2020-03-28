@@ -82,12 +82,16 @@ get_element(Formula, Index, Element) :-
     extract_term(ElementQuantity, [Symbol|_]),
     element_fact(Element, _, Symbol, _, _).
 
-%! get_all_elements(+Formula: string, -ElementSet: list) is det.
+%! get_all_elements(+Formula:string, +ElementSet:list) is det.
+%! get_all_elements(+Formula:string, -ElementSet:list) is det.
+%! get_all_elements(-Formula:string, -ElementSet:list) is failure.
+%! get_all_elements(-Formula:string, +ElementSet:list) is failure.
 %
 %  Return a set (a list without duplicate) of elements in
 %  formula `Formula`
 %
 get_all_elements(Formula, ElementSet) :-
+    nonvar(Formula),
     remove_parentheses_(Formula, Formula_),
     extract_elements_from_formula(Formula_, ElementQuantities),
     extract_element_quantity(ElementQuantities, ElementList),
