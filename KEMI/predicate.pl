@@ -1,6 +1,11 @@
 :- use_module(elements, [group/2,element_name/2]).
 
 
+%! append_suffix(+Element: atom, +Suffix: string, -Result: string) is det.
+%! append_suffix(+Element: atom, +Suffix: string, +Result: string) is semidet.
+%
+%  Append `Suffix` to the name of `Element`
+%
 append_suffix(Element, Suffix, Result) :-
     (
         Suffix = "ide" -> idify(Element, Result);
@@ -11,7 +16,23 @@ append_suffix(Element, Suffix, Result) :-
     ).
 
 
+idify_(ElementName, [], Result) :-
+    % ElemntName doesn't match any suffix in SuffixList
+    Result = ElementName,
+    !.
+idify_(ElementName, SuffixList, Result) :-
+    SuffixList = [ESuffixH|ESuffixT],
+    (
+        string_concat(Root, ESuffixH, ElementName) -> Result = Root, !;
+        idify_(ElementName, ESuffixT, Result)
+    ).
+%! idify(+Element: atom, -Result: string) is det.
+%! idify(+Element: atom, +Result: string) is semidet.
+%
+%  Add suffix -ide to the name of `Element`
+%  TODO: -Element, +Result
 idify(Element, Result) :-
+    % Add -ide to the end of Group 18 which ends with -on
     group(Element, 18),
     element_name(Element, Name),
     string_concat(_, "on", Name),
@@ -20,23 +41,12 @@ idify(Element, Result) :-
 idify(Element, Result) :-
     element_name(Element, Name),
     not(group(Element, 18)),
-    (
-        % order suffix by length and alphabet for longest match
-        string_concat(Root, "ogen", Name);
-        string_concat(Root, "orus", Name);
-        string_concat(Root, "ygen", Name);
-        string_concat(Root, "ese", Name);
-        string_concat(Root, "ine", Name);
-        string_concat(Root, "ium", Name);
-        string_concat(Root, "en", Name);
-        string_concat(Root, "ic", Name);
-        string_concat(Root, "on", Name);
-        string_concat(Root, "um", Name);
-        string_concat(Root, "ur", Name);
-        string_concat(Root, "y", Name);
-        string_concat(Name, "ide", Result), !
-    ),
-    string_concat(Root, "ide", Result),
+    SuffixList = [
+        "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
+        "ic", "on", "um", "ur", "y"
+    ],
+    idify_(Name, SuffixList, Name_),
+    string_concat(Name_, "ide", Result),
     !.
 
 
