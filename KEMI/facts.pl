@@ -215,6 +215,7 @@ multiplicative_prefix_fact(500, "pentacta").
 multiplicative_prefix_fact(1000, "kilia").
 multiplicative_prefix_fact(2000, "dilia").
 
+
 % From KEMI base: MultiplicativeAffixFact
 % multiplicative_affix_fact(Number: integer, Prefix: string)
 multiplicative_affix_fact(1, "hen").
@@ -226,6 +227,7 @@ multiplicative_affix_fact(6, "hexa").
 multiplicative_affix_fact(7, "hepta").
 multiplicative_affix_fact(8, "octa").
 multiplicative_affix_fact(9, "nona").
+
 
 % From KEMI base: ComplexMultiplicativePrefixFact
 % complex_multiplicative_prefix_fact(Number: integer, Prefix: string)
@@ -351,3 +353,6 @@ pauling_electronegativity_fact(mendelevium, 1.3).
 pauling_electronegativity_fact(nobelium, 1.3).
 pauling_electronegativity_fact(lawrencium, 1.3).
 
+
+% From KEMI base: FunctionalReplacementPrefixFact
+functional_replacement_prefix_fact(chlorine, "chloro").
