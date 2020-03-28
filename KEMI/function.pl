@@ -1,6 +1,5 @@
-:- use_module('elements',[element_quantity/2, extract_elements_from_formula/2]).
-:- use_module('utils', [extract_term/2]).
-:- use_module('facts', [en/2]).
+% :- use_module('facts', [en/2]).
+:- use_module('facts',[element_fact/5]).
 
 %!  list_remove(+In: list, +Element: atom, -Out: list) is det.
 %!  list_remove(-In: list, +Element: atom, +Out: list) is det.
@@ -107,6 +106,53 @@ remove_parentheses_(String, Result) :-
     delete(R7, "", Result_),
     atomics_to_string(Result_, Result).
 
+element_quantity(Symbol, Quantity) :-
+    Quantity > 0,
+    element_fact(_, _, Symbol, _, _).
+formula_to_quantified(Raw, Elements) :-
+    re_split("([1-9][0-9]*)"/n, Raw, [RawSymbol, Quantity|_], []),
+    element_fact(_, _, Symbol, _, _),
+    Elements =.. [element_quantity, Symbol, Quantity],
+    call(Elements),
+    atom_string(RawSymbol, Symbol).
+
+%!  extract_elements_from_formula(+Formula:string, -Elements:list) is det.
+%
+%   Return a list of element_quantity(Symbol, Quantity)
+%
+extract_elements_from_formula(Formula, Elements) :-
+    extract_elements_(Formula, 0, "", Elements).
+
+determine_multiplicity(Formula, Result) :- 
+    formula_to_quantified(Formula, Result).
+determine_multiplicity(Formula, Result) :- 
+    Result =.. [element_quantity, Formula, 1],
+    call(Result).
+
+extract_elements_(Formula, Start, _, _) :-
+    string_length(Formula, Length),
+    Start = Length.
+extract_elements_(Formula, Start, String, End) :-
+    string_length(Formula, Length),
+    Start < Length,
+    Final is Length - 1 - Start,
+    sub_string(Formula, Final, _, Start, Out),
+    Trim is Start + 1,
+    string_concat(Out, String, ConcatString),
+    (
+        is_upper(Out) -> extract_elements_(Formula, Trim, "", End2); 
+        extract_elements_(Formula, Trim, ConcatString, End2), !
+    ),
+    (
+        is_upper(Out) -> determine_multiplicity(ConcatString, Result), 
+                         Sth = [Result];
+        Sth = []
+    ),
+    append(End2, Sth, End).
+
+extract_term(Term, Args) :-
+    Term =.. [_|Args].
+
 %! get_element(+Formula: string, +Index: integer, -Element: string) is det.
 %
 %  Get element at `Index` position in formula `Formula`.
@@ -156,10 +202,10 @@ get_num_elements(Formula, Amount) :-
     length(ElementSet, Amount),
     !.
 
-sorted_by_en_(List, SortedList) :-
-    map_list_to_pairs(en, List, ElementEnPairs),
-    keysort(ElementEnPairs, ElementEnSorted),
-    pairs_values(ElementEnSorted, SortedList).
+% sorted_by_en_(List, SortedList) :-
+%     map_list_to_pairs(en, List, ElementEnPairs),
+%     keysort(ElementEnPairs, ElementEnSorted),
+%     pairs_values(ElementEnSorted, SortedList).
 
 %! sorted(+Key: string, +List: list, -SortedList: list) is det.
 %
@@ -167,10 +213,10 @@ sorted_by_en_(List, SortedList) :-
 %  TODO: sort by alphabet
 %
 %  sorted("en", ["Na", "Cl", "H"], ["Na", "H", "Cl"]).
-sorted(Key, List, SortedList) :-
-    (
-        Key = "en", sorted_by_en_(List, SortedList);
-        Key = "alphabet", SortedList = [];
-        Key = "", false
-    ),
-    !.
+% sorted(Key, List, SortedList) :-
+%     (
+%         Key = "en", sorted_by_en_(List, SortedList);
+%         Key = "alphabet", SortedList = [];
+%         Key = "", false
+%     ),
+%     !.

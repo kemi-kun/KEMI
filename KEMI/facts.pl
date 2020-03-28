@@ -12,6 +12,8 @@ Contents:
 
 % From KEMI base: ElementFact
 % element_fact(Element: atom, Name: string, Symbol: string, AtomicNumber: integer, AtomicWeight: real)
+:- module(facts,[element_fact/5]).
+
 element_fact(hydrogen,      "hydrogen",      "H",  1,   1.007).
 element_fact(helium,        "helium",        "He", 2,   4.002).
 element_fact(lithium,       "lithium",       "Li", 3,   6.941).
