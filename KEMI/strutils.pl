@@ -64,3 +64,25 @@ split(In, Out) :-
 
 number_to_character_(Number, Character) :-
     string_codes(Character,[Number]).
+
+%!  join(+Sep:string, +Subs:list(string), +String:string) is semidet.
+%!  join(+Sep:string, +Subs:list(string), -String:string) is det.
+%!  join(+Sep:string, -Subs:list(string), -String:string) is failure.
+%!  join(+Sep:string, -Subs:list(string), +String:string) is det.
+%
+join(Sep, Subs, String) :-
+    nonvar(Sep), nonvar(Subs),
+    join_(Sep, Subs, String),
+    !.
+join(Sep, Subs, String) :-
+    nonvar(Sep), nonvar(String),
+    split_string(String, Sep, "", Subs),
+    !.
+join_(Sep, [H|T], String) :-
+    nonvar(Sep), nonvar(H),
+    T = [] ->
+        String = H;
+    join_(Sep, T, S0),
+    string_concat(H, Sep, T0),
+    string_concat(T0, S0, String),
+    !.
