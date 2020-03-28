@@ -1,5 +1,5 @@
 % :- use_module('facts', [en/2]).
-:- use_module('facts',[en_fact/2,element_fact/5]).
+:- use_module('facts',[en/2,element_fact/5]).
 
 %!  list_remove(+In: list, +Element: atom, -Out: list) is det.
 %!  list_remove(-In: list, +Element: atom, +Out: list) is det.
@@ -205,7 +205,7 @@ get_num_elements(Formula, Amount) :-
     !.
 
 sorted_by_en_(List, SortedList) :-
-    map_list_to_pairs(en_fact, List, ElementEnPairs),
+    map_list_to_pairs(en, List, ElementEnPairs),
     keysort(ElementEnPairs, ElementEnSorted),
     pairs_values(ElementEnSorted, SortedList).
 
