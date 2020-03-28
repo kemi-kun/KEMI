@@ -181,7 +181,7 @@ full_orbital(NumProtons) :-
 %! group(-Element:atom, +Group:int) is multi.
 %! group(-Element:atom, -Group:int) is WRONG.   # TODO: Fix
 %
-%  True if element is group 18.
+%  True if element `Element` is group `Group`.
 %
 group(Element, Group) :-
     nonvar(Element) ->
