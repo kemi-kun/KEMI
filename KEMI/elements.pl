@@ -15,12 +15,6 @@ Implements:
     ]).
 
 
-%   ElementName(Element, ElementName) ← [
-% 	ElementFact(Element, ElementName, symbol: __, atomic_num: __, atomic_w: __) ∨ (
-% 		¬ElementFact(Element, ElementName, symbol: __, atomic_num: __, atomic_w: __)) ∧
-% 		NewElementName(Element, ElementName)
-% 	) ∨ AlternativeElementNameFact(Element, ElementName)
-% ]
 element_name(Element, ElementName) :-
     element_fact(Element, ElementName, _, _, _) -> true;
     new_element_name(Element, ElementName);
@@ -31,9 +25,10 @@ atomic_number(Element, Z) :-
     new_element_atomic_number(Element, Z).
 
 
+%!  new_element_atomic_number(+Element:string, +Z:integer) is det.
 %!  new_element_atomic_number(+Element:string, -Z:integer) is det.
-%!  new_element_atomic_number(-Element:string, +Z:integer) is det.
 %!  new_element_atomic_number(-Element:string, -Z:integer) is failure.
+%!  new_element_atomic_number(-Element:string, +Z:integer) is det.
 %
 %   True when `Z` is the atomic number of new element `Element`
 %
@@ -66,6 +61,7 @@ numerical_root_symbol(Number, Symbol) :-
     numerical_root_fact(Number, Root),
     string_chars(Root, [Symbol|_]),
     !.
+
 
 %!  period(+Element:string, -Period:integer) is det.
 %!  period(-Element:string, +Period:integer) is multi.
