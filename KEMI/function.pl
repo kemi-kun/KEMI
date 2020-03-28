@@ -1,5 +1,5 @@
 % :- use_module('facts', [en/2]).
-:- use_module('facts',[element_fact/5]).
+:- use_module('facts',[en_fact/2,element_fact/5]).
 
 %!  list_remove(+In: list, +Element: atom, -Out: list) is det.
 %!  list_remove(-In: list, +Element: atom, +Out: list) is det.
@@ -204,21 +204,21 @@ get_num_elements(Formula, Amount) :-
     length(ElementSet, Amount),
     !.
 
-% sorted_by_en_(List, SortedList) :-
-%     map_list_to_pairs(en, List, ElementEnPairs),
-%     keysort(ElementEnPairs, ElementEnSorted),
-%     pairs_values(ElementEnSorted, SortedList).
+sorted_by_en_(List, SortedList) :-
+    map_list_to_pairs(en_fact, List, ElementEnPairs),
+    keysort(ElementEnPairs, ElementEnSorted),
+    pairs_values(ElementEnSorted, SortedList).
 
 %! sorted(+Key: string, +List: list, -SortedList: list) is det.
 %
-%  Sort list `List` by `Key`
+%  Sort list `List` by `Key` (ascending order)
 %  TODO: sort by alphabet
 %
-%  sorted("en", ["Na", "Cl", "H"], ["Na", "H", "Cl"]).
-% sorted(Key, List, SortedList) :-
-%     (
-%         Key = "en", sorted_by_en_(List, SortedList);
-%         Key = "alphabet", SortedList = [];
-%         Key = "", false
-%     ),
-%     !.
+% sorted("en", ['sodium', 'chlorine', 'hydrogen'], ['sodium', 'hydrogen', 'chlorine']).
+sorted(Key, List, SortedList) :-
+    (
+        Key = "en", sorted_by_en_(List, SortedList);
+        Key = "alphabet", SortedList = [];
+        Key = "", false
+    ),
+    !.
