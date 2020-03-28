@@ -218,7 +218,7 @@ sorted_by_en_(List, SortedList) :-
 sorted(Key, List, SortedList) :-
     (
         Key = "en", sorted_by_en_(List, SortedList);
-        Key = "alphabet", SortedList = [];
+        Key = "alphabet", sort(0, @=<, List, SortedList);
         Key = "", false
     ),
     !.
