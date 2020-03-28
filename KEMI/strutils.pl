@@ -35,7 +35,7 @@ replace(String, S1, S2, Result) :-
 %   and all leters in `Result` is lower.
 %
 capitalize(String, Result) :-
-    var(Result),
+    nonvar(String),
     sub_string(String, 0, 1, _, First),
     sub_string(String, 1, _, 0, Sub),
     string_upper(First, FirstUpper),    % one-way
@@ -43,7 +43,7 @@ capitalize(String, Result) :-
     string_concat(FirstUpper, Sub, Result),
     !.
 capitalize(String, Result) :-
-    var(String),
+    nonvar(Result),
     sub_string(Result, 0, 1, _, First),
     sub_string(Result, 1, _, 0, Sub),
     string_lower(First, FirstLower),    % one-way

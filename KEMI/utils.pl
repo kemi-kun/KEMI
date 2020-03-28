@@ -8,12 +8,12 @@
 %  
 %  split_decimal(1234, [1, 2, 3, 4]).
 split_decimal(Number, Numbers) :-
-    var(Numbers),
+    nonvar(Number),
     number_chars(Number, Numbers_),
     maplist(atom_number, Numbers_, Numbers),
     !.
 split_decimal(Number, Numbers) :-
-    var(Number),
+    nonvar(Numbers),
     maplist(atom_number, Numbers_, Numbers),
     number_chars(Number, Numbers_),
     !.
