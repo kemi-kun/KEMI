@@ -10,7 +10,7 @@ Contents:
 */
 :- module(facts,[
     parent_name_exception/2,
-    complex_multiplicative_affix_fact/2,
+    complex_multiplicative_prefix_fact/2,
     multiplicative_affix_fact/2,
     multiplicative_affix_fact/2,
     numerical_root_fact/2,
@@ -222,16 +222,16 @@ multiplicative_affix_fact(2000, "dilia").
 
 
 % From KEMI base: ComplexMultiplicativePrefixFact
-% complex_multiplicative_affix_fact(Number: integer, Prefix: string)
-complex_multiplicative_affix_fact(2, "bis").
-complex_multiplicative_affix_fact(3, "tris").
-complex_multiplicative_affix_fact(4, "tetrakis").
-complex_multiplicative_affix_fact(5, "pentakis").
-complex_multiplicative_affix_fact(6, "hexakis").
-complex_multiplicative_affix_fact(7, "heptakis").
-complex_multiplicative_affix_fact(8, "octakis").
-complex_multiplicative_affix_fact(9, "nonakis").
-complex_multiplicative_affix_fact(10, "decakis").
+% complex_multiplicative_prefix_fact(Number: integer, Prefix: string)
+complex_multiplicative_prefix_fact(2, "bis").
+complex_multiplicative_prefix_fact(3, "tris").
+% complex_multiplicative_prefix_fact(4, "tetrakis").
+% complex_multiplicative_prefix_fact(5, "pentakis").
+% complex_multiplicative_prefix_fact(6, "hexakis").
+% complex_multiplicative_prefix_fact(7, "heptakis").
+% complex_multiplicative_prefix_fact(8, "octakis").
+% complex_multiplicative_prefix_fact(9, "nonakis").
+% complex_multiplicative_prefix_fact(10, "decakis").
 
 
 % From KEMI base: ParentNameException
