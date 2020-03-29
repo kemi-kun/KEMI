@@ -3,8 +3,6 @@
 :- use_module('ustr',[split/2,remove_chars/3]).
 
 
-
-
 element_quantity(Symbol, Quantity) :-
     Quantity > 0,
     element_fact(_, _, Symbol, _, _).
@@ -75,11 +73,19 @@ get_element(Formula, Index, Element) :-
 %
 get_all_elements(Formula, ElementSet) :-
     nonvar(Formula),
-    remove_chars(Formula, "()[]{}", Formula_),
-    extract_elements_from_formula(Formula_, ElementQuantities),
-    extract_element_quantity(ElementQuantities, ElementList),
-    list_to_set(ElementList, ElementSet),
+    remove_chars(Formula, "()[]{}0123456789+-", Formula_),
+    extract_elements(Formula_, ElementList),
+    list_to_set(ElementList, ElementSet).
+extract_elements(Formula, ElementList) :-
+    Formula = "" -> ElementList = [];
+    element_fact(_, _, Symbol, _, _),
+    string_length(Symbol, L),
+    sub_string(Formula, 0, L, A0, Symbol),
+    sub_string(Formula, L, A0, 0, Rest),
+    extract_elements(Rest, ElementList_),
+    append([Symbol], ElementList_, ElementList),
     !.
+    
 
 % [element_quantity("Na", 1), element_quantity("Cl", 1)] => [sodium, chlorine]
 extract_element_quantity([], []).
@@ -136,7 +142,7 @@ sorted(Key, List, SortedList) :-
 %  formula `Formula`
 %
 get_num_atoms(Formula, Element, Amount) :-
-    remove_chars(Formula, Formula_),
+    remove_chars(Formula, "()[]{}", Formula_),
     extract_elements_from_formula(Formula_, ElementQuantities),
     extract_quantity_from_element(ElementQuantities,Element, Amount).
  
