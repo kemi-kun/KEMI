@@ -80,7 +80,7 @@ mul_prefix_except_mono(Number, Prefix) :-
 
 %!  get_neutral_specie(+Formula: string, -NeutralSpecie: string) is det.
 %!  get_neutral_specie(+Formula: string, +NeutralSpecie: string) is semidet.
-%!  get_neutral_specie(-Formula: string, +NeutralSpecie: string) is failure.
+%!  get_neutral_specie(-Formula: string, +NeutralSpecie: string) is ERROR.
 %
 %   Get neutral specie (element without charge) from `Formula`
 %
