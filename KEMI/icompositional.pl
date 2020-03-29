@@ -22,8 +22,33 @@ homonuclear(Formula) :-
 
 binary_compound_cn(Formula, Name) :-
     fail.
+
+
 ion_cn(Formula, Name) :-
+    cation_cn(Formula, Name);
+    anion_cn(Formula, Name).
+
+cation_cn(Formula, Name) :-
+    monoatomic_cation_cn(Formula, Name);
+    homopolyatomic_cation_cn(Formula, Name).
+
+monoatomic_cation_cn(Formula, Name) :-
     fail.
+
+homopolyatomic_cation_cn(Formula, Name) :-
+    fail.
+
+anion_cn(Formula, Name) :-
+    monoatomic_anion_cn(Formula, Name);
+    homopolyatomic_anion_cn(Formula, Name).
+
+monoatomic_anion_cn(Formula, Name) :-
+    fail.
+
+homopolyatomic_anion_cn(Formula, Name) :-
+    fail.
+
+
 addition_compound_cn(Formula, Name) :-
     fail.
 
