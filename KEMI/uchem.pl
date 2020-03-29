@@ -1,6 +1,7 @@
-:- module(uchem,[remove_chars/2,get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
-:- use_module('facts',[en/2,element_fact/5]).
-:- use_module('ustr',[split/2,remove_chars/3]).
+:- module(uchem,[get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
+:- use_module(facts,[en/2,element_fact/5]).
+:- use_module(ustr,[split/2,remove_chars/3]).
+:- use_module(elements,[element_symbol/2]).
 
 
 element_quantity(Symbol, Quantity) :-
@@ -63,6 +64,7 @@ get_element(Formula, Index, Element) :-
     extract_term(ElementQuantity, [Symbol|_]),
     element_fact(Element, _, Symbol, _, _).
 
+
 %! get_all_elements(+Formula:string, +ElementSet:list) is det.
 %! get_all_elements(+Formula:string, -ElementSet:list) is det.
 %! get_all_elements(-Formula:string, -ElementSet:list) is failure.
@@ -74,16 +76,17 @@ get_element(Formula, Index, Element) :-
 get_all_elements(Formula, ElementSet) :-
     nonvar(Formula),
     remove_chars(Formula, "()[]{}0123456789+-", Formula_),
-    extract_elements(Formula_, ElementList),
-    list_to_set(ElementList, ElementSet).
-extract_elements(Formula, ElementList) :-
-    Formula = "" -> ElementList = [];
+    extract_elements(Formula_, ElementSymbolList),
+    list_to_set(ElementSymbolList, ElementSymbolSet),
+    maplist(element_symbol, ElementSet, ElementSymbolSet).
+extract_elements(Formula, ElementSymbolList) :-
+    Formula = "" -> ElementSymbolList = [];
     element_fact(_, _, Symbol, _, _),
     string_length(Symbol, L),
     sub_string(Formula, 0, L, A0, Symbol),
     sub_string(Formula, L, A0, 0, Rest),
-    extract_elements(Rest, ElementList_),
-    append([Symbol], ElementList_, ElementList),
+    extract_elements(Rest, ElementSymbolList_),
+    append([Symbol], ElementSymbolList_, ElementSymbolList),
     !.
     
 
@@ -109,8 +112,8 @@ extract_element_quantity(ElementQuantities, Elements) :-
 get_num_elements(Formula, Amount) :-
     remove_chars(Formula, "()[]{}", Formula_),
     extract_elements_from_formula(Formula_, ElementQuantities),
-    extract_element_quantity(ElementQuantities, ElementList),
-    list_to_set(ElementList, ElementSet),
+    extract_element_quantity(ElementQuantities, ElementSymbolList),
+    list_to_set(ElementSymbolList, ElementSet),
     length(ElementSet, Amount),
     !.
 
