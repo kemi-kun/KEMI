@@ -1,5 +1,6 @@
 :- module(uchem,[remove_parentheses_/2,get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
 :- use_module('facts',[en/2,element_fact/5]).
+:- use_module('ustr',[split/2]).
 
 
 %! remove_parentheses_(+String: string, -Result: string) is det.
@@ -12,15 +13,9 @@
 % remove_parentheses_("ab[(c)][d2](3)", "abcd23").
 remove_parentheses_(String, Result) :-
     re_split("[(\\)\\[\\]\\{\\}]", String, R1, []),
-    delete(R1, "(", R2),
-    delete(R2, ")", R3),
-    delete(R3, "[", R4),
-    delete(R4, "]", R5),
-    delete(R5, "{", R6),
-    delete(R6, "}", R7),
-    delete(R7, "", Result_),
+    exclude(is_to_remove, R1, Result_),
     atomics_to_string(Result_, Result).
-
+is_to_remove(Elem) :- split("()[]{}", X), member(Elem, X).
 
 element_quantity(Symbol, Quantity) :-
     Quantity > 0,
