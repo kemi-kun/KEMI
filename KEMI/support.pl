@@ -2,7 +2,7 @@
 :- use_module(utils,[split_decimal/3,split_digits/2]).
 :- use_module(ustr,[join/3]).
 :- use_module(ulist,[enumerate/2,range/4]).
-:- use_module(facts,[multiplicative_prefix_fact/2,multiplicative_affix_fact/2]).
+:- use_module(facts,[multiplicative_prefix_fact/2,multiplicative_affix_fact/2,complex_multiplicative_prefix_fact/2]).
 
 
 %!	multiplicative_prefix(+Number, +Prefix) det.
@@ -15,13 +15,13 @@ multiplicative_prefix(Number, Prefix) :-
     multiplicative_prefix_fact(Number, Prefix) -> true;
     multiplicative_prefix_(Number, Prefix).
 multiplicative_prefix_(Number, Prefix) :-
+    Number = 0 -> Prefix = "";
     multiplicative_affix_fact(Number, Prefix) -> true;
     nonvar(Number),
     split_decimal(Number, First, Rest),
     get_affix(First, CurrentPart),
     multiplicative_prefix_(Rest, RecursePart),
-    string_concat(RecursePart, CurrentPart, Prefix),
-    !.
+    string_concat(RecursePart, CurrentPart, Prefix).
 
 %!  get_affix(+Number, +Affix) is semidet.
 %!  get_affix(+Number, -Affix) is semidet.
@@ -52,3 +52,15 @@ gen_affix_(Number, Affix) :-
         NumZeroes = 2 -> string_concat(Affix_, "cta", Affix);
         NumZeroes = 3 -> string_concat(Affix_, "lia", Affix)
     ).
+
+%!	multiplicative_prefix(+Number, +Prefix) det.
+%!	multiplicative_prefix(+Number, -Prefix) det.
+%!	multiplicative_prefix(-Number, -Prefix) det.    # TODO: Fix (returns first fact)
+%!	multiplicative_prefix(-Number, +Prefix) semidet. (ERROR when Prefix is wrong)
+%
+%   Note: Depends on multiplicative_prefix/2.
+%
+complex_multiplicative_prefix(Number, Prefix) :-
+    complex_multiplicative_prefix_fact(Number, Prefix) -> true;
+    multiplicative_prefix(Number, SimplePrefix),
+    string_concat(SimplePrefix, "kis", Prefix).
