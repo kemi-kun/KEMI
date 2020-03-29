@@ -166,15 +166,12 @@ extract_quantity_from_element(ElementQuantities,Element,Amount) :-
 %
 %   Get a string of charge from `Formula`
 %
-%   get_num_charge_str_("[Cr]300-", "-300").
-%   get_num_charge_str_("+200[Cr]", "+200").
+%   get_num_charge_str_("[AA]300-", "-300").
+%   get_num_charge_str_("+200[B2B]", "+200").
 get_num_charge_str_(Formula, ChargeStr) :-
     (
-        re_matchsub(".*(?<charge>[1-9][0-9]*[+\\-])$", Formula, SubDict_, []) -> SubDict = SubDict_;
-        re_matchsub(".*(?<charge>[+\\-])$", Formula, SubDict_, []) -> SubDict = SubDict_;
-        re_matchsub("^(?<charge>[+\\-][1-9][0-9]*).*", Formula, SubDict_, []) -> SubDict = SubDict_;
-        re_matchsub("^(?<charge>[+\\-]).*", Formula, SubDict_, []) -> SubDict = SubDict_;
-        SubDict = re_match{charge: ""}, !
+        re_matchsub("^.*?(?<charge>([1-9][0-9]*)?[+\\-]?)$", Formula, SubDict_, []) -> SubDict = SubDict_;
+        re_matchsub("^(?<charge>[+-]?([1-9][0-9]*)?)?.*$", Formula, SubDict_, []) -> SubDict = SubDict_
     ),
     get_dict(charge, SubDict, ChargeStr_),
     (
@@ -189,9 +186,10 @@ get_num_charge_str_(Formula, ChargeStr) :-
 %
 %   Get net charge from `Formula`
 %   Return 0 if on charge is found in `Formula`
-%   
-%   Only support: "[formula]", "[formula]charge+/-", "[formula]+/-"
-%                 "+/-[formula]", "+/-charge[formula]"
+%
+%   Note: Need parentheses to separate compound and charge
+%     examples [formula], [formula]charge+/-, [formula]+/-, 
+%              +/-[formula], +/-charge[formula]
 %
 get_net_charge(Formula, NetCharge) :-
     get_num_charge_str_(Formula, ChargeStr),
