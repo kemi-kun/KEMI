@@ -11,8 +11,7 @@ homonuclear_cn(Formula, Name) :-
     get_num_atoms(Formula, Element, Amount),
     element_name(Element, ElementName),
     (
-        group(Element, 18) ->
-            mul_prefix_except_mono(Amount, MulPrefix);
+        group(Element, 18) -> mul_prefix_except_mono(Amount, MulPrefix);
         multiplicative_prefix(Amount, MulPrefix)
     ),
     string_concat(MulPrefix, ElementName, Name).
