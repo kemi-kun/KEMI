@@ -88,17 +88,6 @@ extract_symbols_(Formula, SymbolList) :-
     extract_symbols_(Rest, SymbolList_),
     append([Symbol], SymbolList_, SymbolList),
     !.
-    
-
-% [element_quantity("Na", 1), element_quantity("Cl", 1)] => [sodium, chlorine]
-extract_element_quantity([], []).
-extract_element_quantity(ElementQuantities, Elements) :-
-    ElementQuantities = [EleQuanH|EleQuanT],
-    extract_term(EleQuanH, [SymbolH|_]),
-    extract_element_quantity(EleQuanT, EleT),
-    element_fact(EleH, _, SymbolH, _, _),
-    append([EleH], EleT, Elements),
-    !.
 
 
 % get_all_elements("ClOF", R).
@@ -110,12 +99,8 @@ extract_element_quantity(ElementQuantities, Elements) :-
 %  formula `Formula`
 %
 get_num_elements(Formula, Amount) :-
-    remove_chars(Formula, "()[]{}", Formula_),
-    extract_elements_from_formula(Formula_, ElementQuantities),
-    extract_element_quantity(ElementQuantities, ElementList),
-    list_to_set(ElementList, ElementSet),
-    length(ElementSet, Amount),
-    !.
+    get_all_elements(Formula, Elements),
+    length(Elements, Amount).
 
 
 sorted_by_en_(List, SortedList) :-
