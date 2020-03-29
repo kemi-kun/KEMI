@@ -12,7 +12,7 @@ Contents:
     parent_name_exception/2,
     complex_multiplicative_prefix_fact/2,
     multiplicative_affix_fact/2,
-    multiplicative_prefix_fact/2,
+    multiplicative_affix_fact/2,
     numerical_root_fact/2,
     alternative_element_name_fact/2,
     en/2,
@@ -177,44 +177,6 @@ numerical_root_fact(0, "nil").
 % multiplicative_prefix_fact(number: integer, prefix: string)
 multiplicative_prefix_fact(1, "mono").
 multiplicative_prefix_fact(2, "di").
-multiplicative_prefix_fact(3, "tri").
-multiplicative_prefix_fact(4, "tetra").
-multiplicative_prefix_fact(5, "penta").
-multiplicative_prefix_fact(6, "hexa").
-multiplicative_prefix_fact(7, "hepta").
-multiplicative_prefix_fact(8, "octa").
-multiplicative_prefix_fact(9, "nona").
-multiplicative_prefix_fact(10, "deca").
-multiplicative_prefix_fact(11, "undeca").
-multiplicative_prefix_fact(12, "dodeca").
-multiplicative_prefix_fact(13, "trideca").
-multiplicative_prefix_fact(14, "tetradeca").
-multiplicative_prefix_fact(15, "pentadeca").
-multiplicative_prefix_fact(16, "hexadeca").
-multiplicative_prefix_fact(17, "heptadeca").
-multiplicative_prefix_fact(18, "octadeca").
-multiplicative_prefix_fact(19, "nonadeca").
-multiplicative_prefix_fact(20, "icosa").
-multiplicative_prefix_fact(21, "henicosa").
-multiplicative_prefix_fact(22, "docosa").
-multiplicative_prefix_fact(23, "tricosa").
-multiplicative_prefix_fact(30, "triaconta").
-multiplicative_prefix_fact(31, "hentriaconta").
-multiplicative_prefix_fact(35, "pentatriaconta").
-multiplicative_prefix_fact(40, "tetraconta").
-multiplicative_prefix_fact(48, "octatetraconta").
-multiplicative_prefix_fact(50, "pentaconta").
-multiplicative_prefix_fact(52, "dopentaconta").
-multiplicative_prefix_fact(60, "hexaconta").
-multiplicative_prefix_fact(70, "heptaconta").
-multiplicative_prefix_fact(80, "octaconta").
-multiplicative_prefix_fact(90, "nonaconta").
-multiplicative_prefix_fact(100, "hecta").
-multiplicative_prefix_fact(200, "dicta").
-multiplicative_prefix_fact(500, "pentacta").
-multiplicative_prefix_fact(1000, "kilia").
-multiplicative_prefix_fact(2000, "dilia").
-
 
 % From KEMI base: MultiplicativeAffixFact
 % multiplicative_affix_fact(Number: integer, Prefix: string)
@@ -227,19 +189,49 @@ multiplicative_affix_fact(6, "hexa").
 multiplicative_affix_fact(7, "hepta").
 multiplicative_affix_fact(8, "octa").
 multiplicative_affix_fact(9, "nona").
+multiplicative_affix_fact(10, "deca").
+multiplicative_affix_fact(11, "undeca").
+% multiplicative_affix_fact(12, "dodeca").
+% multiplicative_affix_fact(13, "trideca").
+% multiplicative_affix_fact(14, "tetradeca").
+% multiplicative_affix_fact(15, "pentadeca").
+% multiplicative_affix_fact(16, "hexadeca").
+% multiplicative_affix_fact(17, "heptadeca").
+% multiplicative_affix_fact(18, "octadeca").
+% multiplicative_affix_fact(19, "nonadeca").
+multiplicative_affix_fact(20, "icosa").
+multiplicative_affix_fact(21, "henicosa").
+multiplicative_affix_fact(22, "docosa").
+multiplicative_affix_fact(23, "tricosa").
+multiplicative_affix_fact(30, "triaconta").
+% multiplicative_affix_fact(31, "hentriaconta").
+% multiplicative_affix_fact(35, "pentatriaconta").
+% multiplicative_affix_fact(40, "tetraconta").
+% multiplicative_affix_fact(48, "octatetraconta").
+% multiplicative_affix_fact(50, "pentaconta").
+% multiplicative_affix_fact(52, "dopentaconta").
+% multiplicative_affix_fact(60, "hexaconta").
+% multiplicative_affix_fact(70, "heptaconta").
+% multiplicative_affix_fact(80, "octaconta").
+% multiplicative_affix_fact(90, "nonaconta").
+multiplicative_affix_fact(100, "hecta").
+multiplicative_affix_fact(200, "dicta").
+% multiplicative_affix_fact(500, "pentacta").
+multiplicative_affix_fact(1000, "kilia").
+multiplicative_affix_fact(2000, "dilia").
 
 
 % From KEMI base: ComplexMultiplicativePrefixFact
 % complex_multiplicative_prefix_fact(Number: integer, Prefix: string)
 complex_multiplicative_prefix_fact(2, "bis").
 complex_multiplicative_prefix_fact(3, "tris").
-complex_multiplicative_prefix_fact(4, "tetrakis").
-complex_multiplicative_prefix_fact(5, "pentakis").
-complex_multiplicative_prefix_fact(6, "hexakis").
-complex_multiplicative_prefix_fact(7, "heptakis").
-complex_multiplicative_prefix_fact(8, "octakis").
-complex_multiplicative_prefix_fact(9, "nonakis").
-complex_multiplicative_prefix_fact(10, "decakis").
+% complex_multiplicative_prefix_fact(4, "tetrakis").
+% complex_multiplicative_prefix_fact(5, "pentakis").
+% complex_multiplicative_prefix_fact(6, "hexakis").
+% complex_multiplicative_prefix_fact(7, "heptakis").
+% complex_multiplicative_prefix_fact(8, "octakis").
+% complex_multiplicative_prefix_fact(9, "nonakis").
+% complex_multiplicative_prefix_fact(10, "decakis").
 
 
 % From KEMI base: ParentNameException

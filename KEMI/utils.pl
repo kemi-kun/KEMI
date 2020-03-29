@@ -1,10 +1,10 @@
-:- module(utils,[split_decimal/2]).
+:- module(utils,[split_digits/2,split_decimal/3]).
 
 
-%!  split_digits(+Number:int, +Numbers:list) is semidet.
-%!  split_digits(+Number:int, -Numbers:list) is det.
-%!  split_digits(-Number:int, -Numbers:list) is failure.
-%!  split_digits(-Number:int, +Numbers:list) is det.
+%!  split_digits(+Number:int, +Digits:list) is semidet.
+%!  split_digits(+Number:int, -Digits:list) is det.
+%!  split_digits(-Number:int, -Digits:list) is failure.
+%!  split_digits(-Number:int, +Digits:list) is det.
 %
 %   Return the number splitted into digits.
 %
@@ -12,15 +12,15 @@
 %       ?- split_digits(1234, [1, 2, 3, 4]).
 %       true.
 %
-split_digits(Number, Numbers) :-
+split_digits(Number, Digits) :-
     nonvar(Number),
-    number_chars(Number, Numbers_),
-    maplist(atom_number, Numbers_, Numbers),
+    number_chars(Number, Digits_),
+    maplist(atom_number, Digits_, Digits),
     !.
-split_digits(Number, Numbers) :-
-    nonvar(Numbers),
-    maplist(atom_number, Numbers_, Numbers),
-    number_chars(Number, Numbers_),
+split_digits(Number, Digits) :-
+    nonvar(Digits),
+    maplist(atom_number, Digits_, Digits),
+    number_chars(Number, Digits_),
     !.
 
 %!  split_decimal(+Number:int, +First:int, +Rest:int) is semidet.
