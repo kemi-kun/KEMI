@@ -83,14 +83,10 @@ mul_prefix_except_mono(Number, Prefix) :-
 %!  get_neutral_specie(-Formula: string, +NeutralSpecie: string) is ERROR.
 %
 %   Get neutral specie (element without charge) from `Formula`
+%   Note: Need parentheses to separate compound and charge
+%     examples [N2H5]+, [Cl]-
 %
 get_neutral_specie(Formula, NeutralSpecie) :-
-    (
-        re_matchsub("^(?<formula>.*)[1-9][0-9]*[+\\-]$", Formula, SubDict_, []) -> SubDict = SubDict_;
-        re_matchsub("^(?<formula>.*)[+\\-]$", Formula, SubDict_, []) -> SubDict = SubDict_;
-        re_matchsub("[+\\-][1-9][0-9]*(?<formula>.*)", Formula, SubDict_, []) -> SubDict = SubDict_;
-        re_matchsub("[+\\-](?<formula>.*)", Formula, SubDict_, []) -> SubDict = SubDict_;
-        SubDict = re_match{formula: Formula}, !
-    ),
+    re_matchsub("^[+-]?([1-9][0-9]*)?(?<formula>.*?)([1-9][0-9]*)?[+\\-]?$", Formula, SubDict, []),
     get_dict(formula, SubDict, Formula_),
     remove_parentheses_(Formula_, NeutralSpecie).
