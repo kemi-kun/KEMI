@@ -104,20 +104,19 @@ ylify(ElementName, Result) :-
     !.
 
 
-%! ylidenify(+Element: atom, -Result: string) is det.
-%! ylidenify(+Element: atom, +Result: string) is semidet.
+%! ylidenify(+ElementName: string, -Result: string) is det.
+%! ylidenify(+ElementName: string, +Result: string) is semidet.
 %
 %  If name of `Element` have ﬁnal -e, remove -e and add suffix -ylidene
 %  Add suffix -ylidene to the name of `Element`
 %  
-ylidenify(Element, Result) :-
-    element_name(Element, Name),
+ylidenify(ElementName, Result) :-
     (
-        string_concat(NameElideE, "e", Name) -> Name_ = NameElideE;
-        Name_ = Name
+        string_concat(NameElideE, "e", ElementName) -> Name_ = NameElideE;
+        Name_ = ElementName
     ),
     (
-        Name_ = Name -> string_concat(Name_, "ylidene", Result);
+        Name_ = ElementName -> string_concat(Name_, "ylidene", Result);
         string_concat(Name_, "ylidene", Result)
     ),
     !.
