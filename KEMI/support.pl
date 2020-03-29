@@ -55,8 +55,8 @@ gen_affix_(Number, Affix) :-
 
 %!	multiplicative_prefix(+Number, +Prefix) det.
 %!	multiplicative_prefix(+Number, -Prefix) det.
-%!	multiplicative_prefix(-Number, -Prefix) det.    # TODO: Fix (returns first fact)
-%!	multiplicative_prefix(-Number, +Prefix) semidet. (ERROR when Prefix is wrong)
+%!	multiplicative_prefix(-Number, -Prefix) det.        # TODO: Fix (returns first fact)
+%!	multiplicative_prefix(-Number, +Prefix) failure.    # TODO: FIx
 %
 %   Note: Depends on multiplicative_prefix/2.
 %
