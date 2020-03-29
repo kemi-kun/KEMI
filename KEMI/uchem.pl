@@ -76,17 +76,17 @@ get_element(Formula, Index, Element) :-
 get_all_elements(Formula, ElementSet) :-
     nonvar(Formula),
     remove_chars(Formula, "()[]{}0123456789+-", Formula_),
-    extract_elements(Formula_, ElementSymbolList),
-    list_to_set(ElementSymbolList, ElementSymbolSet),
-    maplist(element_symbol, ElementSet, ElementSymbolSet).
-extract_elements(Formula, ElementSymbolList) :-
-    Formula = "" -> ElementSymbolList = [];
+    extract_elements(Formula_, SymbolList),
+    list_to_set(SymbolList, SymbolSet),
+    maplist(element_symbol, ElementSet, SymbolSet).
+extract_elements(Formula, SymbolList) :-
+    Formula = "" -> SymbolList = [];
     element_fact(_, _, Symbol, _, _),
     string_length(Symbol, L),
     sub_string(Formula, 0, L, A0, Symbol),
     sub_string(Formula, L, A0, 0, Rest),
-    extract_elements(Rest, ElementSymbolList_),
-    append([Symbol], ElementSymbolList_, ElementSymbolList),
+    extract_elements(Rest, SymbolList_),
+    append([Symbol], SymbolList_, SymbolList),
     !.
     
 
@@ -112,8 +112,8 @@ extract_element_quantity(ElementQuantities, Elements) :-
 get_num_elements(Formula, Amount) :-
     remove_chars(Formula, "()[]{}", Formula_),
     extract_elements_from_formula(Formula_, ElementQuantities),
-    extract_element_quantity(ElementQuantities, ElementSymbolList),
-    list_to_set(ElementSymbolList, ElementSet),
+    extract_element_quantity(ElementQuantities, ElementList),
+    list_to_set(ElementList, ElementSet),
     length(ElementSet, Amount),
     !.
 
