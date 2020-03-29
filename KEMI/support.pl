@@ -3,6 +3,7 @@
 :- use_module(ustr,[join/3]).
 :- use_module(ulist,[enumerate/2,range/4]).
 :- use_module(facts,[multiplicative_prefix_fact/2,multiplicative_affix_fact/2,complex_multiplicative_prefix_fact/2]).
+:- use_module(uchem,[remove_parentheses_/2]).
 
 
 %!	multiplicative_prefix(+Number, +Prefix) det.
@@ -75,3 +76,21 @@ complex_multiplicative_prefix(Number, Prefix) :-
 mul_prefix_except_mono(Number, Prefix) :-
     Number = 1 -> Prefix = "";
     multiplicative_prefix(Number, Prefix).
+
+
+%!  get_neutral_specie(+Formula: string, -NeutralSpecie: string) is det.
+%!  get_neutral_specie(+Formula: string, +NeutralSpecie: string) is semidet.
+%!  get_neutral_specie(-Formula: string, +NeutralSpecie: string) is failure.
+%
+%   Get neutral specie (element without charge) from `Formula`
+%
+get_neutral_specie(Formula, NeutralSpecie) :-
+    (
+        re_matchsub("^(?<formula>.*)[1-9][0-9]*[+\\-]$", Formula, SubDict_, []) -> SubDict = SubDict_;
+        re_matchsub("^(?<formula>.*)[+\\-]$", Formula, SubDict_, []) -> SubDict = SubDict_;
+        re_matchsub("[+\\-][1-9][0-9]*(?<formula>.*)", Formula, SubDict_, []) -> SubDict = SubDict_;
+        re_matchsub("[+\\-](?<formula>.*)", Formula, SubDict_, []) -> SubDict = SubDict_;
+        SubDict = re_match{formula: Formula}, !
+    ),
+    get_dict(formula, SubDict, Formula_),
+    remove_parentheses_(Formula_, NeutralSpecie).

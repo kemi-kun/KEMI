@@ -1,7 +1,4 @@
-:- module(uchem,[
-    get_net_charge/2, get_num_atoms/3, get_num_elements/2,
-    get_all_elements/2, get_element/3
-    ]).
+:- module(uchem,[remove_parentheses_/2,get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
 :- use_module('facts',[en/2,element_fact/5]).
 
 
