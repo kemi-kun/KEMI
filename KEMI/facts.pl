@@ -203,6 +203,7 @@ multiplicative_affix_fact(20, "icosa").
 multiplicative_affix_fact(21, "henicosa").
 multiplicative_affix_fact(22, "docosa").
 multiplicative_affix_fact(23, "tricosa").
+multiplicative_affix_fact(23, "tetracosa"). % Page 26 https://old.iupac.org/reports/provisional/abstract04/BB-prs310305/Chapter1.pdf
 multiplicative_affix_fact(30, "triaconta").
 % multiplicative_affix_fact(31, "hentriaconta").
 % multiplicative_affix_fact(35, "pentatriaconta").
