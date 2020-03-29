@@ -105,12 +105,42 @@ ylify(Element, Result) :-
     !.
 
 
+%! ylidenify(+Element: atom, -Result: string) is det.
+%! ylidenify(+Element: atom, +Result: string) is semidet.
+%
+%  If name of `Element` have ﬁnal -e, remove -e and add suffix -ylidene
+%  Add suffix -ylidene to the name of `Element`
+%  
 ylidenify(Element, Result) :-
-    false.
+    element_name(Element, Name),
+    (
+        string_concat(NameElideE, "e", Name) -> Name_ = NameElideE;
+        Name_ = Name
+    ),
+    (
+        Name_ = Name -> string_concat(Name_, "ylidene", Result);
+        string_concat(Name_, "ylidene", Result)
+    ),
+    !.
 
 
+%! ylidynify(+Element: atom, -Result: string) is det.
+%! ylidynify(+Element: atom, +Result: string) is semidet.
+%
+%  If name of `Element` have ﬁnal -e, remove -e and add suffix -ylidyne
+%  Add suffix -ylidyne to the name of `Element`
+%  
 ylidynify(Element, Result) :-
-    false.
+    element_name(Element, Name),
+    (
+        string_concat(NameElideE, "e", Name) -> Name_ = NameElideE;
+        Name_ = Name
+    ),
+    (
+        Name_ = Name -> string_concat(Name_, "ylidyne", Result);
+        string_concat(Name_, "ylidyne", Result)
+    ),
+    !.
 
 
 %! replace_prefix(

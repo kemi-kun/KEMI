@@ -4,6 +4,7 @@
     re_finditer/3,
     re_findall/3,
     join/3,
+    remove_chars/3,
     split/2,
     capitalize/2,
     replace/4
@@ -72,6 +73,23 @@ split(In, Out) :-
 
 number_to_character_(Number, Character) :-
     string_codes(Character,[Number]).
+
+
+%! remove_chars(+String:string, +CharsToRemove:string, +Result:string) is semidet.
+%! remove_chars(+String:string, +CharsToRemove:string, -Result:string) is det.
+%
+%  Remove "(", ")", "[", "]", "{" and "}" from `String`.
+%
+% remove_chars("NaCl", "NaCl").
+% remove_chars("[Al(POCl3)6]3+", "AlPOCl363+").
+% remove_chars("H2[PtCl6]", "H2PtCl6").
+% remove_chars("ab[(c)][d2](3)", "abcd23").
+remove_chars(String, CharsToRemove, Result) :-
+    split(String, Strings),
+    exclude(is_(CharsToRemove), Strings, Result_),
+    atomics_to_string(Result_, Result).
+is_(String, Elem) :- split(String, X), member(Elem, X).
+
 
 %!  join(+Sep:string, +Subs:list(string), +String:string) is semidet.
 %!  join(+Sep:string, +Subs:list(string), -String:string) is det.
