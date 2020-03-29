@@ -81,3 +81,28 @@ join_(Sep, [H|T], String) :-
     string_concat(H, Sep, T0),
     string_concat(T0, S0, String),
     !.
+
+
+%!	re_matchsub_mul(+Regex, +String:string, -Subs:list[dict], +Options:list, -Leftover:string) is det.
+%
+%   Like re_matchsub but returns all matches.
+%
+%   Note: Use re_finditer/3 if leftover is not needed.
+%
+re_matchsub_mul(Regex, String, Subs, Options, Leftover) :-
+    re_matchsub(Regex, String, Sub1, Options),
+
+    % get UnMatched string
+    get_dict(0, Sub1, FullMatch),
+    sub_string(String, Before, _, After, FullMatch),
+    sub_string(String, 0, Before, _, BeforePart),
+    sub_string(String, _, After, 0, AfterPart),
+    string_concat(BeforePart, AfterPart, Unmatched),
+    
+    re_matchsub_mul(Regex, Unmatched, Subs0, Options, Leftover),
+    append(Subs0, [Sub1], Subs),
+    !.
+re_matchsub_mul(Regex, String, Subs, Options, Leftover) :-
+    not(re_matchsub(Regex, String, _, Options)),
+    Subs = [],
+    Leftover = String.
