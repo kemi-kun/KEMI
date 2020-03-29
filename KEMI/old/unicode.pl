@@ -27,12 +27,12 @@ sup(C, SC) :-
         C = ')' -> SC = '\u207E';
         C = 'n' -> SC = '\u207F';
         fail
-    ).
+    ),!.
 sup(Number, String) :-
     number(Number),
     number_chars(Number, CharList),
     fsup_(CharList, CL2),
-    string_chars(String, CL2).
+    string_chars(String, CL2),!.
 fsup_([H|T], R) :-
     T = [],
     sup(H, R1),
@@ -69,12 +69,12 @@ sub(C, SC) :-
         C = ')' -> SC = '\u208E';
         C = 'n' -> SC = '\u2099';
         fail
-    ).
+    ),!.
 sub(Number, String) :-
     number(Number),
     number_chars(Number, CharList),
     fsub_(CharList, CL2),
-    string_chars(String, CL2).
+    string_chars(String, CL2),!.
 fsub_([H|T], R) :-
     T = [],
     sub(H, R1),
