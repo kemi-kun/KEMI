@@ -11,7 +11,7 @@ Contents:
 :- module(facts,[
     parent_name_exception/2,
     complex_multiplicative_prefix_fact/2,
-    multiplicative_affix_fact/2,
+    multiplicative_prefix_fact/2,
     multiplicative_affix_fact/2,
     numerical_root_fact/2,
     alternative_element_name_fact/2,
