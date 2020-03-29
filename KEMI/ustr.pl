@@ -106,3 +106,43 @@ re_matchsub_mul(Regex, String, Subs, Options, Leftover) :-
     not(re_matchsub(Regex, String, _, Options)),
     Subs = [],
     Leftover = String.
+
+
+%!  re_findall(+Regex, +String:string, -Matches:list(string)) is det.
+%
+%   Attemps to be python's `re.findall()`.
+%
+%   Reference: https://docs.python.org/3/library/re.html#re.findall
+%
+re_findall(Regex, String, Matches) :-
+    re_foldl(append_matchstring, Regex, String, [], Matches, []).
+
+append_matchstring(Match, V0, V1) :-
+    get_dict(0, Match, X),
+    append(V0, [X], V1).
+
+
+%!  re_finditer(+Regex, +String:string, -Matches:list(re_match)) is det.
+%
+%   Attemps to be python's `re.finditer()`.
+%
+%   Reference: https://docs.python.org/3/library/re.html#re.finditer
+%
+re_finditer(Regex, String, Matches) :-
+    re_foldl(append_match, Regex, String, [], Matches, []).
+
+append_match(Match, V0, V1) :-
+    append(V0, [Match], V1).
+
+
+%!  re_match_count(+Regex, +String:string, -Count:int) is det.
+%
+%   Counts all matches in a string.
+%
+%   Taken from https://www.swi-prolog.org/pldoc/doc_for?object=re_foldl/6.
+%
+re_match_count(Regex, String, Count) :-
+    re_foldl(increment, Regex, String, 0, Count, []).
+
+increment(_Match, V0, V1) :-
+    V1 is V0+1.
