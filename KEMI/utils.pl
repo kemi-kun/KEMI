@@ -1,4 +1,4 @@
-:- module(utils,[split_digits/2,split_decimal/2]).
+:- module(utils,[split_digits/2,split_decimal/3]).
 
 
 %!  split_digits(+Number:int, +Digits:list) is semidet.
