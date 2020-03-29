@@ -1,14 +1,27 @@
-:- module(ustr,[join/3,split/2,capitalize/2,contains/2,remove/3,replace/4]).
+:- module(ustr,[
+    re_matchsub_mul/5,
+    re_match_count/3,
+    re_finditer/3,
+    re_findall/3,
+    join/3,
+    split/2,
+    capitalize/2,
+    replace/4
+    ]).
 
 
-contains(String, Substring) :-
-    sub_string(String, _,_,_, Substring), !.
+% contains(String, Substring) :-
+%     sub_string(String, _,_,_, Substring), !.
 
-remove(String, Removed, Result) :-
-    replace(String, Removed, "", Result), !.
+% remove(String, Removed, Result) :-
+%     replace(String, Removed, "", Result), !.
 
 
-%!  replace(String: string, S1: string, S2: string, -Result: string) is nondet
+%!  replace(+String: string, +S1:string, +S2:string, +Result:string) is multi.  # TODO: Remove choice points
+%!  replace(+String: string, +S1:string, +S2:string, -Result:string) is multi.  # TODO: Remove choice points
+%!  replace(+String: string, +S1:string, -S2:string, +Result:string) is ERROR.  # TODO: Fix
+%!  replace(+String: string, -S1:string, +S2:string, +Result:string) is multi.  # TODO: REmove chocie points
+%!  replace(-String: string, +S1:string, +S2:string, +Result:string) is ERROR.  # TODO: Fix
 %
 %   Find the first occurence of substring `S1` and replace it with `S2`.
 %
@@ -21,10 +34,10 @@ replace(String, S1, S2, Result) :-
     string_concat(Before, S2, T0),
     string_concat(T0, After, Result).
 
-%!	capitalize(+String: string, +Result: string) is failure.
-%!	capitalize(+String: string, -Result: string) is det.
-%!	capitalize(-String: string, +Result: string) is det.
-%!	capitalize(-String: string, -Result: string) is failure.
+%!	capitalize(+String:string, +Result:string) is failure.
+%!	capitalize(+String:string, -Result:string) is det.
+%!	capitalize(-String:string, +Result:string) is det.
+%!	capitalize(-String:string, -Result:string) is failure.
 %
 %   True when first letter in `String` is upper and the rest is lower,
 %   and all leters in `Result` is lower.
@@ -47,8 +60,8 @@ capitalize(String, Result) :-
     !.
 
 
-%!  split(+In: string, -Out: list) is det.
-%!  split(-In: string, +Out: list) is ERROR.
+%!  split(+In:string, -Out:list) is det.
+%!  split(-In:string, +Out:list) is ERROR.
 %
 %   Split string `In` to list
 %   and return the result list as `Out`.
@@ -115,9 +128,9 @@ re_matchsub_mul(Regex, String, Subs, Options, Leftover) :-
 %   Reference: https://docs.python.org/3/library/re.html#re.findall
 %
 re_findall(Regex, String, Matches) :-
-    re_foldl(append_matchstring, Regex, String, [], Matches, []).
+    re_foldl(append_matchstring_, Regex, String, [], Matches, []).
 
-append_matchstring(Match, V0, V1) :-
+append_matchstring_(Match, V0, V1) :-
     get_dict(0, Match, X),
     append(V0, [X], V1).
 
@@ -129,9 +142,9 @@ append_matchstring(Match, V0, V1) :-
 %   Reference: https://docs.python.org/3/library/re.html#re.finditer
 %
 re_finditer(Regex, String, Matches) :-
-    re_foldl(append_match, Regex, String, [], Matches, []).
+    re_foldl(append_match_, Regex, String, [], Matches, []).
 
-append_match(Match, V0, V1) :-
+append_match_(Match, V0, V1) :-
     append(V0, [Match], V1).
 
 
@@ -142,7 +155,7 @@ append_match(Match, V0, V1) :-
 %   Taken from https://www.swi-prolog.org/pldoc/doc_for?object=re_foldl/6.
 %
 re_match_count(Regex, String, Count) :-
-    re_foldl(increment, Regex, String, 0, Count, []).
+    re_foldl(increment_, Regex, String, 0, Count, []).
 
-increment(_Match, V0, V1) :-
+increment_(_Match, V0, V1) :-
     V1 is V0+1.
