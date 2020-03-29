@@ -89,8 +89,8 @@ anify(Element, Result) :-
 %! ylify(+ElementName: string, -Result: string) is det.
 %! ylify(+ElementName: string, +Result: string) is semidet.
 %
-%  If name of `Element` have ﬁnal -e, remove -e and add suffix -yl
-%  Add suffix -yl to the name of `Element`
+%  If `ElementName` have ﬁnal -e, remove -e and add suffix -yl
+%  Add suffix -yl to `ElementName`
 %  
 ylify(ElementName, Result) :-
     (
@@ -107,8 +107,8 @@ ylify(ElementName, Result) :-
 %! ylidenify(+ElementName: string, -Result: string) is det.
 %! ylidenify(+ElementName: string, +Result: string) is semidet.
 %
-%  If name of `Element` have ﬁnal -e, remove -e and add suffix -ylidene
-%  Add suffix -ylidene to the name of `Element`
+%  If `ElementName` have ﬁnal -e, remove -e and add suffix -ylidene
+%  Add suffix -ylidene to `ElementName`
 %  
 ylidenify(ElementName, Result) :-
     (
@@ -122,20 +122,19 @@ ylidenify(ElementName, Result) :-
     !.
 
 
-%! ylidynify(+Element: atom, -Result: string) is det.
-%! ylidynify(+Element: atom, +Result: string) is semidet.
+%! ylidynify(+ElementName: string, -Result: string) is det.
+%! ylidynify(+ElementName: string, +Result: string) is semidet.
 %
-%  If name of `Element` have ﬁnal -e, remove -e and add suffix -ylidyne
-%  Add suffix -ylidyne to the name of `Element`
+%  If `ElementName` have ﬁnal -e, remove -e and add suffix -ylidyne
+%  Add suffix -ylidyne to `ElementName`
 %  
-ylidynify(Element, Result) :-
-    element_name(Element, Name),
+ylidynify(ElementName, Result) :-
     (
-        string_concat(NameElideE, "e", Name) -> Name_ = NameElideE;
-        Name_ = Name
+        string_concat(NameElideE, "e", ElementName) -> Name_ = NameElideE;
+        Name_ = ElementName
     ),
     (
-        Name_ = Name -> string_concat(Name_, "ylidyne", Result);
+        Name_ = ElementName -> string_concat(Name_, "ylidyne", Result);
         string_concat(Name_, "ylidyne", Result)
     ),
     !.
