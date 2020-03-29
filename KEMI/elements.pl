@@ -6,9 +6,9 @@ Implements:
 - Group
 - Period
 */
-:- module(elements,[group/2,element_name/2]).
+:- module(elements,[group/2,element_name/2,element_symbol/2]).
 :- use_module(ustr,[capitalize/2,join/3]).
-:- use_module(utils,[split_decimal/2]).
+:- use_module(utils,[split_digits/2]).
 :- use_module(facts,[
     element_fact/5,
     alternative_element_name_fact/2,
@@ -25,6 +25,10 @@ element_name(Element, ElementName) :-
     element_fact(Element, ElementName, _, _, _) -> true;
     new_element_name(Element, ElementName).
 
+element_symbol(Element, Symbol) :-
+    element_fact(Element, _, Symbol, _, _) -> true;
+    new_element_symbol(Element, Symbol).
+
 atomic_number(Element, Z) :-
     element_fact(Element, _, _, Z, _) -> true;
     new_element_atomic_number(Element, Z).
@@ -38,7 +42,7 @@ atomic_number(Element, Z) :-
 %   True when `Z` is the atomic number of "new" element `Element`.
 %
 new_element_atomic_number(Element, Z) :-
-    split_decimal(Z, L0),
+    split_digits(Z, L0),
     maplist(numerical_root_fact, L0, L1),
     join("", L1, T0),
     (
@@ -49,7 +53,7 @@ new_element_atomic_number(Element, Z) :-
     atom_string(Element, Element_).
 % new_element_atomic_number(Symbol, Z) :-
 %     nonvar(Z),
-%     split_decimal(Z, L0),
+%     split_digits(Z, L0),
 %     maplist(numerical_root_symbol, L0, L1),
 %     string_chars(T0, L1),
 %     capitalize(T0, Symbol),
@@ -59,7 +63,7 @@ new_element_atomic_number(Element, Z) :-
 %     capitalize(T0, Symbol),
 %     string_chars(T0, L1),
 %     maplist(numerical_root_symbol, L0, L1),
-%     split_decimal(Z, L0),
+%     split_digits(Z, L0),
 %     !.
 
 %!  numerical_root_symbol(+Number:int, +Symbol:atom) is semidet.
@@ -81,9 +85,12 @@ numerical_root_symbol(Number, Symbol) :-
 new_element_name(Element, ElementName) :-
     not(element_fact(Element, ElementName, _, _, _)),
     new_element_atomic_number(Element, Z),
-    split_decimal(Z, L0),
+    split_digits(Z, L0),
     maplist(numerical_root_fact, L0, L1),
     ElementName = L1.
+
+new_element_symbol(Element, Symbol) :-
+    fail.
 
 
 %!  period(+Element:atom, -Period:int) is det.
