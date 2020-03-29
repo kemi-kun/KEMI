@@ -1,22 +1,9 @@
-:- module(uchem,[remove_parentheses_/2,get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
+:- module(uchem,[remove_chars/2,get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
 :- use_module('facts',[en/2,element_fact/5]).
-:- use_module('ustr',[split/2]).
+:- use_module('ustr',[split/2,remove_chars/3]).
 
-%! remove_parentheses_(+String: string, +Result: string) is semidet.
-%! remove_parentheses_(+String: string, -Result: string) is det.
-%
-%  Remove "(", ")", "[", "]", "{" and "}" from `String`.
-%
-% remove_parentheses_("NaCl", "NaCl").
-% remove_parentheses_("[Al(POCl3)6]3+", "AlPOCl363+").
-% remove_parentheses_("H2[PtCl6]", "H2PtCl6").
-% remove_parentheses_("ab[(c)][d2](3)", "abcd23").
-remove_parentheses_(String, Result) :-
-    re_split("[(\\)\\[\\]\\{\\}]", String, R1, []),
-    exclude(is_parens_, R1, Result_),
-    % delete(R2, "", Result_),
-    atomics_to_string(Result_, Result).
-is_parens_(Elem) :- split("()[]{}", X), member(Elem, X).
+
+
 
 element_quantity(Symbol, Quantity) :-
     Quantity > 0,
@@ -72,7 +59,7 @@ extract_term(Term, Args) :-
 %  Return false if there's no element at `Index`
 %
 get_element(Formula, Index, Element) :-
-    remove_parentheses_(Formula, Formula_),
+    remove_chars(Formula, "()[]{}", Formula_),
     extract_elements_from_formula(Formula_, Elements),
     nth0(Index, Elements, ElementQuantity),
     extract_term(ElementQuantity, [Symbol|_]),
@@ -88,7 +75,7 @@ get_element(Formula, Index, Element) :-
 %
 get_all_elements(Formula, ElementSet) :-
     nonvar(Formula),
-    remove_parentheses_(Formula, Formula_),
+    remove_chars(Formula, "()[]{}", Formula_),
     extract_elements_from_formula(Formula_, ElementQuantities),
     extract_element_quantity(ElementQuantities, ElementList),
     list_to_set(ElementList, ElementSet),
@@ -114,7 +101,7 @@ extract_element_quantity(ElementQuantities, Elements) :-
 %  formula `Formula`
 %
 get_num_elements(Formula, Amount) :-
-    remove_parentheses_(Formula, Formula_),
+    remove_chars(Formula, "()[]{}", Formula_),
     extract_elements_from_formula(Formula_, ElementQuantities),
     extract_element_quantity(ElementQuantities, ElementList),
     list_to_set(ElementList, ElementSet),
@@ -149,7 +136,7 @@ sorted(Key, List, SortedList) :-
 %  formula `Formula`
 %
 get_num_atoms(Formula, Element, Amount) :-
-    remove_parentheses_(Formula, Formula_),
+    remove_chars(Formula, Formula_),
     extract_elements_from_formula(Formula_, ElementQuantities),
     extract_quantity_from_element(ElementQuantities,Element, Amount).
  
