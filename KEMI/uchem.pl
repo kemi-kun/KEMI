@@ -2,7 +2,7 @@
 :- use_module('facts',[en/2,element_fact/5]).
 :- use_module('ustr',[split/2]).
 
-
+%! remove_parentheses_(+String: string, +Result: string) is semidet.
 %! remove_parentheses_(+String: string, -Result: string) is det.
 %
 %  Remove "(", ")", "[", "]", "{" and "}" from `String`.
@@ -13,9 +13,10 @@
 % remove_parentheses_("ab[(c)][d2](3)", "abcd23").
 remove_parentheses_(String, Result) :-
     re_split("[(\\)\\[\\]\\{\\}]", String, R1, []),
-    exclude(is_to_remove, R1, Result_),
+    exclude(is_parens_, R1, Result_),
+    % delete(R2, "", Result_),
     atomics_to_string(Result_, Result).
-is_to_remove(Elem) :- split("()[]{}", X), member(Elem, X).
+is_parens_(Elem) :- split("()[]{}", X), member(Elem, X).
 
 element_quantity(Symbol, Quantity) :-
     Quantity > 0,
