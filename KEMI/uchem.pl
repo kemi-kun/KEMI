@@ -76,16 +76,16 @@ get_element(Formula, Index, Element) :-
 get_all_elements(Formula, ElementSet) :-
     nonvar(Formula),
     remove_chars(Formula, "()[]{}0123456789+-", Formula_),
-    extract_elements(Formula_, SymbolList),
+    extract_symbols_(Formula_, SymbolList),
     list_to_set(SymbolList, SymbolSet),
     maplist(element_symbol, ElementSet, SymbolSet).
-extract_elements(Formula, SymbolList) :-
+extract_symbols_(Formula, SymbolList) :-
     Formula = "" -> SymbolList = [];
-    element_fact(_, _, Symbol, _, _),
+    element_fact(_, _, Symbol, _, _),       % TODO: use `element_symbol` instead
     string_length(Symbol, L),
     sub_string(Formula, 0, L, A0, Symbol),
     sub_string(Formula, L, A0, 0, Rest),
-    extract_elements(Rest, SymbolList_),
+    extract_symbols_(Rest, SymbolList_),
     append([Symbol], SymbolList_, SymbolList),
     !.
     
