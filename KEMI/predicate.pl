@@ -86,14 +86,23 @@ anify(Element, Result) :-
     string_concat(Root, "ane", Result).
 
 
+%! ylify(+Element: atom, -Result: string) is det.
+%! ylify(+Element: atom, +Result: string) is semidet.
+%
+%  If name of `Element` have ﬁnal -e, remove -e and add suffix -yl
+%  Add suffix -yl to the name of `Element`
+%  
 ylify(Element, Result) :-
-    false.
-    % element_name(Element, Name),
-    % (
-    %     string_concat(NameElideE, "e", Name) -> Name_ = NameElideE;
-    %     Name_ = Name
-    % ),
-    % string_concat(Name_, "yl", Result).
+    element_name(Element, Name),
+    (
+        string_concat(NameElideE, "e", Name) -> Name_ = NameElideE;
+        Name_ = Name
+    ),
+    (
+        Name_ = Name -> string_concat(Name_, "yl", Result);
+        string_concat(Name_, "yl", Result)
+    ),
+    !.
 
 
 ylidenify(Element, Result) :-
@@ -124,6 +133,7 @@ replace_prefix(Name1, Name2, Prefix1, Prefix2) :-
 
 
 %! get_standard_bonding_number(+Element: atom, -BondingNum: integer) is det.
+%! get_standard_bonding_number(+Element: atom, +BondingNum: integer) is semidet.
 %
 %  X is group of elemnt 
 %  If 13 ≤ X ≤ 15 -> X - 10 
