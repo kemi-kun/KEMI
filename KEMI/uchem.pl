@@ -171,15 +171,15 @@ extract_quantity_from_element(ElementQuantities,Element,Amount) :-
     !.
 
 
-%!  get_charge_str_(+Formula: string, -ChargeStr: string) is det.
-%!  get_charge_str_(+Formula: string, +ChargeStr: string) is semidet.
-%!  get_charge_str_(-Formula: string, -ChargeStr: string) is failure.
+%!  get_num_charge_str_(+Formula: string, -ChargeStr: string) is det.
+%!  get_num_charge_str_(+Formula: string, +ChargeStr: string) is semidet.
+%!  get_num_charge_str_(-Formula: string, -ChargeStr: string) is failure.
 %
-%   Get a string of charge from `Formula` (without modify)
+%   Get a string of charge from `Formula`
 %
-%   get_charge_str_("[Cr]300-", "300-").
-%   get_charge_str_("+200[Cr]", "+200").
-get_charge_str_(Formula, ChargeStr) :-
+%   get_num_charge_str_("[Cr]300-", "-300").
+%   get_num_charge_str_("+200[Cr]", "+200").
+get_num_charge_str_(Formula, ChargeStr) :-
     (
         re_matchsub(".*(?<charge>[1-9][0-9]*[+\\-])$", Formula, SubDict_, []) -> SubDict = SubDict_;
         re_matchsub(".*(?<charge>[+\\-])$", Formula, SubDict_, []) -> SubDict = SubDict_;
@@ -187,8 +187,12 @@ get_charge_str_(Formula, ChargeStr) :-
         re_matchsub("^(?<charge>[+\\-]).*", Formula, SubDict_, []) -> SubDict = SubDict_;
         SubDict = re_match{charge: ""}, !
     ),
-    get_dict(charge, SubDict, ChargeStr).
-
+    get_dict(charge, SubDict, ChargeStr_),
+    (
+        string_concat(Number, "+", ChargeStr_) -> string_concat("+", Number, ChargeStr), !;
+        string_concat(Number, "-", ChargeStr_) -> string_concat("-", Number, ChargeStr);
+        ChargeStr = ChargeStr_
+    ).
 
 %!  get_net_charge(+Formula: string, -NetCharge: int) is det.
 %!  get_net_charge(+Formula: string, -NetCharge: int) is semidet.
@@ -201,19 +205,15 @@ get_charge_str_(Formula, ChargeStr) :-
 %                 "+/-[formula]", "+/-charge[formula]"
 %
 get_net_charge(Formula, NetCharge) :-
-    get_charge_str_(Formula, ChargeStr),
+    get_num_charge_str_(Formula, ChargeStr),
     string_length(ChargeStr, Length),
     Length > 1,
-    (
-        string_concat(NetCharge_, "+", ChargeStr) -> number_chars(NetCharge, NetCharge_), !;
-        string_concat(NetCharge_, "-", ChargeStr) -> number_chars(NetCharge, NetCharge_), !;
-        string_concat("+", NetCharge_, ChargeStr) -> number_chars(NetCharge, NetCharge_), !;
-        string_concat("-", NetCharge_, ChargeStr) -> number_chars(NetCharge, NetCharge_)
-    ),
+    number_chars(NetCharge, ChargeStr),
     !.
 get_net_charge(Formula, NetCharge) :-
-    get_charge_str_(Formula, ChargeStr),
-    string_length(ChargeStr, Length),
-    Length < 2,
-    Length >= 0,
-    Length = NetCharge.
+    get_num_charge_str_(Formula, ChargeStr),
+    (
+        ChargeStr = "+" -> NetCharge = 1, !;
+        ChargeStr = "-" -> NetCharge = -1, !;
+        ChargeStr = "" -> NetCharge = 0
+    ).

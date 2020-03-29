@@ -1,4 +1,4 @@
-:- use_module(elements, [group/2, element_name/2]).
+:- use_module(elements, [group/2, element_name/2, group_/2]).
 :- use_module(facts, [alternative_element_name_fact/2]).
 
 
@@ -121,3 +121,20 @@ replace_prefix(Name1, Name2, Prefix1, Prefix2) :-
 replace_prefix(Name1, Name2, Prefix1, Prefix2) :-
     string_concat(Root, Prefix2, Name2),
     string_concat(Root, Prefix1, Name1).
+
+
+%! get_standard_bonding_number(+Element: atom, -BondingNum: integer) is det.
+%
+%  X is group of elemnt 
+%  If 13 ≤ X ≤ 15 -> X - 10 
+%  Else If 16 ≤ X ≤ 17 -> 18 - X
+%  Else FAIL
+%
+get_standard_bonding_number(Element, BondingNum):-
+    Element \= hydrogen -> group_(Element, X),
+    (
+        13 =< X, X =< 15 -> BondingNum is X - 10;
+        16 =< X, X =< 18 -> BondingNum is 18 - X;
+        false
+    ),
+    !.
