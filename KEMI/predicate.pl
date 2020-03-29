@@ -86,20 +86,19 @@ anify(Element, Result) :-
     string_concat(Root, "ane", Result).
 
 
-%! ylify(+Element: atom, -Result: string) is det.
-%! ylify(+Element: atom, +Result: string) is semidet.
+%! ylify(+ElementName: string, -Result: string) is det.
+%! ylify(+ElementName: string, +Result: string) is semidet.
 %
 %  If name of `Element` have ﬁnal -e, remove -e and add suffix -yl
 %  Add suffix -yl to the name of `Element`
 %  
-ylify(Element, Result) :-
-    element_name(Element, Name),
+ylify(ElementName, Result) :-
     (
-        string_concat(NameElideE, "e", Name) -> Name_ = NameElideE;
-        Name_ = Name
+        string_concat(NameElideE, "e", ElementName) -> Name_ = NameElideE;
+        Name_ = ElementName
     ),
     (
-        Name_ = Name -> string_concat(Name_, "yl", Result);
+        Name_ = ElementName -> string_concat(Name_, "yl", Result);
         string_concat(Name_, "yl", Result)
     ),
     !.
