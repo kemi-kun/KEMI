@@ -32,14 +32,20 @@ cation(Formula) :-
     get_net_charge(Formula, NetCharge),
     NetCharge > 0.
 
+anion(Formula) :-
+    get_net_charge(Formula, NetCharge),
+    NetCharge < 0.
+
 monoatomic(Formula) :-
     get_all_elements(Formula, Elements),
     length(Elements, 1),
     Elements = [Element0|_],
     get_neutral_specie(Formula, Formula_),        % TODO: remove this when `get_num_atoms()` finished
     % Still bug when Formula has 1 letter
+    % writeln(Formula_),
     get_num_atoms(Formula_, Element0, NumAtom),
-    NumAtom = 1.
+    % writeln(NumAtom),
+    NumAtom is 1.
 
 get_ion_part_(NetCharge, IonSign, ChargeStr) :-
     string_concat("(", NetCharge, ChargeStr1),
@@ -58,17 +64,20 @@ cation_cn(Formula, Name) :-
 %   True if `Name` is a compositional name of `Formula`
 %
 monoatomic_cation_cn(Formula, Name) :-
-    (
-        monoatomic(Formula), cation(Formula)
-    ),
+    monoatomic(Formula), 
+    cation(Formula),
+    % writeln("Here"),
     nonvar(Name) -> monoatomic_cation_cn_(Formula, Name);
     get_element(Formula, 0, Element),
     element_name(Element, ElementName),
     get_net_charge(Formula, NetCharge),
     get_ion_part_(NetCharge, "+", ChargeStr),
     string_concat(ElementName, ChargeStr, Name).
+
 % monoatomic_cation_cn("[Na]+", "sodium(1+)")
 monoatomic_cation_cn_(Formula, Name) :-
+    monoatomic(Formula), 
+    cation(Formula),
     get_element(Formula, 0, Element),
     element_name(Element, ElementName),
     get_net_charge(Formula, NetCharge),

@@ -7,60 +7,85 @@
 %
 %  Append `Suffix` to the name of `Element`
 %
-append_suffix(Element, Suffix, Result) :-
+append_suffix(ElementName, Suffix, Result) :-
     (
-        Suffix = "ide" -> idify(Element, Result);
-        Suffix = "ane" -> anify(Element, Result);
-        Suffix = "yl" -> ylify(Element, Result);
-        Suffix = "ylidene" -> ylidenify(Element, Result);
-        Suffix = "ylidyne" -> ylidynify(Element, Result)
+        Suffix = "ide" -> idify(ElementName, Result);
+        Suffix = "ane" -> anify(ElementName, Result);
+        Suffix = "yl" -> ylify(ElementName, Result);
+        Suffix = "ylidene" -> ylidenify(ElementName, Result);
+        Suffix = "ylidyne" -> ylidynify(ElementName, Result)
     ).
 
 
-idify_(ElementName, [], Result) :-
+replace_suffix_lst_(ElementName, [], Result) :-
     % ElemntName doesn't match any suffix in SuffixList
     Result = ElementName,
     !.
-idify_(ElementName, SuffixList, Result) :-
+replace_suffix_lst_(ElementName, SuffixList, Result) :-
+    var(ElementName), nonvar(Result) -> 
+        replace_suffix_lst_re_(ElementName, SuffixList, Result);
     SuffixList = [ESuffixH|ESuffixT],
     (
         string_concat(Root, ESuffixH, ElementName) -> Result = Root, !;
-        idify_(ElementName, ESuffixT, Result)
+        replace_suffix_lst_(ElementName, ESuffixT, Result)
     ).
+replace_suffix_lst_re_(ElementName, SuffixList, Result) :-
+    var(ElementName),
+    SuffixList = [ESuffixH|ESuffixT],
+    string_concat(Result, ESuffixH, Name),
+    (
+        element_name(_, Name) -> ElementName = Name;
+        replace_suffix_lst_(ElementName, ESuffixT, Result)
+    ).
+
+
+idify_re(ElementName, Result) :-
+    string_concat(Name_, "ide", Result),
+    SuffixList = [
+        "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
+        "ic", "on", "um", "ur", "y"
+    ],
+    replace_suffix_lst_(Name, SuffixList, Name_),
+    element_name(Element_, Name),
+    not(group(Element_, 18)),
+    ElementName = Name,
+    !.
 %! idify(+Element: atom, -Result: string) is det.
 %! idify(+Element: atom, +Result: string) is semidet.
+%! idify(-Element: atom, +Result: string) is det.
 %
 %  Add suffix -ide to the name of `Element`
-%  TODO: (-Element, +Result)
-idify(Element, Result) :-
+%
+idify(ElementName, Result) :-
     % Add -ide to the end of Group 18 which ends with -on
+    element_name(Element, ElementName),
     group(Element, 18),
-    element_name(Element, Name),
     string_concat(_, "on", Name),
     string_concat(Name, "ide", Result),
     !.
-idify(Element, Result) :-
-    element_name(Element, Name),
+idify(ElementName, Result) :-
+    var(ElementName), nonvar(Result) -> idify_re(ElementName, Result);
+    element_name(Element, ElementName),
     not(group(Element, 18)),
     SuffixList = [
         "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
         "ic", "on", "um", "ur", "y"
     ],
-    idify_(Name, SuffixList, Name_),
-    string_concat(Name_, "ide", Result),
-    !.
+    replace_suffix_lst_(ElementName, SuffixList, RootName),
+    string_concat(RootName, "ide", Result).
+    
 
+% anify_(ElementName, [], Result) :-
+%     % ElemntName doesn't match any suffix in SuffixList
+%     Result = ElementName,
+%     !.
+% anify_(ElementName, SuffixList, Result) :-
+%     SuffixList = [ESuffixH|ESuffixT],
+%     (
+%         string_concat(Root, ESuffixH, ElementName) -> Result = Root, !;
+%         anify_(ElementName, ESuffixT, Result)
+%     ).
 
-anify_(ElementName, [], Result) :-
-    % ElemntName doesn't match any suffix in SuffixList
-    Result = ElementName,
-    !.
-anify_(ElementName, SuffixList, Result) :-
-    SuffixList = [ESuffixH|ESuffixT],
-    (
-        string_concat(Root, ESuffixH, ElementName) -> Result = Root, !;
-        anify_(ElementName, ESuffixT, Result)
-    ).
 %! anify(+Element: atom, -Result: string) is det.
 %! anify(+Element: atom, +Result: string) is semidet.
 %
@@ -77,7 +102,7 @@ anify(Element, Result) :-
         "icon", "inum", "ogen", "orus", "gen", "ine", "ium",
         "on", "um", "ur"
     ],
-    anify_(Name, SuffixList, Root_),
+    replace_suffix_lst_(Name, SuffixList, Root_),
     (
         string_concat(TempStr, "e", Root_) ->
             string_concat(TempStr, "i", Root);
