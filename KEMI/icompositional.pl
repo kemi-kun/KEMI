@@ -29,7 +29,40 @@ homonuclear(Formula) :-
     get_all_elements(Formula, Elements),
     length(Elements,1).
 
+
+%!  binary_compound_cn(+Formula: string, -Name: string) is det.
+%!  binary_compound_cn(+Formula: string, +Name: string) is det.
+%!  binary_compound_cn(-Formula: string, +Name: string) is ERROR.
+%
+%   IR-5.2 p.81-82
+%
 binary_compound_cn(Formula, Name) :-
+    (
+        binary_compound(Formula),
+        not(cation(Formula)),
+        not(anion(Formula))
+    ),
+    get_element(Formula, 0, EPosElement),
+    get_element(Formula, 1, ENegElement),
+    element_name(EPosElement,EPosElementName),
+    element_name(ENegElement,ENegElementName),
+    append_suffix(ENegElementName, "ide", NegativePart),
+    get_num_atoms(Formula,EPosElement, NumPositive),
+    mul_prefix_except_mono(NumPositive, EPosMulPrefix),
+    get_num_atoms(Formula, ENegElement,  NumNegative),
+    mul_prefix_except_mono(NumNegative, ENegMulPrefixEx),
+    string_concat(EPosMulPrefix, EPosElementName, EPos),
+    string_concat(EPos, " ", EPos_),
+    string_concat(ENegMulPrefixEx, NegativePart, ENeg),
+    string_concat(EPos_, ENeg, Name),
+    !.
+ 
+binary_compound(Formula) :-
+    get_all_elements(Formula, Elements),
+    length(Elements, 2),
+    !.
+ 
+get_various_name_(Formula, EPos, NumNegative, NegativePart, Name) :-
     fail.
 
 
