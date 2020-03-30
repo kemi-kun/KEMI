@@ -1,6 +1,6 @@
 :- module(uchem,[get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
 :- use_module(facts,[en/2,element_fact/5]).
-:- use_module(ustr,[split/2,remove_chars/3]).
+:- use_module(ustr,[split/2,remove_chars/3,re_finditer/4,replace/4]).
 :- use_module(elements,[element_symbol/2]).
 :- use_module(support,[get_neutral_specie/2]).
 
@@ -137,24 +137,41 @@ sorted(Key, List, SortedList) :-
     !.
 
 
-%! get_num_atoms(+Formula:string, +Element:atom, -Amount:int) is det.
+%! get_num_atoms(+Formula:string, +Element:atom, -NumAtoms:int) is det.
 %
 %  Return the amount of element `Element` in formula `Formula`
 %
-get_num_atoms(Formula, Element, Amount) :-
-    remove_chars(Formula, "()[]{}", Formula_),
-    extract_elements_from_formula(Formula_, ElementQuantities),
-    extract_quantity_from_element(ElementQuantities,Element, Amount).
- 
-extract_quantity_from_element([],_,_).
-extract_quantity_from_element(ElementQuantities,Element,Amount) :-
-    ElementQuantities = [EleQuanH|EleQuanT],
-    element_fact(Element, _, Symbol, _, _),
-    extract_term(EleQuanH, [EleH|Num]),
-    (EleH = Symbol -> Amount is Num ;
-    extract_quantity_from_element(EleQuanT, Element, Amount)
-    ),
-    !.
+get_num_atoms(Formula, Element, NumAtoms) :-
+    count_atoms(Formula, Dict),
+    get_dict(Element, Dict, NumAtoms).
+
+count_atoms(Formula, Dict) :-
+    nonvar(Formula),
+    count_atoms_(Formula, Dict, 1).
+
+count_atoms_(Formula, Dict, Multiplicity) :-
+    true.
+
+
+%!  replace_isotopes(+Formula:string, +NewFormula:string) is semidet.
+%!  replace_isotopes(+Formula:string, -NewFormula:string) is det.
+%!  replace_isotopes(-Formula:string, -NewFormula:string) is failure.   # one-way function
+%!  replace_isotopes(-Formula:string, +NewFormula:string) is failure.   # one-way function
+%
+%   Removes all isotopoe information from the formula.
+%
+replace_isotopes(Formula, NewFormula) :-
+    nonvar(Formula),
+    % matches front-formula isotope declaration
+    re_replace("(?:^\\[(?<isotopes_info>[^]]*,[^]]*)])", "", Formula, Formula_),
+    % matches in-formula isotopes
+    re_finditer("(?:\\[(?<neutrons>[1-9][0-9]*)(?<element>[A-Z][a-z]*)])", Formula_, Matches, []),
+    foldl(replace_match(0, 'element'), Matches, Formula_, NewFormula).
+
+replace_match(Key0, Key1, Match, S0, S1) :-
+    get_dict(Key0, Match, Match0),
+    get_dict(Key1, Match, Match1),
+    replace(S0, Match0, Match1, S1).
 
 % Regex patterns
 %
