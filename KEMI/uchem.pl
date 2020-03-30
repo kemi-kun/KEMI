@@ -2,6 +2,7 @@
 :- use_module(facts,[en/2,element_fact/5]).
 :- use_module(ustr,[split/2,remove_chars/3]).
 :- use_module(elements,[element_symbol/2]).
+:- use_module(support,[get_neutral_specie/2]).
 
 
 element_quantity(Symbol, Quantity) :-
@@ -60,14 +61,16 @@ extract_term(Term, Args) :-
 %  Return false if there's no element at `Index`
 %
 get_element(Formula, Index, Element) :-
-    remove_chars(Formula, "()[]{}", Formula_),
+    get_neutral_specie(Formula, Formula_),
+    % remove_chars(Formula, "()[]{}", Formula_),
     string_length(Formula_, Length),
     Length = 1,
     Index is Length - 1,
     element_symbol(Element, Formula_),
     !.
 get_element(Formula, Index, Element) :-
-    remove_chars(Formula, "()[]{}", Formula_),
+    get_neutral_specie(Formula, Formula_),
+    % remove_chars(Formula, "()[]{}", Formula_),
     extract_elements_from_formula(Formula_, Elements),
     nth0(Index, Elements, ElementQuantity),
     extract_term(ElementQuantity, [Symbol|_]),
