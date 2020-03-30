@@ -152,36 +152,40 @@ count_atoms(Formula, Atoms) :-
     count_atoms_(Formula1, 1, Atoms).
 
 count_atoms_(Formula, Multiplicity, Atoms) :-
+    writeln(Formula),
+    writeln(Multiplicity),
     % Deals with enclosed formula recursion
     re_compile("(?:\\((?<paren_enclosed>[^)]*)\\)|\\[(?<bracket_enclosed>[^]]*)]|{(?<braces_enclosed>[^}]*)})(?:(?<ion>(?<num_ions>[1-9][0-9]*)?[+-])|(?<multiple>[1-9][0-9]*))?", Regex, []),
     re_match(Regex, Formula,[]) ->      % should fail if no enclosed formula
         re_finditer(Regex, Formula, Matches_, []),
         % writeln(Matches_),
         maplist(dict_remove_on_cond(value_is_empty_string), Matches_, Matches),
-          writeln(Matches),
+        %   writeln(Matches),
         maplist(get_dict_optional(['paren_enclosed', 'bracket_enclosed', 'braces_enclosed']), Matches, EnclosedList),
-          writeln(EnclosedList),
+        %   writeln(EnclosedList),
         maplist(get_dict_or_default("1", 'multiple'), Matches, MultipleStrList),
         maplist(number_string, MultipleList_, MultipleStrList),
-          write(MultipleList_), write(*), write(Multiplicity), write(=),    
+        %   write(MultipleList_), write(*), write(Multiplicity), write(=),    
         maplist(multiply(Multiplicity), MultipleList_, MultipleList),
-          writeln(MultipleList),
+        %   writeln(MultipleList),
         maplist(count_atoms_, EnclosedList, MultipleList, AtomsList),
-          writeln(AtomsList),
+        %   writeln(AtomsList),
         foldl(join_pairs_by_keys(plus), AtomsList, [], RecursedAtoms),
-          writeln(RecursedAtoms),
+        %   writeln(RecursedAtoms),
         maplist(get_dict(0), Matches, FullMatches),
-          write(FullMatches),
+        %   write(FullMatches),
         foldl(remove, FullMatches, Formula, Leftovers),
-          write(Leftovers),
+        %   write(Leftovers),
         count_atoms__(Leftovers, Multiplicity, CurrentAtoms),  % Should call the bottom
         join_pairs_by_keys(plus, RecursedAtoms, CurrentAtoms, Atoms),
         !;
+    % write("hi"),
     count_atoms__(Formula, Multiplicity, Atoms).
 
 count_atoms__(Formula, Multiplicity, Atoms) :-
     % Deals with base formula
-    re_finditer("(?<sham>[ημ](?:[2-9][0-9]*)?-)?(?<symbol>[A-Z][a-z]*)(?<num>[1-9][0-9]*)?", Formula, Matches, []),
+    re_finditer("(?<sham>[ημ](?:[2-9][0-9]*)?-)?(?<symbol>[A-Z][a-z]*)(?<num>[1-9][0-9]*)?", Formula, Matches_, []),
+    maplist(dict_remove_on_cond(value_is_empty_string), Matches_, Matches),
     maplist(get_dict('symbol'), Matches, Symbols),
     maplist(element_symbol, Elements, Symbols),
     maplist(get_dict_or_default("1", 'num'), Matches, BaseAmountStrs),
