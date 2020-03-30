@@ -41,6 +41,11 @@ monoatomic(Formula) :-
     get_num_atoms(Formula_, Element0, NumAtom),
     NumAtom = 1.
 
+get_ion_part_(NetCharge, IonSign, ChargeStr) :-
+    string_concat("(", NetCharge, ChargeStr1),
+    string_concat(ChargeStr1, IonSign, ChargeStr2),
+    string_concat(ChargeStr2, ")", ChargeStr).
+
 cation_cn(Formula, Name) :-
     monoatomic_cation_cn(Formula, Name);
     homopolyatomic_cation_cn(Formula, Name).
@@ -60,17 +65,15 @@ monoatomic_cation_cn(Formula, Name) :-
     get_element(Formula, 0, Element),
     element_name(Element, ElementName),
     get_net_charge(Formula, NetCharge),
-    string_concat("(", NetCharge, ChargeStr1),
-    string_concat(ChargeStr1, "+)", ChargeStr2),
-    string_concat(ElementName, ChargeStr2, Name).
+    get_ion_part_(NetCharge, "+", ChargeStr),
+    string_concat(ElementName, ChargeStr, Name).
 % monoatomic_cation_cn("[Na]+", "sodium(1+)")
 monoatomic_cation_cn_(Formula, Name) :-
     get_element(Formula, 0, Element),
     element_name(Element, ElementName),
     get_net_charge(Formula, NetCharge),
-    string_concat("(", NetCharge, ChargeStr1),
-    string_concat(ChargeStr1, "+)", ChargeStr2),
-    string_concat(ElementName, ChargeStr2, Name),
+    get_ion_part_(NetCharge, "+", ChargeStr),
+    string_concat(ElementName, ChargeStr, Name),
     !.
 
 homopolyatomic_cation_cn(Formula, Name) :-

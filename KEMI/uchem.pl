@@ -172,7 +172,6 @@ get_num_charge_str_(Formula, ChargeStr) :-
         re_matchsub("^.*?(?<charge>([1-9][0-9]*)?[+\\-]?)$", Formula, SubDict_, []) -> SubDict = SubDict_
     ),
     get_dict(charge, SubDict, ChargeStr_),
-    writeln(ChargeStr_),
     (
         string_concat(Number, "+", ChargeStr_) -> string_concat("+", Number, ChargeStr), !;
         string_concat(Number, "-", ChargeStr_) -> string_concat("-", Number, ChargeStr);
