@@ -1,3 +1,5 @@
+:- module(predicate,[append_suffix/3]).
+
 :- use_module(elements, [group/2, element_name/2, group_/2]).
 :- use_module(facts, [alternative_element_name_fact/2]).
 
