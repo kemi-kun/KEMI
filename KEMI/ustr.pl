@@ -1,8 +1,8 @@
 :- module(ustr,[
     re_matchsub_mul/5,
     re_match_count/3,
-    re_finditer/3,
-    re_findall/3,
+    re_finditer/4,
+    re_findall/4,
     join/3,
     remove_chars/3,
     split/2,
@@ -33,7 +33,8 @@ replace(String, S1, S2, Result) :-
     sub_string(String, 0, BS, _, Before),
     sub_string(String, _, AS, 0, After),
     string_concat(Before, S2, T0),
-    string_concat(T0, After, Result).
+    string_concat(T0, After, Result),
+    !.
 
 %!	capitalize(+String:string, +Result:string) is failure.
 %!	capitalize(+String:string, -Result:string) is det.
@@ -139,28 +140,28 @@ re_matchsub_mul(Regex, String, Subs, Options, Leftover) :-
     Leftover = String.
 
 
-%!  re_findall(+Regex, +String:string, -Matches:list(string)) is det.
+%!  re_findall(+Regex, +String:string, -Matches:list(string), +Options:list) is det.
 %
 %   Attemps to be python's `re.findall()`.
 %
 %   Reference: https://docs.python.org/3/library/re.html#re.findall
 %
-re_findall(Regex, String, Matches) :-
-    re_foldl(append_matchstring_, Regex, String, [], Matches, []).
+re_findall(Regex, String, Matches, Options) :-
+    re_foldl(append_matchstring_, Regex, String, [], Matches, Options).
 
 append_matchstring_(Match, V0, V1) :-
     get_dict(0, Match, X),
     append(V0, [X], V1).
 
 
-%!  re_finditer(+Regex, +String:string, -Matches:list(re_match)) is det.
+%!  re_finditer(+Regex, +String:string, -Matches:list(re_match), +Options:list) is det.
 %
 %   Attemps to be python's `re.finditer()`.
 %
 %   Reference: https://docs.python.org/3/library/re.html#re.finditer
 %
-re_finditer(Regex, String, Matches) :-
-    re_foldl(append_match_, Regex, String, [], Matches, []).
+re_finditer(Regex, String, Matches, Options) :-
+    re_foldl(append_match_, Regex, String, [], Matches, Options).
 
 append_match_(Match, V0, V1) :-
     append(V0, [Match], V1).
