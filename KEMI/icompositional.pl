@@ -108,24 +108,24 @@ monoatomic_anion_cn(Formula, Name) :-
     anion(Formula),
     get_all_elements(Formula, Elements),
     Elements = [Element|_],
-    element_name(Element, ElementName_),
-    append_suffix(ElementName_, "ide", ElementName),
+    element_name(Element, ElementName),
+    append_suffix(ElementName, "ide", IdeName),
     get_net_charge(Formula, NetCharge_),
     abs(NetCharge_, NetCharge),
     get_ion_part_(NetCharge, "-", ChargeStr),
-    string_concat(ElementName, ChargeStr, Name).
+    string_concat(IdeName, ChargeStr, Name).
 % monoatomic_anion_cn("Cl-", "chloride(1-)").
 monoatomic_anion_cn_(Formula, Name) :-
     monoatomic(Formula),
     anion(Formula),
     get_all_elements(Formula, Elements),
     Elements = [Element|_],
-    element_name(Element, ElementName_),
-    append_suffix(ElementName_, "ide", ElementName),
+    element_name(Element, ElementName),
+    append_suffix(ElementName, "ide", IdeName),
     get_net_charge(Formula, NetCharge_),
     abs(NetCharge_, NetCharge),
     get_ion_part_(NetCharge, "-", ChargeStr),
-    string_concat(ElementName, ChargeStr, Name),
+    string_concat(IdeName, ChargeStr, Name),
     !.
 
 homopolyatomic_anion_cn(Formula, Name) :-
