@@ -7,13 +7,13 @@
 %
 %  Append `Suffix` to the name of `Element`
 %
-append_suffix(Element, Suffix, Result) :-
+append_suffix(ElementName, Suffix, Result) :-
     (
-        Suffix = "ide" -> idify(Element, Result);
-        Suffix = "ane" -> anify(Element, Result);
-        Suffix = "yl" -> ylify(Element, Result);
-        Suffix = "ylidene" -> ylidenify(Element, Result);
-        Suffix = "ylidyne" -> ylidynify(Element, Result)
+        Suffix = "ide" -> idify(ElementName, Result);
+        Suffix = "ane" -> anify(ElementName, Result);
+        Suffix = "yl" -> ylify(ElementName, Result);
+        Suffix = "ylidene" -> ylidenify(ElementName, Result);
+        Suffix = "ylidyne" -> ylidynify(ElementName, Result)
     ).
 
 
@@ -50,17 +50,7 @@ idify_re(ElementName, Result) :-
     not(group(Element_, 18)),
     ElementName = Name,
     !.
-% idify_eq(ElementName, Result) :-
-%     element_name(Element, ElementName),
-%     not(group(Element, 18)),
-%     SuffixList = [
-%         "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
-%         "ic", "on", "um", "ur", "y"
-%     ],
-%     replace_suffix_lst_(ElementName, SuffixList, Name_),
-%     string_concat(Name_, "ide", Result),
-%     !.
-%! idify(+Element: atom, -Result: string) is multi.
+%! idify(+Element: atom, -Result: string) is det.
 %! idify(+Element: atom, +Result: string) is semidet.
 %! idify(-Element: atom, +Result: string) is det.
 %
@@ -75,7 +65,6 @@ idify(ElementName, Result) :-
     !.
 idify(ElementName, Result) :-
     var(ElementName), nonvar(Result) -> idify_re(ElementName, Result);
-    % nonvar(ElementName), nonvar(Result) -> idify_eq(ElementName, Result);
     element_name(Element, ElementName),
     not(group(Element, 18)),
     SuffixList = [
