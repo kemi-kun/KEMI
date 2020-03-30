@@ -144,7 +144,8 @@ sorted(Key, List, SortedList) :-
 %
 get_num_atoms(Formula, Element, NumAtoms) :-
     count_atoms(Formula, Atoms),
-    get_dict(Element, Atoms, NumAtoms).
+    dict_pairs(Dict, _, Atoms),
+    get_dict(Element, Dict, NumAtoms).
 
 count_atoms(Formula, Atoms) :-
     nonvar(Formula),
@@ -152,8 +153,8 @@ count_atoms(Formula, Atoms) :-
     count_atoms_(Formula1, 1, Atoms).
 
 count_atoms_(Formula, Multiplicity, Atoms) :-
-    writeln(Formula),
-    writeln(Multiplicity),
+    % writeln(Formula),
+    % writeln(Multiplicity),
     % Deals with enclosed formula recursion
     re_compile("(?:\\((?<paren_enclosed>[^)]*)\\)|\\[(?<bracket_enclosed>[^]]*)]|{(?<braces_enclosed>[^}]*)})(?:(?<ion>(?<num_ions>[1-9][0-9]*)?[+-])|(?<multiple>[1-9][0-9]*))?", Regex, []),
     re_match(Regex, Formula,[]) ->      % should fail if no enclosed formula
