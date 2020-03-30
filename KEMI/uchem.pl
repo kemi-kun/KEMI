@@ -1,8 +1,9 @@
 :- module(uchem,[get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
-:- use_module(facts,[en/2,element_fact/5]).
-:- use_module(ustr,[split/2,remove_chars/3,re_finditer/4,replace/4]).
 :- use_module(elements,[element_symbol/2]).
+:- use_module(facts,[en/2,element_fact/5]).
 :- use_module(support,[get_neutral_specie/2]).
+:- use_module(ustr,[split/2,remove_chars/3,re_finditer/4,replace/4]).
+:- use_module(utils,[get_dict_optional/3,get_dict_or_default/4,add_dict/4,join_dict/3,multiply/3,split_digits/2,split_decimal/3]).
 
 
 element_quantity(Symbol, Quantity) :-
@@ -142,34 +143,21 @@ sorted(Key, List, SortedList) :-
 %  Return the amount of element `Element` in formula `Formula`
 %
 get_num_atoms(Formula, Element, NumAtoms) :-
-    count_atoms(Formula, Dict),
-    get_dict(Element, Dict, NumAtoms).
+    count_atoms(Formula, Atoms),
+    get_dict(Element, Atoms, NumAtoms).
 
-count_atoms(Formula, Dict) :-
+count_atoms(Formula, Atoms) :-
     nonvar(Formula),
     remove_isotope_info(Formula, Formula1),   % Can remove once isotopes are considred in this KB
-    count_atoms_(Formula1, Multiplicity, Dict).
+    count_atoms_(Formula1, 1, Atoms).
 
-count_atoms_(Formula, Multiplicity, Dict) :-
+count_atoms_(Formula, Multiplicity, Atoms) :-
     re_finditer("(?:\\(([ημ](?:[2-9][0-9]*)?-)?(?<paren_enclosed>[^)]*)\\)|\\[(?<bracket_enclosed>[^]]*)]|{(?<braces_enclosed>[^}]*)})(?:(?<ion>(?<num_ions>[1-9][0-9]*)?[+-])|(?<multiple>[1-9][0-9]*))?", Formula, Matches1, []),
-    % maplist(get_dict(0), ),
-    % Matches1
-    true.
+    maplist(get_dict_optional(['paren_enclosed', 'bracket_enclosed', 'braces_enclosed']), Matches1, EnclosedList),
+    maplist(get_dict_or_default('multiple'), Matches1, MuultipleList_),
+    maplist(multiply(Multiplicity), MuultipleList_, MultipleList),
+    maplist(count_atoms_, EnclosedList, MuultipleList, AtomsList),
 
-%!  get_dict_optional(+Keys:list, +Dict, +Value) is semidet.
-%!  get_dict_optional(+Keys:list, +Dict, -Value) is det.
-%
-%   Try each key and return the first value that is true.
-%
-get_dict_optional(Keys, Dict, Value) :-
-    get_dict_optional_(Keys, Dict, Value_),
-    Value_ = Value.
-get_dict_optional_(Keys, Dict, Value) :-
-    Keys \= [],
-    get_dict_optional__(Keys, Dict, Value).
-get_dict_optional__([H|T], Dict, Value) :-
-    get_dict(H, Dict, Value) -> true;
-        get_dict_optional_(T, Dict, Value).
 
 %!  remove_isotope_info(+Formula:string, +NewFormula:string) is semidet.
 %!  remove_isotope_info(+Formula:string, -NewFormula:string) is det.
