@@ -3,7 +3,7 @@
 :- use_module(ustr,[join/3]).
 :- use_module(ulist,[enumerate/2,range/4]).
 :- use_module(facts,[multiplicative_prefix_fact/2,multiplicative_affix_fact/2,complex_multiplicative_prefix_fact/2]).
-:- use_module(uchem,[remove_parentheses_/2]).
+:- use_module(ustr,[remove_chars/3]).
 
 
 %!	multiplicative_prefix(+Number, +Prefix) det.
@@ -89,4 +89,4 @@ mul_prefix_except_mono(Number, Prefix) :-
 get_neutral_specie(Formula, NeutralSpecie) :-
     re_matchsub("^[+-]?([1-9][0-9]*)?(?<formula>.*?)([1-9][0-9]*)?[+\\-]?$", Formula, SubDict, []),
     get_dict(formula, SubDict, Formula_),
-    remove_parentheses_(Formula_, NeutralSpecie).
+    remove_chars(Formula_, "()[]{}", NeutralSpecie).
