@@ -6,6 +6,8 @@
 
 
 homonuclear_cn(Formula, Name) :-
+    not(cation(Formula)),
+    not(anion(Formula)),
     homonuclear(Formula),
     get_all_elements(Formula, Elements),
     memberchk(Element, Elements),
@@ -86,6 +88,7 @@ monoatomic_cation_cn_(Formula, Name) :-
 
 homopolyatomic_cation_cn(Formula, Name) :-
     fail.
+
 
 anion_cn(Formula, Name) :-
     monoatomic_anion_cn(Formula, Name);
