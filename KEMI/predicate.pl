@@ -80,27 +80,17 @@ idify(ElementName, Result) :-
     string_concat(RootName, "ide", Result).
     
 
-% anify_(ElementName, [], Result) :-
-%     % ElemntName doesn't match any suffix in SuffixList
-%     Result = ElementName,
-%     !.
-% anify_(ElementName, SuffixList, Result) :-
-%     SuffixList = [ESuffixH|ESuffixT],
-%     (
-%         string_concat(Root, ESuffixH, ElementName) -> Result = Root, !;
-%         anify_(ElementName, ESuffixT, Result)
-%     ).
-
 %! anify(+Element: atom, -Result: string) is det.
 %! anify(+Element: atom, +Result: string) is semidet.
 %
-%  Add suffix -ane to the name of `Element`
+%  Add suffix -ane to `ElementName`
 %  TODO: (-Element, +Result)
-anify(Element, Result) :-
+anify(ElementName, Result) :-
+    element_name(Element, ElementName),
     (
         alternative_element_name_fact(Element, Name_) -> Name = Name_;
-        not(alternative_element_name_fact(Element, _)),
-        element_name(Element, Name)
+        not(alternative_element_name_fact(Element, Name_)),
+        element_name(Element, Name_), Name = Name_
     ),
     SuffixList = [
         "inium", "onium", "urium", "aium", "eium", "enic",
@@ -113,7 +103,13 @@ anify(Element, Result) :-
             string_concat(TempStr, "i", Root);
         Root = Root_
     ),
-    string_concat(Root, "ane", Result).
+    string_concat(Root, "ane", Result_),
+    ExcludeNames = [
+        "carbane", "aluminane", "bismane", "oxane", "thiane", 
+        "selenane", "tellurane", "polonane"
+    ],
+    not(member(Result_, ExcludeNames)),
+    Result = Result_.
 
 
 %! ylify(+ElementName: string, -Result: string) is det.
