@@ -1,4 +1,4 @@
-:- module(utils,[get_dict_optional/3,get_dict_or_default/4,add_dict/4,join_dict/3,multiply/3,split_digits/2,split_decimal/3]).
+:- module(utils,[join_pairs_by_keys/4,get_dict_optional/3,get_dict_or_default/4,add_dict/4,join_dict/3,multiply/3,split_digits/2,split_decimal/3]).
 
 
 %!  split_digits(+Number:int, +Digits:list) is semidet.
@@ -130,3 +130,24 @@ multiply(A, B, C) :-
 multiply(A, B, C) :-
     nonvar(B), nonvar(C),
     A is C / B.
+
+% multiply(A, B, C) :-
+%     B > 1 -> plus(B, -1, Y), multiply(A, Y, X), plus(X, A, C);
+%     B = 1 -> C = A;
+%     B < 0 -> Y is -B, multiply(A, Y, C).
+
+%!	join_pairs_by_keys(:Function, +P1, +P2, -Joined:list(Key-Value)) is det.
+%
+%   Join two pairs together using `Function` to collapse values that have the 
+%   same key. `Function` should be in the form Function(+A:T, +B:T, -C:T).
+%
+join_pairs_by_keys(Function, P1, P2, Joined) :-
+    append(P1, P2, Pairs_),
+    sort(1, @=<, Pairs_, Pairs),
+    group_pairs_by_key(Pairs, Joined_),
+    pairs_keys_values(Joined_, Keys, Values_),
+    maplist(collapse_(Function), Values_, Values),
+    pairs_keys_values(Joined, Keys, Values).
+
+collapse_(Function, [V0|L], Value) :-
+    foldl(Function, L, V0, Value).
