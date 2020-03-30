@@ -1,4 +1,5 @@
-:- module(uchem,[get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
+:- module(uchem,[count_atoms/2,get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
+
 :- use_module(elements,[element_symbol/2]).
 :- use_module(facts,[en/2,element_fact/5]).
 :- use_module(support,[get_neutral_specie/2]).
@@ -247,7 +248,8 @@ get_num_charge_str_(Formula, ChargeStr) :-
     (
         re_matchsub("^(?<charge>[+\\-][1-9][0-9]*).*$", Formula, SubDict_, []) -> SubDict = SubDict_, !;
         re_matchsub("^(?<charge>[+\\-]).*", Formula, SubDict_, []) -> SubDict = SubDict_;
-        re_matchsub("^.*?(?<charge>([1-9][0-9]*)?[+\\-]?)$", Formula, SubDict_, []) -> SubDict = SubDict_
+        re_matchsub("^.*?(?<charge>([1-9][0-9]*)?[+\\-])$", Formula, SubDict_, []) -> SubDict = SubDict_;
+        SubDict = rematch{charge: ""}
     ),
     get_dict(charge, SubDict, ChargeStr_),
     (
