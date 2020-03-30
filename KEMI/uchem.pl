@@ -156,6 +156,21 @@ extract_quantity_from_element(ElementQuantities,Element,Amount) :-
     ),
     !.
 
+% Regex patterns
+%
+% in-formula isotope:
+%   (?:\[(?<neutrons>[1-9][0-9]*)(?<element>[A-Z][a-z]*)])
+%
+% front-formula isotopde declaration:  % TODO: deal with one element decl
+%   (?:^\[(?<isotopes_info>[^]]*,[^]]*)])
+%
+% enclosed group & multiplicity & ions:
+%   (?:\(([ημ](?:[2-9][0-9]*)?-)?(?<paren_enclosed>[^)]*)\)|\[(?<bracket_enclosed>[^]]*)]|{(?<braces_enclosed>[^}]*)})(?:(?<ion>(?<num_ions>[1-9][0-9]*)?[+-])|(?<multiple>[1-9][0-9]*))?
+%
+% individual elements & amounts:
+%   (?<symbol>[A-Z][a-z]*)(?<num>[1-9][0-9]*)?
+
+
 
 %!  get_num_charge_str_(+Formula: string, -ChargeStr: string) is det.
 %!  get_num_charge_str_(+Formula: string, +ChargeStr: string) is semidet.
