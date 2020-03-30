@@ -148,11 +148,28 @@ get_num_atoms(Formula, Element, NumAtoms) :-
 count_atoms(Formula, Dict) :-
     nonvar(Formula),
     remove_isotope_info(Formula, Formula1),   % Can remove once isotopes are considred in this KB
-    count_atoms_(Formula1, Dict, 1).
+    count_atoms_(Formula1, Multiplicity, Dict).
 
-count_atoms_(Formula, Dict, Multiplicity) :-
+count_atoms_(Formula, Multiplicity, Dict) :-
+    re_finditer("(?:\\(([ημ](?:[2-9][0-9]*)?-)?(?<paren_enclosed>[^)]*)\\)|\\[(?<bracket_enclosed>[^]]*)]|{(?<braces_enclosed>[^}]*)})(?:(?<ion>(?<num_ions>[1-9][0-9]*)?[+-])|(?<multiple>[1-9][0-9]*))?", Formula, Matches1, []),
+    % maplist(get_dict(0), ),
+    % Matches1
     true.
 
+%!  get_dict_optional(+Keys:list, +Dict, +Value) is semidet.
+%!  get_dict_optional(+Keys:list, +Dict, -Value) is det.
+%
+%   Try each key and return the first value that is true.
+%
+get_dict_optional(Keys, Dict, Value) :-
+    get_dict_optional_(Keys, Dict, Value_),
+    Value_ = Value.
+get_dict_optional_(Keys, Dict, Value) :-
+    Keys \= [],
+    get_dict_optional__(Keys, Dict, Value).
+get_dict_optional__([H|T], Dict, Value) :-
+    get_dict(H, Dict, Value) -> true;
+        get_dict_optional_(T, Dict, Value).
 
 %!  remove_isotope_info(+Formula:string, +NewFormula:string) is semidet.
 %!  remove_isotope_info(+Formula:string, -NewFormula:string) is det.
