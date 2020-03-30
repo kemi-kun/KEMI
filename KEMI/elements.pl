@@ -21,8 +21,8 @@ Implements:
 %!  element_name(-Element:atom, +ElementName:string) is multi.      # TODO: Remove last false choice point
 %
 element_name(Element, ElementName) :-
+    element_fact(Element, ElementName, _, _, _);
     alternative_element_name_fact(Element, ElementName);
-    element_fact(Element, ElementName, _, _, _) -> true;
     new_element_name(Element, ElementName).
 
 element_symbol(Element, Symbol) :-

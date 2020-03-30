@@ -102,5 +102,31 @@ addition_compound_cn(Formula, Name) :-
 
 general_stoichiometric(Formula, Name) :-
     fail.
+
+
+boron_hydride(Formula) :-
+    get_all_elements(Formula,Elements),
+    member(boron, Elements),
+    member(hydrogen, Elements),
+    !.
+ 
+%!  boron_hydride_stoichiometric(+Formula: string, -Name: string) is det.
+%!  boron_hydride_stoichiometric(+Formula: string, +Name: string) is det.
+%!  boron_hydride_stoichiometric(-Formula: string, +Name: string) is ERROR.
+%
+%   IR-6.2.3.1
+%
 boron_hydride_stoichiometric(Formula, Name) :-
-    fail.
+    (
+        boron_hydride(Formula)
+    ),
+    get_num_atoms(Formula, boron, NumAtomB),
+    get_num_atoms(Formula, hydrogen, NumAtomH),
+    multiplicative_prefix(NumAtomB, MulPrefix),
+    get_borane_atom_part_(NumAtomH, BoraneAtom),
+    string_concat(MulPrefix, BoraneAtom, Name).
+ 
+get_borane_atom_part_(NumAtom,Str) :-
+    string_concat("borane(", NumAtom, Str0),
+    string_concat(Str0, ")", Str).
+
