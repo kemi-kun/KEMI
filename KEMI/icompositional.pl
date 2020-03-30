@@ -1,8 +1,10 @@
 :- module(icompositional,[boron_hydride_stoichiometric/2,general_stoichiometric/2,addition_compound_cn/2,ion_cn/2,binary_compound_cn/2,homonuclear_cn/2]).
-:- use_module(uchem,[get_element/3,get_all_elements/2,get_num_atoms/3,get_net_charge/2]).
+
+:- use_module(uchem,[count_atoms/2,get_element/3,get_all_elements/2,get_num_atoms/3,get_net_charge/2]).
 :- use_module(elements,[element_name/2,group/2]).
 :- use_module(support,[get_neutral_specie/2,multiplicative_prefix/2,mul_prefix_except_mono/2]).
 :- use_module(predicate,[append_suffix/3]).
+:- use_module(inorganic,[compositional/2]).
 
 
 homonuclear_cn(Formula, Name) :-
@@ -42,6 +44,13 @@ monoatomic(Formula) :-
     get_num_atoms(Formula, Element0, NumAtom),
     NumAtom is 1.
 
+homopolyatomic(Formula) :-
+    get_all_elements(Formula, Elements),
+    length(Elements, 1),
+    Elements = [Element0|_],
+    get_num_atoms(Formula, Element0, NumAtom),
+    NumAtom > 1.
+
 get_ion_part_(NetCharge, IonSign, ChargeStr) :-
     string_concat("(", NetCharge, ChargeStr1),
     string_concat(ChargeStr1, IonSign, ChargeStr2),
@@ -59,11 +68,10 @@ cation_cn(Formula, Name) :-
 
 
 %!  monoatomic_cation_cn(+Formula: string, -Name: string) is multi.
-%!  monoatomic_cation_cn(+Formula: string, +Name: string) is det.
+%!  monoatomic_cation_cn(+Formula: string, +Name: string) is semidet.
 %!  monoatomic_cation_cn(-Formula: string, +Name: string) is ERROR.
 %
 %   IR-5.3.2.2
-%   True if `Name` is a compositional name of `Formula`
 %
 monoatomic_cation_cn(Formula, Name) :-
     nonvar(Name) -> monoatomic_cation_cn_(Formula, Name);
@@ -86,8 +94,20 @@ monoatomic_cation_cn_(Formula, Name) :-
     string_concat(ElementName, ChargeStr, Name),
     !.
 
+%! homopolyatomic_cation_cn(+Formula: string, -Name: string) is multi.
+%! homopolyatomic_cation_cn(+Formula: string, +Name: string) is nondet.
+%! homopolyatomic_cation_cn(-Formula: string, +Name: string) is failure.
+%
+%  IR-5.3.2.3
+%
 homopolyatomic_cation_cn(Formula, Name) :-
-    fail.
+    homopolyatomic(Formula),
+    cation(Formula),
+    get_neutral_specie(Formula, NeutralSpecie),
+    compositional(NeutralSpecie, NeutralSpecieName),
+    get_net_charge(Formula, NetCharge),
+    get_ion_part_(NetCharge, "+", ChargeStr),
+    string_concat(NeutralSpecieName, ChargeStr, Name).
 
 
 anion_cn(Formula, Name) :-
@@ -96,11 +116,10 @@ anion_cn(Formula, Name) :-
 
 
 %!  monoatomic_anion_cn(+Formula: string, -Name: string) is multi.
-%!  monoatomic_anion_cn(+Formula: string, +Name: string) is det.
+%!  monoatomic_anion_cn(+Formula: string, +Name: string) is semidet.
 %!  monoatomic_anion_cn(-Formula: string, +Name: string) is ERROR.
 %
 %   IR-5.3.3.2
-%   True if `Name` is a compositional name of `Formula`
 %
 monoatomic_anion_cn(Formula, Name) :-
     nonvar(Name) -> monoatomic_anion_cn_(Formula, Name);
