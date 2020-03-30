@@ -15,6 +15,7 @@
 multiplicative_prefix(Number, Prefix) :-
     multiplicative_prefix_fact(Number, Prefix) -> true;
     multiplicative_prefix_(Number, Prefix).
+
 multiplicative_prefix_(Number, Prefix) :-
     Number = 0 -> Prefix = "";
     multiplicative_affix_fact(Number, Prefix) -> true;
@@ -54,6 +55,7 @@ gen_affix_(Number, Affix) :-
         NumZeroes = 3 -> string_concat(Affix_, "lia", Affix)
     ).
 
+
 %!	complex_multiplicative_prefix(+Number, +Prefix) semidet.
 %!	complex_multiplicative_prefix(+Number, -Prefix) det.
 %!	complex_multiplicative_prefix(-Number, -Prefix) det.        # TODO: Fix (returns first fact)
@@ -65,6 +67,7 @@ complex_multiplicative_prefix(Number, Prefix) :-
     complex_multiplicative_prefix_fact(Number, Prefix) -> true;
     multiplicative_prefix(Number, SimplePrefix),
     string_concat(SimplePrefix, "kis", Prefix).
+
 
 %!	mul_prefix_except_mono(+Number, +Prefix) semidet.
 %!	mul_prefix_except_mono(+Number, -Prefix) det.
