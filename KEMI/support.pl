@@ -1,4 +1,4 @@
-:- module(support,[multiplicative_prefix/2]).
+:- module(support,[get_neutral_specie/2,multiplicative_prefix/2]).
 :- use_module(utils,[split_decimal/3,split_digits/2]).
 :- use_module(ustr,[join/3]).
 :- use_module(ulist,[enumerate/2,range/4]).
