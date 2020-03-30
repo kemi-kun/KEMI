@@ -3,7 +3,7 @@
 :- use_module(facts,[en/2,element_fact/5]).
 :- use_module(support,[get_neutral_specie/2]).
 :- use_module(ustr,[split/2,remove_chars/3,re_finditer/4,replace/4]).
-:- use_module(utils,[join_pairs_by_keys/4,get_dict_optional/3,get_dict_or_default/4,add_dict/4,join_dict/3,multiply/3,split_digits/2,split_decimal/3]).
+:- use_module(utils,[value_is_empty_string/1,dict_remove_on_cond/3,join_pairs_by_keys/4,get_dict_optional/3,get_dict_or_default/4,add_dict/4,join_dict/3,multiply/3,split_digits/2,split_decimal/3]).
 
 
 element_quantity(Symbol, Quantity) :-
@@ -161,6 +161,7 @@ count_atoms_(Formula, Multiplicity, Atoms) :-
         
         maplist(get_dict(0), Matches, FullMatches),
         foldl(remove, FullMatches, Formula, Leftovers),
+        
         count_atoms__(Leftovers, Multiplicity, CurrentAtoms),  % Should call the bottom
         join_pairs_by_keys(plus, RecursedAtoms, CurrentAtoms, Atoms),
         !;
@@ -170,21 +171,15 @@ count_atoms__(Formula, Multiplicity, Atoms) :-
     % Deals with base formula
     re_finditer("(?<sham>[ημ](?:[2-9][0-9]*)?-)?(?<symbol>[A-Z][a-z]*)(?<num>[1-9][0-9]*)?", Formula, Matches_, []),
     maplist(dict_remove_on_cond(value_is_empty_string), Matches_, Matches),
+
     maplist(get_dict('symbol'), Matches, Symbols),
     maplist(element_symbol, Elements, Symbols),
+    
     maplist(get_dict_or_default("1", 'num'), Matches, BaseAmountStrs),
     maplist(number_string, BaseAmounts, BaseAmountStrs),
+    
     maplist(multiply(Multiplicity), BaseAmounts, TrueAmounts),
     pairs_keys_values(Atoms, Elements, TrueAmounts).
-
-dict_remove_on_cond(Condition, Dict, TrimmedDict) :-
-    dict_pairs(Dict, Tag, Pairs),
-    exclude(Condition, Pairs, TrimmedPairs),
-    dict_pairs(TrimmedDict, Tag, TrimmedPairs).
-
-value_is_empty_string(KeyValue) :-
-    KeyValue = _Key-Value,
-    Value = "".
 
 remove(Sub, String, Result) :-
     sub_string(String, BS, _, AS, Sub),
