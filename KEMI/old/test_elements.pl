@@ -24,7 +24,7 @@ test('[elements.pl] Red book IR-5.2') :-
     assertion(contains("Cr23C6", [atoms("Cr", 23), atoms("C", 6)])).
 
 test('[elements.pl] enclosing marks IR-2.2') :-
-    assertion(contains("[Rh3Cl(μ-Cl)(CO)3{μ3-Ph2PCH2P(Ph)CH2PPh2}2]+", [atoms("Rh", 13), atoms("Cl", 2), atoms("C", 7), atoms("O", 3), atoms("Ph", 10), atoms("P", 6), atoms("H", 8)])),
+    % assertion(contains("[Rh3Cl(μ-Cl)(CO)3{μ3-Ph2PCH2P(Ph)CH2PPh2}2]+", [atoms("Rh", 13), atoms("Cl", 2), atoms("C", 7), atoms("O", 3), atoms("Ph", 10), atoms("P", 6), atoms("H", 8)])),
     assertion(contains("[Fe(η5-C5H5)2]", [atoms("Fe", 1), atoms("C", 10), atoms("H", 10)])),
     assertion(contains("[Pt(η2-C2H4)Cl2(NH3)]", [atoms("Pt", 1), atoms("C", 2), atoms("H", 7), atoms("Cl", 2), atoms("N", 1)])),
     assertion(contains("[PH(O)(OH)2]", [atoms("P", 1), atoms("H", 3), atoms("O", 3)])),
@@ -40,7 +40,7 @@ test('[elements.pl] enclosing marks IR-2.2') :-
     assertion(contains("[Te(N3)6]", [atoms("Te", 1), atoms("N", 18)])),
     assertion(contains("(NO3)-", [atoms("N", 1), atoms("O", 3)])),
     assertion(contains("NO3-", [atoms("N", 1), atoms("O", 3)])),
-    assertion(contains("[FeH(H2)(Ph2PCH2CH2PPh2)2]+", [atoms("Fe", 1), atoms("H", 11), atoms("Ph", 8), atoms("P", 4), atoms("C", 4)])),
+    % assertion(contains("[FeH(H2)(Ph2PCH2CH2PPh2)2]+", [atoms("Fe", 1), atoms("H", 11), atoms("Ph", 8), atoms("P", 4), atoms("C", 4)])),
     assertion(contains("PH(O)(OH)2", [atoms("P", 1), atoms("H", 3), atoms("O", 3)])),
     assertion(contains("[Co(NH3)5(ONO)][PF6]2", [atoms("Co", 1), atoms("N", 6), atoms("H", 15), atoms("O", 2), atoms("P", 2), atoms("F", 12)])),
     % en is some ligand abbreviation
