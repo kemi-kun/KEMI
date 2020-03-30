@@ -37,7 +37,9 @@ replace_suffix_lst_re_(ElementName, SuffixList, Result) :-
         element_name(_, Name) -> ElementName = Name;
         replace_suffix_lst_(ElementName, ESuffixT, Result)
     ).
-idify_re(Element, Result) :-
+
+
+idify_re(ElementName, Result) :-
     string_concat(Name_, "ide", Result),
     SuffixList = [
         "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
@@ -46,41 +48,41 @@ idify_re(Element, Result) :-
     replace_suffix_lst_(Name, SuffixList, Name_),
     element_name(Element_, Name),
     not(group(Element_, 18)),
-    Element = Element_,
+    ElementName = Name,
     !.
-idify_eq(Element, Result) :-
-    element_name(Element, Name),
-    not(group(Element, 18)),
-    SuffixList = [
-        "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
-        "ic", "on", "um", "ur", "y"
-    ],
-    replace_suffix_lst_(Name, SuffixList, Name_),
-    string_concat(Name_, "ide", Result),
-    !.
+% idify_eq(ElementName, Result) :-
+%     element_name(Element, ElementName),
+%     not(group(Element, 18)),
+%     SuffixList = [
+%         "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
+%         "ic", "on", "um", "ur", "y"
+%     ],
+%     replace_suffix_lst_(ElementName, SuffixList, Name_),
+%     string_concat(Name_, "ide", Result),
+%     !.
 %! idify(+Element: atom, -Result: string) is multi.
 %! idify(+Element: atom, +Result: string) is semidet.
 %! idify(-Element: atom, +Result: string) is det.
 %
 %  Add suffix -ide to the name of `Element`
 %
-idify(Element, Result) :-
+idify(ElementName, Result) :-
     % Add -ide to the end of Group 18 which ends with -on
+    element_name(Element, ElementName),
     group(Element, 18),
-    element_name(Element, Name),
     string_concat(_, "on", Name),
     string_concat(Name, "ide", Result),
     !.
-idify(Element, Result) :-
-    var(Element), nonvar(Result) -> idify_re(Element, Result);
-    nonvar(Element), nonvar(Result) -> idify_eq(Element, Result);
-    element_name(Element, Name),
+idify(ElementName, Result) :-
+    var(ElementName), nonvar(Result) -> idify_re(ElementName, Result);
+    % nonvar(ElementName), nonvar(Result) -> idify_eq(ElementName, Result);
+    element_name(Element, ElementName),
     not(group(Element, 18)),
     SuffixList = [
         "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
         "ic", "on", "um", "ur", "y"
     ],
-    replace_suffix_lst_(Name, SuffixList, RootName),
+    replace_suffix_lst_(ElementName, SuffixList, RootName),
     string_concat(RootName, "ide", Result).
     
 
