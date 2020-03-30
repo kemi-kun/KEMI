@@ -249,6 +249,8 @@ re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 general_stoichiometric(Formula, Name) :-
     fail.
 
+%!  cation_name(+Formula, -Name) is nondet.
+%!  cation_name(+Formula, +Name) is nondet.
 cation_name(Formula, Name) :-
     cation_cn(Formula, Name);
     substitutive(Formula, Name);
@@ -268,6 +270,8 @@ cation_name(Formula, Name) :-
         compositional(Formula, Name)
     ).
 
+%!  anion_name(+Formula, -Name) is nondet.
+%!  anion_name(+Formula, +Name) is nondet.
 anion_name(Formula, Name) :-
     anion_cn(Formula, Name);
     substitutive(Formula, Name);
