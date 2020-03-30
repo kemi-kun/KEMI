@@ -67,8 +67,8 @@ idify(ElementName, Result) :-
     % Add -ide to the end of Group 18 which ends with -on
     element_name(Element, ElementName),
     group(Element, 18),
-    string_concat(_, "on", Name),
-    string_concat(Name, "ide", Result),
+    string_concat(_, "on", ElementName),
+    string_concat(ElementName, "ide", Result),
     !.
 idify(ElementName, Result) :-
     var(ElementName), nonvar(Result) -> idify_re(ElementName, Result);
