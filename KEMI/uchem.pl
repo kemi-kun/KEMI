@@ -54,11 +54,11 @@ extract_term(Term, Args) :-
     Term =.. [_|Args].
 
 
-%! get_element(+Formula: string, +Index: integer, -Element: atom) is det.
+%!  get_element(+Formula: string, +Index: int, -Element: atom) is det.
 %
-%  Get element at `Index` position in formula `Formula`.
-%  (index starts at 0)
-%  Return false if there's no element at `Index`
+%   Get element at `Index` position in formula `Formula`.
+%   (index starts at 0)
+%   Return false if there's no element at `Index`
 %
 get_element(Formula, Index, Element) :-
     get_neutral_specie(Formula, Formula_),
@@ -77,13 +77,16 @@ get_element(Formula, Index, Element) :-
     element_symbol(Element, Symbol).
 
 
-%! get_all_elements(+Formula:string, +ElementSet:list) is det.
-%! get_all_elements(+Formula:string, -ElementSet:list) is det.
-%! get_all_elements(-Formula:string, -ElementSet:list) is failure.
-%! get_all_elements(-Formula:string, +ElementSet:list) is failure.
+%!  get_all_elements(+Formula:string, +ElementSet:list) is det.
+%!  get_all_elements(+Formula:string, -ElementSet:list) is det.
+%!  get_all_elements(-Formula:string, -ElementSet:list) is failure.
+%!  get_all_elements(-Formula:string, +ElementSet:list) is failure.
 %
-%  Return a set (a list without duplicate) of elements in
-%  formula `Formula`
+%   Return a set (a list without duplicate) of elements in
+%   formula `Formula`
+%
+%   get_all_elements("ClOF", R).
+%   get_all_elements("PH5", R).
 %
 get_all_elements(Formula, ElementSet) :-
     nonvar(Formula),
@@ -91,6 +94,7 @@ get_all_elements(Formula, ElementSet) :-
     extract_symbols_(Formula_, SymbolList),
     list_to_set(SymbolList, SymbolSet),
     maplist(element_symbol, ElementSet, SymbolSet).
+
 extract_symbols_(Formula, SymbolList) :-
     Formula = "" -> SymbolList = [];
     element_fact(_, _, Symbol, _, _),       % TODO: use `element_symbol` instead
@@ -102,13 +106,10 @@ extract_symbols_(Formula, SymbolList) :-
     !.
 
 
-% get_all_elements("ClOF", R).
-% get_all_elements("PH5", R).
 
-%! get_num_elements(+Formula: string, -Amount: integer) is det.
+%!  get_num_elements(+Formula: string, -Amount: int) is det.
 %
-%  Return total number (num of type) of elements in
-%  formula `Formula`
+%   Return the total number of types of elements in formula `Formula`.
 %
 get_num_elements(Formula, Amount) :-
     get_all_elements(Formula, Elements),
@@ -121,12 +122,12 @@ sorted_by_en_(List, SortedList) :-
     pairs_values(ElementEnSorted, SortedList).
 
 
-%! sorted(+Key: string, +List: list, -SortedList: list) is det.
+%!  sorted(+Key: string, +List: list, -SortedList: list) is det.
 %
-%  Sort list `List` by `Key` (ascending order)
-%  TODO: sort by alphabet
+%   Sort list `List` by `Key` (ascending order)
+%   TODO: sort by alphabet
 %
-% sorted("en", ['sodium', 'chlorine', 'hydrogen'], ['sodium', 'hydrogen', 'chlorine']).
+%   sorted("en", ['sodium', 'chlorine', 'hydrogen'], ['sodium', 'hydrogen', 'chlorine']).
 sorted(Key, List, SortedList) :-
     (
         Key = "en", sorted_by_en_(List, SortedList);
@@ -136,10 +137,9 @@ sorted(Key, List, SortedList) :-
     !.
 
 
-%! get_num_atoms(+Formula: string,+Element: atom, -Amount: integer) is det.
+%! get_num_atoms(+Formula:string, +Element:atom, -Amount:int) is det.
 %
-%  Return amount of element in 
-%  formula `Formula`
+%  Return the amount of element `Element` in formula `Formula`
 %
 get_num_atoms(Formula, Element, Amount) :-
     remove_chars(Formula, "()[]{}", Formula_),
@@ -165,6 +165,7 @@ extract_quantity_from_element(ElementQuantities,Element,Amount) :-
 %
 %   get_num_charge_str_("[AA]300-", "-300").
 %   get_num_charge_str_("+200[B2B]", "+200").
+%
 get_num_charge_str_(Formula, ChargeStr) :-
     (
         re_matchsub("^(?<charge>[+\\-][1-9][0-9]*).*$", Formula, SubDict_, []) -> SubDict = SubDict_, !;
