@@ -3,7 +3,7 @@
 :- use_module(facts,[en/2,element_fact/5]).
 :- use_module(support,[get_neutral_specie/2]).
 :- use_module(ustr,[split/2,remove_chars/3,re_finditer/4,replace/4]).
-:- use_module(utils,[get_dict_optional/3,get_dict_or_default/4,add_dict/4,join_dict/3,multiply/3,split_digits/2,split_decimal/3]).
+:- use_module(utils,[join_pairs_by_keys/4,get_dict_optional/3,get_dict_or_default/4,add_dict/4,join_dict/3,multiply/3,split_digits/2,split_decimal/3]).
 
 
 element_quantity(Symbol, Quantity) :-
@@ -148,15 +148,61 @@ get_num_atoms(Formula, Element, NumAtoms) :-
 
 count_atoms(Formula, Atoms) :-
     nonvar(Formula),
-    remove_isotope_info(Formula, Formula1),   % Can remove once isotopes are considred in this KB
+    remove_isotope_info(Formula, Formula1),     % Can remove once isotopes are considred in this KB
     count_atoms_(Formula1, 1, Atoms).
 
 count_atoms_(Formula, Multiplicity, Atoms) :-
-    re_finditer("(?:\\(([ημ](?:[2-9][0-9]*)?-)?(?<paren_enclosed>[^)]*)\\)|\\[(?<bracket_enclosed>[^]]*)]|{(?<braces_enclosed>[^}]*)})(?:(?<ion>(?<num_ions>[1-9][0-9]*)?[+-])|(?<multiple>[1-9][0-9]*))?", Formula, Matches1, []),
-    maplist(get_dict_optional(['paren_enclosed', 'bracket_enclosed', 'braces_enclosed']), Matches1, EnclosedList),
-    maplist(get_dict_or_default('multiple'), Matches1, MuultipleList_),
-    maplist(multiply(Multiplicity), MuultipleList_, MultipleList),
-    maplist(count_atoms_, EnclosedList, MuultipleList, AtomsList),
+    % Deals with enclosed formula recursion
+    re_compile("(?:\\((?<paren_enclosed>[^)]*)\\)|\\[(?<bracket_enclosed>[^]]*)]|{(?<braces_enclosed>[^}]*)})(?:(?<ion>(?<num_ions>[1-9][0-9]*)?[+-])|(?<multiple>[1-9][0-9]*))?", Regex, []),
+    re_match(Regex, Formula,[]) ->      % should fail if no enclosed formula
+        re_finditer(Regex, Formula, Matches_, []),
+        % writeln(Matches_),
+        maplist(dict_remove_on_cond(value_is_empty_string), Matches_, Matches),
+          writeln(Matches),
+        maplist(get_dict_optional(['paren_enclosed', 'bracket_enclosed', 'braces_enclosed']), Matches, EnclosedList),
+          writeln(EnclosedList),
+        maplist(get_dict_or_default("1", 'multiple'), Matches, MultipleStrList),
+        maplist(number_string, MultipleList_, MultipleStrList),
+          write(MultipleList_), write(*), write(Multiplicity), write(=),    
+        maplist(multiply(Multiplicity), MultipleList_, MultipleList),
+          writeln(MultipleList),
+        maplist(count_atoms_, EnclosedList, MultipleList, AtomsList),
+          writeln(AtomsList),
+        foldl(join_pairs_by_keys(plus), AtomsList, [], RecursedAtoms),
+          writeln(RecursedAtoms),
+        maplist(get_dict(0), Matches, FullMatches),
+          write(FullMatches),
+        foldl(remove, FullMatches, Formula, Leftovers),
+          write(Leftovers),
+        count_atoms__(Leftovers, Multiplicity, CurrentAtoms),  % Should call the bottom
+        join_pairs_by_keys(plus, RecursedAtoms, CurrentAtoms, Atoms),
+        !;
+    count_atoms__(Formula, Multiplicity, Atoms).
+
+count_atoms__(Formula, Multiplicity, Atoms) :-
+    % Deals with base formula
+    re_finditer("(?<sham>[ημ](?:[2-9][0-9]*)?-)?(?<symbol>[A-Z][a-z]*)(?<num>[1-9][0-9]*)?", Formula, Matches, []),
+    maplist(get_dict('symbol'), Matches, Symbols),
+    maplist(element_symbol, Elements, Symbols),
+    maplist(get_dict_or_default("1", 'num'), Matches, BaseAmountStrs),
+    maplist(number_string, BaseAmounts, BaseAmountStrs),
+    maplist(multiply(Multiplicity), BaseAmounts, TrueAmounts),
+    pairs_keys_values(Atoms, Elements, TrueAmounts).
+
+dict_remove_on_cond(Condition, Dict, TrimmedDict) :-
+    dict_pairs(Dict, Tag, Pairs),
+    exclude(Condition, Pairs, TrimmedPairs),
+    dict_pairs(TrimmedDict, Tag, TrimmedPairs).
+
+value_is_empty_string(KeyValue) :-
+    KeyValue = _Key-Value,
+    Value = "".
+
+remove(Sub, String, Result) :-
+    sub_string(String, BS, _, AS, Sub),
+    sub_string(String, 0, BS, _, Before),
+    sub_string(String, _, AS, 0, After),
+    string_concat(Before, After, Result).
 
 
 %!  remove_isotope_info(+Formula:string, +NewFormula:string) is semidet.
@@ -188,10 +234,15 @@ replace_match(Key0, Key1, Match, S0, S1) :-
 %   (?:^\[(?<isotopes_info>[^]]*,[^]]*)])
 %
 % enclosed group & multiplicity & ions:
+%   Note: somehow prolog doesn't support non-capturing gorup?
 %   (?:\(([ημ](?:[2-9][0-9]*)?-)?(?<paren_enclosed>[^)]*)\)|\[(?<bracket_enclosed>[^]]*)]|{(?<braces_enclosed>[^}]*)})(?:(?<ion>(?<num_ions>[1-9][0-9]*)?[+-])|(?<multiple>[1-9][0-9]*))?
+%   (?:\((?<sham1>[ημ](?:[2-9][0-9]*)?-)?(?<paren_enclosed>[^)]*)\)|\[(?<sham2>[ημ](?:[2-9][0-9]*)?-)?(?<bracket_enclosed>[^]]*)]|{(?<sham3>[ημ](?:[2-9][0-9]*)?-)?(?<braces_enclosed>[^}]*)})(?:(?<ion>(?<num_ions>[1-9][0-9]*)?[+-])|(?<multiple>[1-9][0-9]*))?
 %
 % individual elements & amounts:
 %   (?<symbol>[A-Z][a-z]*)(?<num>[1-9][0-9]*)?
+%
+% individual elements & amounts & sham:
+%   (?<sham>[ημ](?:[2-9][0-9]*)?-)?(?<symbol>[A-Z][a-z]*)(?<num>[1-9][0-9]*)?
 
 
 
