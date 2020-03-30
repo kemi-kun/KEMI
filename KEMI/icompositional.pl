@@ -268,6 +268,31 @@ cation_name(Formula, Name) :-
         compositional(Formula, Name)
     ).
 
+anion_name(Formula, Name) :-
+    anion_cn(Formula, Name);
+    substitutive(Formula, Name);
+    additive(Formula, Name);
+    alternative(Formula, Name).
+anion_name(Formula, Name) :-
+    (
+        not(anion_cn(Formula, Name)),
+        monoatomic(Formula),
+        get_all_elements(Formula, Elements),
+        Elements = [Element|_],
+        element_name(Element, ElementName),
+        append_suffix(ElementName, "ide", Name)
+    );
+    (
+        not(anion_cn(Formula, Name)),
+        homopolyatomic(Formula),
+        get_all_elements(Formula, Elements),
+        Elements = [Element|_],
+        element_name(Element, EName),
+        append_suffix(EName, "ide", IdeName),
+        compositional(Formula, CName),
+        string_concat(MulPrefix, EName, CName),
+        string_concat(MulPrefix, IdeName, Name)
+    ).
 
 boron_hydride(Formula) :-
     get_all_elements(Formula,Elements),
