@@ -167,15 +167,19 @@ extract_quantity_from_element(ElementQuantities,Element,Amount) :-
 %   get_num_charge_str_("+200[B2B]", "+200").
 get_num_charge_str_(Formula, ChargeStr) :-
     (
-        re_matchsub("^.*?(?<charge>([1-9][0-9]*)?[+\\-]?)$", Formula, SubDict_, []) -> SubDict = SubDict_;
-        re_matchsub("^(?<charge>[+-]?([1-9][0-9]*)?)?.*$", Formula, SubDict_, []) -> SubDict = SubDict_
+        re_matchsub("^(?<charge>[+\\-][1-9][0-9]*).*$", Formula, SubDict_, []) -> SubDict = SubDict_, !;
+        re_matchsub("^(?<charge>[+\\-]).*", Formula, SubDict_, []) -> SubDict = SubDict_;
+        re_matchsub("^.*?(?<charge>([1-9][0-9]*)?[+\\-]?)$", Formula, SubDict_, []) -> SubDict = SubDict_
     ),
     get_dict(charge, SubDict, ChargeStr_),
+    writeln(ChargeStr_),
     (
         string_concat(Number, "+", ChargeStr_) -> string_concat("+", Number, ChargeStr), !;
         string_concat(Number, "-", ChargeStr_) -> string_concat("-", Number, ChargeStr);
         ChargeStr = ChargeStr_
     ).
+% get_num_charge_str_("[Na]200+", R).
+% get_num_charge_str_("+200[Na]", R).
 
 %!  get_net_charge(+Formula: string, -NetCharge: int) is det.
 %!  get_net_charge(+Formula: string, -NetCharge: int) is semidet.
