@@ -17,17 +17,22 @@ append_suffix(ElementName, Suffix, Result) :-
     ).
 
 
-replace_suffix_lst_(ElementName, [], Result) :-
+%! get_root_name_(+ElementName: string, SuffixList: list, Result: string) is det.
+%
+%  Match suffix with element name
+%  Then return a name without that suffix (root name)
+%
+get_root_name_(ElementName, [], Result) :-
     % ElemntName doesn't match any suffix in SuffixList
     Result = ElementName,
     !.
-replace_suffix_lst_(ElementName, SuffixList, Result) :-
+get_root_name_(ElementName, SuffixList, Result) :-
     var(ElementName), nonvar(Result) -> 
         replace_suffix_lst_re_(ElementName, SuffixList, Result);
     SuffixList = [ESuffixH|ESuffixT],
     (
         string_concat(Root, ESuffixH, ElementName) -> Result = Root, !;
-        replace_suffix_lst_(ElementName, ESuffixT, Result)
+        get_root_name_(ElementName, ESuffixT, Result)
     ).
 replace_suffix_lst_re_(ElementName, SuffixList, Result) :-
     var(ElementName),
@@ -35,7 +40,7 @@ replace_suffix_lst_re_(ElementName, SuffixList, Result) :-
     string_concat(Result, ESuffixH, Name),
     (
         element_name(_, Name) -> ElementName = Name;
-        replace_suffix_lst_(ElementName, ESuffixT, Result)
+        get_root_name_(ElementName, ESuffixT, Result)
     ).
 
 
@@ -45,7 +50,7 @@ idify_re(ElementName, Result) :-
         "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
         "ic", "on", "um", "ur", "y"
     ],
-    replace_suffix_lst_(Name, SuffixList, Name_),
+    get_root_name_(Name, SuffixList, Name_),
     element_name(Element_, Name),
     not(group(Element_, 18)),
     ElementName = Name,
@@ -71,7 +76,7 @@ idify(ElementName, Result) :-
         "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
         "ic", "on", "um", "ur", "y"
     ],
-    replace_suffix_lst_(ElementName, SuffixList, RootName),
+    get_root_name_(ElementName, SuffixList, RootName),
     string_concat(RootName, "ide", Result).
     
 
@@ -102,7 +107,7 @@ anify(Element, Result) :-
         "icon", "inum", "ogen", "orus", "gen", "ine", "ium",
         "on", "um", "ur"
     ],
-    replace_suffix_lst_(Name, SuffixList, Root_),
+    get_root_name_(Name, SuffixList, Root_),
     (
         string_concat(TempStr, "e", Root_) ->
             string_concat(TempStr, "i", Root);
