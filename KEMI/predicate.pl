@@ -28,13 +28,13 @@ get_root_name_(ElementName, [], Result) :-
     !.
 get_root_name_(ElementName, SuffixList, Result) :-
     var(ElementName), nonvar(Result) -> 
-        replace_suffix_lst_re_(ElementName, SuffixList, Result);
+        get_root_name_re_(ElementName, SuffixList, Result);
     SuffixList = [ESuffixH|ESuffixT],
     (
         string_concat(Root, ESuffixH, ElementName) -> Result = Root, !;
         get_root_name_(ElementName, ESuffixT, Result)
     ).
-replace_suffix_lst_re_(ElementName, SuffixList, Result) :-
+get_root_name_re_(ElementName, SuffixList, Result) :-
     var(ElementName),
     SuffixList = [ESuffixH|ESuffixT],
     string_concat(Result, ESuffixH, Name),
