@@ -27,7 +27,7 @@ idify_(ElementName, SuffixList, Result) :-
         string_concat(Root, ESuffixH, ElementName) -> Result = Root, !;
         idify_(ElementName, ESuffixT, Result)
     ).
-%! idify(+Element: atom, -Result: string) is det.
+%! idify(+Element: atom, -Result: string) is multi.
 %! idify(+Element: atom, +Result: string) is semidet.
 %
 %  Add suffix -ide to the name of `Element`
@@ -40,6 +40,16 @@ idify(Element, Result) :-
     string_concat(Name, "ide", Result),
     !.
 idify(Element, Result) :-
+    nonvar(Result) -> idify_check_(Element, Result);
+    element_name(Element, Name),
+    not(group(Element, 18)),
+    SuffixList = [
+        "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
+        "ic", "on", "um", "ur", "y"
+    ],
+    idify_(Name, SuffixList, Name_),
+    string_concat(Name_, "ide", Result).
+idify_check_(Element, Result) :-
     element_name(Element, Name),
     not(group(Element, 18)),
     SuffixList = [
