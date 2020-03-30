@@ -4,8 +4,8 @@
 :- use_module(facts, [alternative_element_name_fact/2]).
 
 
-%! append_suffix(+Element: atom, +Suffix: string, -Result: string) is det.
-%! append_suffix(+Element: atom, +Suffix: string, +Result: string) is semidet.
+%! append_suffix(+ElementName: string, +Suffix: string, -Result: string) is det.
+%! append_suffix(+ElementName: string, +Suffix: string, +Result: string) is semidet.
 %
 %  Append `Suffix` to the name of `Element`
 %
