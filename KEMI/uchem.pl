@@ -62,20 +62,8 @@ extract_term(Term, Args) :-
 %   Return false if there's no element at `Index`
 %
 get_element(Formula, Index, Element) :-
-    get_neutral_specie(Formula, Formula_),
-    % remove_chars(Formula, "()[]{}", Formula_),
-    string_length(Formula_, Length),
-    Length = 1,
-    Index is Length - 1,
-    element_symbol(Element, Formula_),
-    !.
-get_element(Formula, Index, Element) :-
-    get_neutral_specie(Formula, Formula_),
-    % remove_chars(Formula, "()[]{}", Formula_),
-    extract_elements_from_formula(Formula_, Elements),
-    nth0(Index, Elements, ElementQuantity),
-    extract_term(ElementQuantity, [Symbol|_]),
-    element_symbol(Element, Symbol).
+    count_atoms(Formula, Atoms),
+    nth0(Index, Atoms, Element-_Amount).
 
 
 %!  get_all_elements(+Formula:string, +ElementSet:list) is det.
