@@ -18,6 +18,7 @@ formula_to_quantified(Raw, Elements) :-
 %
 %   Return a list of element_quantity(Symbol, Quantity)
 %
+%   Note: Error when the symbol has 1 letter
 extract_elements_from_formula(Formula, Elements) :-
     extract_elements_(Formula, 0, "", Elements).
 
@@ -71,7 +72,6 @@ get_element(Formula, Index, Element) :-
     nth0(Index, Elements, ElementQuantity),
     extract_term(ElementQuantity, [Symbol|_]),
     element_symbol(Element, Symbol).
-    % element_fact(Element, _, Symbol, _, _).
 
 
 %! get_all_elements(+Formula:string, +ElementSet:list) is det.
