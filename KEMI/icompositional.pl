@@ -4,11 +4,12 @@
 :- use_module(facts,[addition_compound_exception/2]).
 :- use_module(nomenclature,[iupac_name/2]).
 :- use_module(predicate,[append_suffix/3]).
-:- use_module(inorganic,[compositional/2]).
+:- use_module(inorganic,[additive/2,substitutive/2,compositional/2]).
 :- use_module(support,[get_neutral_specie/2,multiplicative_prefix/2,mul_prefix_except_mono/2]).
 :- use_module(uchem,[get_element/3,get_all_elements/2,get_num_atoms/3,get_net_charge/2]).
 :- use_module(utils,[value_is_empty_string/1,dict_remove_on_cond/3,get_dict_or_default/4]).
 :- use_module(ustr,[join/3]).
+:- use_module(ialternative,[alternative/2]).
 
 
 homonuclear_cn(Formula, Name) :-
@@ -247,6 +248,25 @@ re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 
 general_stoichiometric(Formula, Name) :-
     fail.
+
+cation_name(Formula, Name) :-
+    cation_cn(Formula, Name);
+    substitutive(Formula, Name);
+    additive(Formula, Name);
+    alternative(Formula, Name).
+cation_name(Formula, Name) :-
+    (
+        not(cation_cn(Formula, Name)),
+        monoatomic(Formula),
+        get_all_elements(Formula, Elements),
+        Elements = [Element|_],
+        element_name(Element, Name)
+    );
+    (
+        not(cation_cn(Formula, Name)),
+        homopolyatomic(Formula),
+        compositional(Formula, Name)
+    ).
 
 
 boron_hydride(Formula) :-
