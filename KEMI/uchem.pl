@@ -147,26 +147,27 @@ get_num_atoms(Formula, Element, NumAtoms) :-
 
 count_atoms(Formula, Dict) :-
     nonvar(Formula),
-    count_atoms_(Formula, Dict, 1).
+    remove_isotope_info(Formula, Formula1),   % Can remove once isotopes are considred in this KB
+    count_atoms_(Formula1, Dict, 1).
 
 count_atoms_(Formula, Dict, Multiplicity) :-
     true.
 
 
-%!  replace_isotopes(+Formula:string, +NewFormula:string) is semidet.
-%!  replace_isotopes(+Formula:string, -NewFormula:string) is det.
-%!  replace_isotopes(-Formula:string, -NewFormula:string) is failure.   # one-way function
-%!  replace_isotopes(-Formula:string, +NewFormula:string) is failure.   # one-way function
+%!  remove_isotope_info(+Formula:string, +NewFormula:string) is semidet.
+%!  remove_isotope_info(+Formula:string, -NewFormula:string) is det.
+%!  remove_isotope_info(-Formula:string, -NewFormula:string) is failure.   # one-way function
+%!  remove_isotope_info(-Formula:string, +NewFormula:string) is failure.   # one-way function
 %
-%   Removes all isotopoe information from the formula.
+%   Removes all isotope information from the formula.
 %
-replace_isotopes(Formula, NewFormula) :-
+remove_isotope_info(Formula, NewFormula) :-
     nonvar(Formula),
     % matches front-formula isotope declaration
-    re_replace("(?:^\\[(?<isotopes_info>[^]]*,[^]]*)])", "", Formula, Formula_),
+    re_replace("(?:^\\[(?<isotopes_info>[^]]*,[^]]*)])", "", Formula, Formula1),
     % matches in-formula isotopes
-    re_finditer("(?:\\[(?<neutrons>[1-9][0-9]*)(?<element>[A-Z][a-z]*)])", Formula_, Matches, []),
-    foldl(replace_match(0, 'element'), Matches, Formula_, NewFormula).
+    re_finditer("(?:\\[(?<neutrons>[1-9][0-9]*)(?<element>[A-Z][a-z]*)])", Formula1, Matches, []),
+    foldl(replace_match(0, 'element'), Matches, Formula1, NewFormula).
 
 replace_match(Key0, Key1, Match, S0, S1) :-
     get_dict(Key0, Match, Match0),
