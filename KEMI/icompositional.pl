@@ -2,14 +2,16 @@
 :- use_module(elements,[element_name/2,group/2]).
 :- use_module(facts,[addition_compound_exception/2]).
 :- use_module(nomenclature,[iupac_name/2]).
+:- use_module(predicate,[append_suffix/3]).
 :- use_module(support,[get_neutral_specie/2,multiplicative_prefix/2,mul_prefix_except_mono/2]).
 :- use_module(uchem,[get_element/3,get_all_elements/2,get_num_atoms/3,get_net_charge/2]).
 :- use_module(utils,[value_is_empty_string/1,dict_remove_on_cond/3,get_dict_or_default/4]).
 :- use_module(ustr,[join/3]).
 
 
-
 homonuclear_cn(Formula, Name) :-
+    not(cation(Formula)),
+    not(anion(Formula)),
     homonuclear(Formula),
     get_all_elements(Formula, Elements),
     memberchk(Element, Elements),
@@ -29,10 +31,6 @@ binary_compound_cn(Formula, Name) :-
     fail.
 
 
-ion_cn(Formula, Name) :-
-    cation_cn(Formula, Name);
-    anion_cn(Formula, Name).
-
 cation(Formula) :-
     get_net_charge(Formula, NetCharge),
     NetCharge > 0.
@@ -45,11 +43,7 @@ monoatomic(Formula) :-
     get_all_elements(Formula, Elements),
     length(Elements, 1),
     Elements = [Element0|_],
-    get_neutral_specie(Formula, Formula_),        % TODO: remove this when `get_num_atoms()` finished
-    % Still bug when Formula has 1 letter
-    % writeln(Formula_),
-    get_num_atoms(Formula_, Element0, NumAtom),
-    % writeln(NumAtom),
+    get_num_atoms(Formula, Element0, NumAtom),
     NumAtom is 1.
 
 get_ion_part_(NetCharge, IonSign, ChargeStr) :-
@@ -57,9 +51,16 @@ get_ion_part_(NetCharge, IonSign, ChargeStr) :-
     string_concat(ChargeStr1, IonSign, ChargeStr2),
     string_concat(ChargeStr2, ")", ChargeStr).
 
+
+ion_cn(Formula, Name) :-
+    cation_cn(Formula, Name);
+    anion_cn(Formula, Name).
+
+
 cation_cn(Formula, Name) :-
     monoatomic_cation_cn(Formula, Name);
     homopolyatomic_cation_cn(Formula, Name).
+
 
 %!  monoatomic_cation_cn(+Formula: string, -Name: string) is multi.
 %!  monoatomic_cation_cn(+Formula: string, +Name: string) is det.
@@ -69,16 +70,15 @@ cation_cn(Formula, Name) :-
 %   True if `Name` is a compositional name of `Formula`
 %
 monoatomic_cation_cn(Formula, Name) :-
-    monoatomic(Formula), 
-    cation(Formula),
-    % writeln("Here"),
     nonvar(Name) -> monoatomic_cation_cn_(Formula, Name);
-    get_element(Formula, 0, Element),
+    monoatomic(Formula),
+    cation(Formula),
+    get_all_elements(Formula, Elements),
+    Elements = [Element|_],
     element_name(Element, ElementName),
     get_net_charge(Formula, NetCharge),
     get_ion_part_(NetCharge, "+", ChargeStr),
     string_concat(ElementName, ChargeStr, Name).
-
 % monoatomic_cation_cn("[Na]+", "sodium(1+)")
 monoatomic_cation_cn_(Formula, Name) :-
     monoatomic(Formula), 
@@ -93,12 +93,44 @@ monoatomic_cation_cn_(Formula, Name) :-
 homopolyatomic_cation_cn(Formula, Name) :-
     fail.
 
+
 anion_cn(Formula, Name) :-
     monoatomic_anion_cn(Formula, Name);
     homopolyatomic_anion_cn(Formula, Name).
 
+
+%!  monoatomic_anion_cn(+Formula: string, -Name: string) is multi.
+%!  monoatomic_anion_cn(+Formula: string, +Name: string) is det.
+%!  monoatomic_anion_cn(-Formula: string, +Name: string) is ERROR.
+%
+%   IR-5.3.3.2
+%   True if `Name` is a compositional name of `Formula`
+%
 monoatomic_anion_cn(Formula, Name) :-
-    fail.
+    nonvar(Name) -> monoatomic_anion_cn_(Formula, Name);
+    monoatomic(Formula),
+    anion(Formula),
+    get_all_elements(Formula, Elements),
+    Elements = [Element|_],
+    element_name(Element, ElementName),
+    append_suffix(ElementName, "ide", IdeName),
+    get_net_charge(Formula, NetCharge_),
+    abs(NetCharge_, NetCharge),
+    get_ion_part_(NetCharge, "-", ChargeStr),
+    string_concat(IdeName, ChargeStr, Name).
+% monoatomic_anion_cn("Cl-", "chloride(1-)").
+monoatomic_anion_cn_(Formula, Name) :-
+    monoatomic(Formula),
+    anion(Formula),
+    get_all_elements(Formula, Elements),
+    Elements = [Element|_],
+    element_name(Element, ElementName),
+    append_suffix(ElementName, "ide", IdeName),
+    get_net_charge(Formula, NetCharge_),
+    abs(NetCharge_, NetCharge),
+    get_ion_part_(NetCharge, "-", ChargeStr),
+    string_concat(IdeName, ChargeStr, Name),
+    !.
 
 homopolyatomic_anion_cn(Formula, Name) :-
     fail.
