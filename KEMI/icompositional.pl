@@ -98,12 +98,12 @@ monoatomic_cation_cn_(Formula, Name) :-
     string_concat(ElementName, ChargeStr, Name),
     !.
 
-%! homopolyatomic_cation_cn(+Formula: string, -Name: string) is multi.
-%! homopolyatomic_cation_cn(+Formula: string, +Name: string) is nondet.
-%! homopolyatomic_cation_cn(-Formula: string, +Name: string) is failure.
+%!  homopolyatomic_cation_cn(+Formula: string, -Name: string) is multi.
+%!  homopolyatomic_cation_cn(+Formula: string, +Name: string) is nondet.
+%!  homopolyatomic_cation_cn(-Formula: string, +Name: string) is failure.
 %
-%  IR-5.3.2.3 p.83
-%  [O2]+ => dioxygen(1+)
+%   IR-5.3.2.3 p.83
+%   [O2]+ => dioxygen(1+)
 %
 homopolyatomic_cation_cn(Formula, Name) :-
     homopolyatomic(Formula),
@@ -152,8 +152,29 @@ monoatomic_anion_cn_(Formula, Name) :-
     string_concat(IdeName, ChargeStr, Name),
     !.
 
+%!  homopolyatomic_anion_cn(+Formula: string, -Name: string) is multi.
+%!  homopolyatomic_anion_cn(+Formula: string, +Name: string) is nondet.
+%!  homopolyatomic_anion_cn(-Formula: string, +Name: string) is failure.
+%
+%   IR-5.3.3.3 p.85
+%   [O2]2- => dioxide(2-)
+%
 homopolyatomic_anion_cn(Formula, Name) :-
-    fail.
+    homopolyatomic(Formula),
+    anion(Formula),
+    % to use append_suffix without error
+    get_all_elements(Formula, Elements),
+    Elements = [Element|_],
+    element_name(Element, EName),
+    append_suffix(EName, "ide", IdeName),
+    get_neutral_specie(Formula, NeutralSpecie),
+    compositional(NeutralSpecie, NeutralSpecieName),
+    string_concat(MulPrefix, EName, NeutralSpecieName),
+    string_concat(MulPrefix, IdeName, Name_),
+    get_net_charge(Formula, NetCharge_),
+    abs(NetCharge_, NetCharge),
+    get_ion_part_(NetCharge, "-", ChargeStr),
+    string_concat(Name_, ChargeStr, Name).
 
 
 %!  addition_compound_cn(+Formula, +Name) is nondet.
