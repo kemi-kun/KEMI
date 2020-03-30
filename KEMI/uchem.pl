@@ -1,6 +1,6 @@
 :- module(uchem,[get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
 :- use_module(facts,[en/2,element_fact/5]).
-:- use_module(ustr,[split/2,remove_chars/3]).
+:- use_module(ustr,[split/2,remove_chars/3,re_finditer/4,replace/4]).
 :- use_module(elements,[element_symbol/2]).
 :- use_module(support,[get_neutral_specie/2]).
 
@@ -54,11 +54,11 @@ extract_term(Term, Args) :-
     Term =.. [_|Args].
 
 
-%! get_element(+Formula: string, +Index: integer, -Element: atom) is det.
+%!  get_element(+Formula: string, +Index: int, -Element: atom) is det.
 %
-%  Get element at `Index` position in formula `Formula`.
-%  (index starts at 0)
-%  Return false if there's no element at `Index`
+%   Get element at `Index` position in formula `Formula`.
+%   (index starts at 0)
+%   Return false if there's no element at `Index`
 %
 get_element(Formula, Index, Element) :-
     get_neutral_specie(Formula, Formula_),
@@ -77,13 +77,16 @@ get_element(Formula, Index, Element) :-
     element_symbol(Element, Symbol).
 
 
-%! get_all_elements(+Formula:string, +ElementSet:list) is det.
-%! get_all_elements(+Formula:string, -ElementSet:list) is det.
-%! get_all_elements(-Formula:string, -ElementSet:list) is failure.
-%! get_all_elements(-Formula:string, +ElementSet:list) is failure.
+%!  get_all_elements(+Formula:string, +ElementSet:list) is det.
+%!  get_all_elements(+Formula:string, -ElementSet:list) is det.
+%!  get_all_elements(-Formula:string, -ElementSet:list) is failure.
+%!  get_all_elements(-Formula:string, +ElementSet:list) is failure.
 %
-%  Return a set (a list without duplicate) of elements in
-%  formula `Formula`
+%   Return a set (a list without duplicate) of elements in
+%   formula `Formula`
+%
+%   get_all_elements("ClOF", R).
+%   get_all_elements("PH5", R).
 %
 get_all_elements(Formula, ElementSet) :-
     nonvar(Formula),
@@ -91,6 +94,7 @@ get_all_elements(Formula, ElementSet) :-
     extract_symbols_(Formula_, SymbolList),
     list_to_set(SymbolList, SymbolSet),
     maplist(element_symbol, ElementSet, SymbolSet).
+
 extract_symbols_(Formula, SymbolList) :-
     Formula = "" -> SymbolList = [];
     element_fact(_, _, Symbol, _, _),       % TODO: use `element_symbol` instead
@@ -102,13 +106,10 @@ extract_symbols_(Formula, SymbolList) :-
     !.
 
 
-% get_all_elements("ClOF", R).
-% get_all_elements("PH5", R).
 
-%! get_num_elements(+Formula: string, -Amount: integer) is det.
+%!  get_num_elements(+Formula: string, -Amount: int) is det.
 %
-%  Return total number (num of type) of elements in
-%  formula `Formula`
+%   Return the total number of types of elements in formula `Formula`.
 %
 get_num_elements(Formula, Amount) :-
     get_all_elements(Formula, Elements),
@@ -121,12 +122,12 @@ sorted_by_en_(List, SortedList) :-
     pairs_values(ElementEnSorted, SortedList).
 
 
-%! sorted(+Key: string, +List: list, -SortedList: list) is det.
+%!  sorted(+Key: string, +List: list, -SortedList: list) is det.
 %
-%  Sort list `List` by `Key` (ascending order)
-%  TODO: sort by alphabet
+%   Sort list `List` by `Key` (ascending order)
+%   TODO: sort by alphabet
 %
-% sorted("en", ['sodium', 'chlorine', 'hydrogen'], ['sodium', 'hydrogen', 'chlorine']).
+%   sorted("en", ['sodium', 'chlorine', 'hydrogen'], ['sodium', 'hydrogen', 'chlorine']).
 sorted(Key, List, SortedList) :-
     (
         Key = "en", sorted_by_en_(List, SortedList);
@@ -136,25 +137,56 @@ sorted(Key, List, SortedList) :-
     !.
 
 
-%! get_num_atoms(+Formula: string,+Element: atom, -Amount: integer) is det.
+%! get_num_atoms(+Formula:string, +Element:atom, -NumAtoms:int) is det.
 %
-%  Return amount of element in 
-%  formula `Formula`
+%  Return the amount of element `Element` in formula `Formula`
 %
-get_num_atoms(Formula, Element, Amount) :-
-    remove_chars(Formula, "()[]{}", Formula_),
-    extract_elements_from_formula(Formula_, ElementQuantities),
-    extract_quantity_from_element(ElementQuantities,Element, Amount).
- 
-extract_quantity_from_element([],_,_).
-extract_quantity_from_element(ElementQuantities,Element,Amount) :-
-    ElementQuantities = [EleQuanH|EleQuanT],
-    element_fact(Element, _, Symbol, _, _),
-    extract_term(EleQuanH, [EleH|Num]),
-    (EleH = Symbol -> Amount is Num ;
-    extract_quantity_from_element(EleQuanT, Element, Amount)
-    ),
-    !.
+get_num_atoms(Formula, Element, NumAtoms) :-
+    count_atoms(Formula, Dict),
+    get_dict(Element, Dict, NumAtoms).
+
+count_atoms(Formula, Dict) :-
+    nonvar(Formula),
+    count_atoms_(Formula, Dict, 1).
+
+count_atoms_(Formula, Dict, Multiplicity) :-
+    true.
+
+
+%!  replace_isotopes(+Formula:string, +NewFormula:string) is semidet.
+%!  replace_isotopes(+Formula:string, -NewFormula:string) is det.
+%!  replace_isotopes(-Formula:string, -NewFormula:string) is failure.   # one-way function
+%!  replace_isotopes(-Formula:string, +NewFormula:string) is failure.   # one-way function
+%
+%   Removes all isotopoe information from the formula.
+%
+replace_isotopes(Formula, NewFormula) :-
+    nonvar(Formula),
+    % matches front-formula isotope declaration
+    re_replace("(?:^\\[(?<isotopes_info>[^]]*,[^]]*)])", "", Formula, Formula_),
+    % matches in-formula isotopes
+    re_finditer("(?:\\[(?<neutrons>[1-9][0-9]*)(?<element>[A-Z][a-z]*)])", Formula_, Matches, []),
+    foldl(replace_match(0, 'element'), Matches, Formula_, NewFormula).
+
+replace_match(Key0, Key1, Match, S0, S1) :-
+    get_dict(Key0, Match, Match0),
+    get_dict(Key1, Match, Match1),
+    replace(S0, Match0, Match1, S1).
+
+% Regex patterns
+%
+% in-formula isotope:
+%   (?:\[(?<neutrons>[1-9][0-9]*)(?<element>[A-Z][a-z]*)])
+%
+% front-formula isotopde declaration:  % TODO: deal with one element decl
+%   (?:^\[(?<isotopes_info>[^]]*,[^]]*)])
+%
+% enclosed group & multiplicity & ions:
+%   (?:\(([ημ](?:[2-9][0-9]*)?-)?(?<paren_enclosed>[^)]*)\)|\[(?<bracket_enclosed>[^]]*)]|{(?<braces_enclosed>[^}]*)})(?:(?<ion>(?<num_ions>[1-9][0-9]*)?[+-])|(?<multiple>[1-9][0-9]*))?
+%
+% individual elements & amounts:
+%   (?<symbol>[A-Z][a-z]*)(?<num>[1-9][0-9]*)?
+
 
 
 %!  get_num_charge_str_(+Formula: string, -ChargeStr: string) is det.
@@ -165,6 +197,7 @@ extract_quantity_from_element(ElementQuantities,Element,Amount) :-
 %
 %   get_num_charge_str_("[AA]300-", "-300").
 %   get_num_charge_str_("+200[B2B]", "+200").
+%
 get_num_charge_str_(Formula, ChargeStr) :-
     (
         re_matchsub("^(?<charge>[+\\-][1-9][0-9]*).*$", Formula, SubDict_, []) -> SubDict = SubDict_, !;
