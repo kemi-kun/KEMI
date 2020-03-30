@@ -51,6 +51,7 @@ extract_elements_(Formula, Start, String, End) :-
 extract_term(Term, Args) :-
     Term =.. [_|Args].
 
+
 %! get_element(+Formula: string, +Index: integer, -Element: atom) is det.
 %
 %  Get element at `Index` position in formula `Formula`.
@@ -59,10 +60,18 @@ extract_term(Term, Args) :-
 %
 get_element(Formula, Index, Element) :-
     remove_chars(Formula, "()[]{}", Formula_),
+    string_length(Formula_, Length),
+    Length = 1,
+    Index is Length - 1,
+    element_symbol(Element, Formula_),
+    !.
+get_element(Formula, Index, Element) :-
+    remove_chars(Formula, "()[]{}", Formula_),
     extract_elements_from_formula(Formula_, Elements),
     nth0(Index, Elements, ElementQuantity),
     extract_term(ElementQuantity, [Symbol|_]),
-    element_fact(Element, _, Symbol, _, _).
+    element_symbol(Element, Symbol).
+    % element_fact(Element, _, Symbol, _, _).
 
 
 %! get_all_elements(+Formula:string, +ElementSet:list) is det.
