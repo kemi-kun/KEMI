@@ -3,6 +3,8 @@
     re_match_count/3,
     re_finditer/4,
     re_findall/4,
+    re_finditer/3,
+    re_findall/3,
     join/3,
     remove_chars/3,
     split/2,
@@ -144,6 +146,8 @@ re_matchsub_mul(Regex, String, Subs, Options, Leftover) :-
 %
 re_findall(Regex, String, Matches, Options) :-
     re_foldl(append_matchstring_, Regex, String, [], Matches, Options).
+re_findall(Regex, String, Matches) :-
+    re_foldl(append_matchstring_, Regex, String, [], Matches, []).
 
 append_matchstring_(Match, V0, V1) :-
     get_dict(0, Match, X),
@@ -158,6 +162,8 @@ append_matchstring_(Match, V0, V1) :-
 %
 re_finditer(Regex, String, Matches, Options) :-
     re_foldl(append_match_, Regex, String, [], Matches, Options).
+re_finditer(Regex, String, Matches) :-
+    re_foldl(append_match_, Regex, String, [], Matches, []).
 
 append_match_(Match, V0, V1) :-
     append(V0, [Match], V1).

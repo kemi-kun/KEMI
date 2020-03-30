@@ -9,6 +9,7 @@ Contents:
 - pauling's electronegativity
 */
 :- module(facts,[
+    addition_compound_exception/2,
     parent_name_exception/2,
     complex_multiplicative_prefix_fact/2,
     multiplicative_prefix_fact/2,
@@ -349,3 +350,5 @@ pauling_electronegativity_fact(lawrencium, 1.3).
 
 % From KEMI base: FunctionalReplacementPrefixFact
 functional_replacement_prefix_fact(chlorine, "chloro").
+
+addition_compound_exception("H2O", "water").
