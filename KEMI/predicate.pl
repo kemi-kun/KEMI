@@ -22,34 +22,32 @@ idify_(ElementName, [], Result) :-
     Result = ElementName,
     !.
 idify_(ElementName, SuffixList, Result) :-
+    var(ElementName), nonvar(Result) -> idify_re_(ElementName, SuffixList, Result);
     SuffixList = [ESuffixH|ESuffixT],
     (
         string_concat(Root, ESuffixH, ElementName) -> Result = Root, !;
         idify_(ElementName, ESuffixT, Result)
     ).
-%! idify(+Element: atom, -Result: string) is multi.
-%! idify(+Element: atom, +Result: string) is semidet.
-%
-%  Add suffix -ide to the name of `Element`
-%  TODO: (-Element, +Result)
-idify(Element, Result) :-
-    % Add -ide to the end of Group 18 which ends with -on
-    group(Element, 18),
-    element_name(Element, Name),
-    string_concat(_, "on", Name),
-    string_concat(Name, "ide", Result),
-    !.
-idify(Element, Result) :-
-    nonvar(Result) -> idify_check_(Element, Result);
-    element_name(Element, Name),
-    not(group(Element, 18)),
+idify_re_(ElementName, SuffixList, Result) :-
+    var(ElementName),
+    SuffixList = [ESuffixH|ESuffixT],
+    string_concat(Result, ESuffixH, Name),
+    (
+        element_name(_, Name) -> ElementName = Name;
+        idify_(ElementName, ESuffixT, Result)
+    ).
+idify_re(Element, Result) :-
+    string_concat(Name_, "ide", Result),
     SuffixList = [
         "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
         "ic", "on", "um", "ur", "y"
     ],
     idify_(Name, SuffixList, Name_),
-    string_concat(Name_, "ide", Result).
-idify_check_(Element, Result) :-
+    element_name(Element_, Name),
+    not(group(Element_, 18)),
+    Element = Element_,
+    !.
+idify_eq(Element, Result) :-
     element_name(Element, Name),
     not(group(Element, 18)),
     SuffixList = [
@@ -59,7 +57,31 @@ idify_check_(Element, Result) :-
     idify_(Name, SuffixList, Name_),
     string_concat(Name_, "ide", Result),
     !.
-
+%! idify(+Element: atom, -Result: string) is multi.
+%! idify(+Element: atom, +Result: string) is semidet.
+%! idify(-Element: atom, +Result: string) is det.
+%
+%  Add suffix -ide to the name of `Element`
+%
+idify(Element, Result) :-
+    % Add -ide to the end of Group 18 which ends with -on
+    group(Element, 18),
+    element_name(Element, Name),
+    string_concat(_, "on", Name),
+    string_concat(Name, "ide", Result),
+    !.
+idify(Element, Result) :-
+    var(Element), nonvar(Result) -> idify_re(Element, Result);
+    nonvar(Element), nonvar(Result) -> idify_eq(Element, Result);
+    element_name(Element, Name),
+    not(group(Element, 18)),
+    SuffixList = [
+        "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
+        "ic", "on", "um", "ur", "y"
+    ],
+    idify_(Name, SuffixList, RootName),
+    string_concat(RootName, "ide", Result).
+    
 
 anify_(ElementName, [], Result) :-
     % ElemntName doesn't match any suffix in SuffixList
