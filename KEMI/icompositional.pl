@@ -232,7 +232,11 @@ re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 
 
 general_stoichiometric(Formula, Name) :-
-    fail.
+    split_generalized_salt_formula(Formula, EPCs, ENCs),
+    maplist(cation_name, EPCs, EPCNames),
+    maplist(anion_name, ENCs, ENCNames),
+    append(EPCNames, ENCNames, PCNames),
+    join(" ", EPCNames, Name).
 
 %!  cation_name(+Formula, -Name) is nondet.
 %!  cation_name(+Formula, +Name) is nondet.
