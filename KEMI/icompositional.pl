@@ -6,7 +6,7 @@
 :- use_module(predicate,[append_suffix/3]).
 :- use_module(inorganic,[additive/2,substitutive/2,compositional/2]).
 :- use_module(support,[get_neutral_specie/2,multiplicative_prefix/2,mul_prefix_except_mono/2]).
-:- use_module(uchem,[get_element/3,get_all_elements/2,get_num_atoms/3,get_net_charge/2]).
+:- use_module(uchem,[count_atoms/2,get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
 :- use_module(utils,[value_is_empty_string/1,dict_remove_on_cond/3,get_dict_or_default/4]).
 :- use_module(ustr,[join/3]).
 :- use_module(ialternative,[alternative/2]).
@@ -237,6 +237,19 @@ general_stoichiometric(Formula, Name) :-
     maplist(anion_name, ENCs, ENCNames),
     append(EPCNames, ENCNames, PCNames),
     join(" ", EPCNames, Name).
+
+split_generalized_salt_formula(Formula, EPCs, ENCs) :-
+    count_atoms(Formula, Atoms),
+    append(EPCs_, ENCs_, Atoms),
+    (
+        selectchk(hydrogen-_, EPCs_, EPCRest) ->
+            sort(0, @=<, EPCRest, EPCRest),
+            append(EPCRest, [hydrogen-_], EPCs);
+        sort(0, @=<, EPCs_, EPCs_)
+    ),
+    sort(0, @=<, ENCs_, ENCs_),
+    EPCs = EPCs_,
+    ENCs = ENCs_.
 
 %!  cation_name(+Formula, -Name) is nondet.
 %!  cation_name(+Formula, +Name) is nondet.
