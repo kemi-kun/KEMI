@@ -113,6 +113,7 @@ homonuclear_atom_formula(Atom, Formula) :-
 %   IR-5.2 p.81-82
 %
 binary_compound_cn(Formula, Name) :-
+    nonvar(Formula),
     (
         binary_compound(Formula),
         not(ionic(Formula))
@@ -139,6 +140,7 @@ binary_compound(Formula) :-
 
 
 ion_cn(Formula, Name) :-
+    nonvar(Formula),
     cation_cn(Formula, Name);
     anion_cn(Formula, Name).
 
@@ -249,6 +251,7 @@ homopolyatomic_anion_cn(Formula, Name) :-
 % # 8Kr⋅46H2O ⇒ krypton—water (8/46)
 %
 addition_compound_cn(Formula, Name) :-
+    nonvar(Formula),
     addition_compound(Formula),
     split_addition_compound(Formula, Compounds, Amounts),
     join("/", Amounts, RatioPart),
@@ -283,6 +286,7 @@ re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 %
 %
 general_stoichiometric(Formula, Name) :-
+    nonvar(Formula),
     ionic(Formula) ->
         general_stoichiometric_ion(Formula, Name);
     general_stoichiometric_(Formula, Name).
