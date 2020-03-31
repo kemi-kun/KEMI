@@ -34,6 +34,11 @@ homopolyatomic(Formula) :-
     nth0(0, Atoms, _Element-Amount),
     Amount > 1.
 
+heteropolyatomic(Formula) :-
+    count_atoms(Formula, Atoms),
+    length(Atoms, X),
+    X > 1.
+
 
 get_charge_str(Formula, ChargeStr) :-
     get_net_charge(Formula, NetCharge),
