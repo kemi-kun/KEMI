@@ -46,58 +46,30 @@ get_root_name_re_(ElementName, SuffixList, Result) :-
     ).
 
 
-idify_re(ElementName, Result) :-
-    string_concat(Name_, "ide", Result),
-    SuffixList = [
-        "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
-        "ic", "on", "um", "ur", "y"
-    ],
-    get_root_name_(Name, SuffixList, Name_),
-    element_name(Element_, Name),
-    not(group(Element_, 18)),
-    ElementName = Name,
-    !.
-%! idify(+Element: atom, -Result: string) is det.
-%! idify(+Element: atom, +Result: string) is semidet.
-%! idify(-Element: atom, +Result: string) is det.
+%! idify(+ElementName:string, +Result:string) is semidet.
+%! idify(+ElementName:string, -Result:string) is semidet.
+%! idify(-ElementName:string, -Result:string) is multi.
+%! idify(-ElementName:string, +Result:string) is semidet.
 %
 %  Add suffix -ide to the name of `Element`
 %
 idify(ElementName, Result) :-
-    % Add -ide to the end of Group 18 which ends with -on
-    element_name(Element, ElementName),
-    group(Element, 18),
-    string_concat(_, "on", ElementName),
-    string_concat(ElementName, "ide", Result),
-    !.
-idify(ElementName, Result) :-
-    var(ElementName), nonvar(Result) -> idify_re(ElementName, Result);
-    element_name(Element, ElementName),
-    not(group(Element, 18)),
-    SuffixList = [
-        "ogen", "orus", "ygen", "ese", "ine", "ium", "en",
-        "ic", "on", "um", "ur", "y"
-    ],
-    get_root_name_(ElementName, SuffixList, RootName),
-    string_concat(RootName, "ide", Result).
-
-idify2(ElementName, Result) :-
     element_name(Element, ElementName),
     (
         group(Element, 18),
         string_concat(_, "on", ElementName) ->
             string_concat(ElementName, "ide", Result);
 
-        not(latin_name_exception(Element)),
         latin_element_name_fact(Element, AltName),
+        not(latin_name_exception(Element)),
         member(X, ["ium", "um"]),
         string_concat(Root, X, AltName) ->
-            string_concat(Root, "ide", Result), !;
+            string_concat(Root, "ide", Result);
 
         member(Y, ["ogen", "orus", "ygen", "ese", "ine", "ium",
                    "en", "ic", "on", "um", "ur", "y"]),
         string_concat(Root, Y, ElementName) ->
-            string_concat(Root, "ide", Result), !
+            string_concat(Root, "ide", Result)
     ).
 
 latin_name_exception(antimony).

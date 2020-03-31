@@ -20,12 +20,12 @@ Implements:
 %!  element_name(-Element:atom, +ElementName:string) is multi.      # TODO: Remove last false choice point
 %
 element_name(Element, ElementName) :-
-    element_fact(Element, ElementName, _, _, _) -> true;
-    new_element_name(Element, ElementName).
+    new_element_name(Element, ElementName);
+    element_fact(Element, ElementName, _, _, _).
 
 element_symbol(Element, Symbol) :-
-    element_fact(Element, _, Symbol, _, _) -> true;
-    new_element_symbol(Element, Symbol).
+    new_element_symbol(Element, Symbol);
+    element_fact(Element, _, Symbol, _, _).
 
 atomic_number(Element, Z) :-
     element_fact(Element, _, _, Z, _) -> true;
