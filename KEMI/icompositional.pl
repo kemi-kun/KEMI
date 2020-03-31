@@ -241,17 +241,28 @@ split_addition_compound(Formula, Compounds, Amounts) :-
 
 re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 
-
+%
+%
+%
+%
+%
+%
+%
 general_stoichiometric(Formula, Name) :-
     split_generalized_salt_formula(Formula, EPCs, ENCs),
-    maplist(cation_name, EPCs, EPCNames),
-    maplist(anion_name, ENCs, ENCNames),
+    maplist(homonuclear_atom_formula, EPCs, EPCFormulas),
+    maplist(homonuclear_atom_formula, ENCs, ENCFormulas),
+    maplist(cation_name, EPCFormulas, EPCNames),
+    maplist(anion_name, ENCFormulas, ENCNames),
     append(EPCNames, ENCNames, PCNames),
-    join(" ", EPCNames, Name).
+    join(" ", PCNames, Name).
 
+%!  split_generalized_salt_formula(+Formula:string, -EPCs:list(Element-Amount), -ENCs:list(Element-Amount)) is mutli.
+%
 split_generalized_salt_formula(Formula, EPCs, ENCs) :-
     count_atoms(Formula, Atoms),
     append(EPCs_, ENCs_, Atoms),
+    EPCs_ \= [], ENCs_ \= [],
     (
         selectchk(hydrogen-_, EPCs_, EPCRest) ->
             sort(0, @=<, EPCRest, EPCRest),
