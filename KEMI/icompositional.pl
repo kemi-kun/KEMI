@@ -1,7 +1,7 @@
 :- module(icompositional,[boron_hydride_stoichiometric/2,general_stoichiometric/2,addition_compound_cn/2,ion_cn/2,binary_compound_cn/2,homonuclear_cn/2]).
 
 :- use_module(elements,[element_name/2,element_symbol/2,group/2]).
-:- use_module(facts,[addition_compound_exception/2,alternative_element_name_fact/2]).
+:- use_module(facts,[addition_compound_exception/2,alternative_element_name/2]).
 :- use_module(nomenclature,[iupac_name/2]).
 :- use_module(predicate,[append_suffix/3]).
 :- use_module(inorganic,[additive/2,substitutive/2,compositional/2]).
@@ -57,8 +57,10 @@ get_ion_part_(NetCharge, IonSign, ChargeStr) :-
 %   True when `Name` is the IUPAC name for `Formula`.
 %
 homonuclear_cn(Formula, Name) :-
-    homonuclear_cn_(element_name, Formula, Name);
-    homonuclear_cn_(alternative_element_name_fact, Formula, Name).
+    nonvar(Name) ->
+        homonuclear_name_atom(Name, Atom),
+        homonuclear_atom_formula(Atom, Formula);
+    homonuclear_cn_(element_name, Formula, Name).
 
 homonuclear_cn_(ElementNameFunction, Formula, Name) :-
     % check
@@ -79,6 +81,21 @@ homonuclear(Formula) :-
     get_all_elements(Formula, Elements),
     length(Elements,1).
 
+homonuclear_name_atom(Name, Atom) :-
+    (
+        alternative_element_name(Element, ElementName);
+        element_name(Element, ElementName)
+    ),
+    string_concat(MulPrefix, ElementName, Name),
+    (
+        group(Element, 18) -> mul_prefix_except_mono(Amount, MulPrefix);
+        multiplicative_prefix(Amount, MulPrefix)
+    ),
+    Atom = Element-Amount,
+    !.
+
+%!  homonuclear_atom_formula(+Atom:list(Element-Amount), Formula:string) is det.
+%
 homonuclear_atom_formula(Atom, Formula) :-
     Atom = Element-Amount,
     element_symbol(Element, Symbol),

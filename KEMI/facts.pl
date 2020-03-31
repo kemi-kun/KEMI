@@ -147,8 +147,8 @@ element_fact(oganesson,     "oganesson",     "Og", 118, 294).
 % From KEMI base: AlternativeElementNameFact
 % alternative_element_name(Element: atom, Name: string)
 alternative_element_name(Element, Name) :-
-    latin_element_name_fact(Element, Name) -> true;
-    american_element_name_fact(Element, Name) -> true;
+    latin_element_name_fact(Element, Name);
+    american_element_name_fact(Element, Name);
     alternative_element_name_fact(Element, Name).
 
 latin_element_name_fact(antimony,  "stibium").
