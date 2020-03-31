@@ -112,15 +112,9 @@ cation_cn(Formula, Name) :-
 %   IR-5.3.2.2 p.82-83
 %
 monoatomic_cation_cn(Formula, Name) :-
-    nonvar(Name) -> monoatomic_cation_cn_(Formula, Name);
-    monoatomic(Formula),
-    cation(Formula),
-    get_all_elements(Formula, Elements),
-    Elements = [Element|_],
-    element_name(Element, ElementName),
-    get_net_charge(Formula, NetCharge),
-    get_ion_part_(NetCharge, "+", ChargeStr),
-    string_concat(ElementName, ChargeStr, Name).
+    nonvar(Name) ->
+        monoatomic_cation_cn_(Formula, Name), !;
+    monoatomic_cation_cn_(Formula, Name).
 % monoatomic_cation_cn("[Na]+", "sodium(1+)")
 monoatomic_cation_cn_(Formula, Name) :-
     monoatomic(Formula), 
@@ -161,17 +155,9 @@ anion_cn(Formula, Name) :-
 %   IR-5.3.3.2 p.84-85
 %
 monoatomic_anion_cn(Formula, Name) :-
-    nonvar(Name) -> monoatomic_anion_cn_(Formula, Name);
-    monoatomic(Formula),
-    anion(Formula),
-    get_all_elements(Formula, Elements),
-    Elements = [Element|_],
-    element_name(Element, ElementName),
-    append_suffix(ElementName, "ide", IdeName),
-    get_net_charge(Formula, NetCharge_),
-    abs(NetCharge_, NetCharge),
-    get_ion_part_(NetCharge, "-", ChargeStr),
-    string_concat(IdeName, ChargeStr, Name).
+    nonvar(Name) ->
+        monoatomic_anion_cn_(Formula, Name), !;
+    monoatomic_anion_cn_(Formula, Name).
 % monoatomic_anion_cn("Cl-", "chloride(1-)").
 monoatomic_anion_cn_(Formula, Name) :-
     monoatomic(Formula),
@@ -183,8 +169,7 @@ monoatomic_anion_cn_(Formula, Name) :-
     get_net_charge(Formula, NetCharge_),
     abs(NetCharge_, NetCharge),
     get_ion_part_(NetCharge, "-", ChargeStr),
-    string_concat(IdeName, ChargeStr, Name),
-    !.
+    string_concat(IdeName, ChargeStr, Name).
 
 %!  homopolyatomic_anion_cn(+Formula: string, -Name: string) is multi.
 %!  homopolyatomic_anion_cn(+Formula: string, +Name: string) is nondet.
