@@ -34,6 +34,11 @@ homopolyatomic(Formula) :-
     nth0(0, Atoms, _Element-Amount),
     Amount > 1.
 
+heteropolyatomic(Formula) :-
+    count_atoms(Formula, Atoms),
+    length(Atoms, X),
+    X > 1.
+
 
 get_charge_str(Formula, ChargeStr) :-
     get_net_charge(Formula, NetCharge),
@@ -52,7 +57,10 @@ get_ion_part_(NetCharge, IonSign, ChargeStr) :-
 % # IR-3.4.3 p.61
 % # S8 ⇒ octasulfur
 
-%!  homonuclear_cn(+Formula:string, -Name:string) is det.
+%!  homonuclear_cn(+Formula:string, +Name:string) is semidet.
+%!  homonuclear_cn(+Formula:string, -Name:string) is semidet.
+%!  homonuclear_cn(-Formula:string, -Name:string) is semidet.
+%!  homonuclear_cn(-Formula:string, +Name:string) is semidet.
 %
 %   True when `Name` is the IUPAC name for `Formula`.
 %
@@ -81,6 +89,11 @@ homonuclear(Formula) :-
     get_all_elements(Formula, Elements),
     length(Elements,1).
 
+%!  homonuclear_name_atom(+Name:string, -Atom:list(Element-Amount)) is semidet.
+%
+%   True when `Atom` is the atoms in the formula denoted by `Name`.
+%   False when `Name` is not a compositional homonuclear compound name.
+%
 homonuclear_name_atom(Name, Atom) :-
     (
         alternative_element_name(Element, ElementName);
