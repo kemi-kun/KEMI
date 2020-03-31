@@ -13,8 +13,11 @@
 %
 %
 multiplicative_prefix(Number, Prefix) :-
-    multiplicative_prefix_fact(Number, Prefix) -> true;
-    multiplicative_prefix_(Number, Prefix).
+    between(1, 9999, Number),
+    (
+        multiplicative_prefix_fact(Number, Prefix) -> true;
+        multiplicative_prefix_(Number, Prefix)
+    ).
 
 multiplicative_prefix_(Number, Prefix) :-
     Number = 0 -> Prefix = "";
