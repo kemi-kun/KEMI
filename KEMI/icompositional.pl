@@ -89,6 +89,11 @@ homonuclear(Formula) :-
     get_all_elements(Formula, Elements),
     length(Elements,1).
 
+%!  homonuclear_name_atom(+Name:string, -Atom:list(Element-Amount)) is semidet.
+%
+%   True when `Atom` is the atoms in the formula denoted by `Name`.
+%   False when `Name` is not a compositional homonuclear compound name.
+%
 homonuclear_name_atom(Name, Atom) :-
     (
         alternative_element_name(Element, ElementName);
