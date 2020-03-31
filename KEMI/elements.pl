@@ -34,10 +34,10 @@ atomic_number(Element, Z) :-
 %!  new_element(+Element:atom, +Name:string, +Symbol:string, +NumProtons:int) is semidet.
 %
 new_element(Element, ElementName, Symbol, NumProtons) :-
-    nonvar(ElementName) ->
+    (nonvar(Element); nonvar(ElementName)) ->
+        atom_string(Element, ElementName),
         new_element_atomic_number(ElementName, NumProtons),
-        new_element_symbol_atomic_number(Symbol, NumProtons),
-        atom_string(Element, ElementName);
+        new_element_symbol_atomic_number(Symbol, NumProtons);
     new_element_symbol_atomic_number(Symbol, NumProtons),
     new_element_atomic_number(ElementName, NumProtons),
     atom_string(Element, ElementName).
