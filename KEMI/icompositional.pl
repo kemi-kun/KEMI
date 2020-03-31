@@ -11,6 +11,51 @@
 :- use_module(ustr,[join/3]).
 :- use_module(ialternative,[alternative/2]).
 
+
+ionic(Formula) :- cation(Formula) -> true; anion(Formula).
+
+cation(Formula) :-
+    get_net_charge(Formula, NetCharge),
+    NetCharge > 0.
+
+anion(Formula) :-
+    get_net_charge(Formula, NetCharge),
+    NetCharge < 0.
+
+monoatomic(Formula) :-
+    count_atoms(Formula, Atoms),
+    length(Atoms, 1),
+    nth0(0, Atoms, _Element-Amount),
+    Amount is 1.
+
+homopolyatomic(Formula) :-
+    count_atoms(Formula, Atoms),
+    length(Atoms, 1),
+    nth0(0, Atoms, _Element-Amount),
+    Amount > 1.
+
+
+get_charge_str(Formula, ChargeStr) :-
+    get_net_charge(Formula, NetCharge),
+    NetCharge > 0 -> get_ion_part_(NetCharge, "+", ChargeStr),
+    NetCharge < 0 -> get_ion_part_(NetCharge, "-", ChargeStr);
+    fail.
+
+get_ion_part_(NetCharge, IonSign, ChargeStr) :-
+    abs(NetCharge, NC),
+    string_concat("(", NC, ChargeStr1),
+    string_concat(ChargeStr1, IonSign, ChargeStr2),
+    string_concat(ChargeStr2, ")", ChargeStr).
+
+
+% # IR-5.2 p.81
+% # IR-3.4.3 p.61
+% # S8 ⇒ octasulfur
+
+%!  homonuclear_cn(+Formula:string, -Name:string) is det.
+%
+%   True when `Name` is the IUPAC name for `Formula`.
+%
 homonuclear_cn(Formula, Name) :-
     homonuclear_cn_(element_name, Formula, Name);
     homonuclear_cn_(alternative_element_name_fact, Formula, Name).
@@ -34,7 +79,6 @@ homonuclear(Formula) :-
     get_all_elements(Formula, Elements),
     length(Elements,1).
 
-
 homonuclear_atom_formula(Atom, Formula) :-
     Atom = Element-Amount,
     element_symbol(Element, Symbol),
@@ -43,6 +87,7 @@ homonuclear_atom_formula(Atom, Formula) :-
             number_string(Amount, AmountStr),
             string_concat(Symbol, AmountStr, Formula)
     ).
+
 
 %!  binary_compound_cn(+Formula: string, -Name: string) is det.
 %!  binary_compound_cn(+Formula: string, +Name: string) is det.
@@ -74,47 +119,6 @@ binary_compound(Formula) :-
     get_all_elements(Formula, Elements),
     length(Elements, 2),
     !.
- 
-get_various_name_(Formula, EPos, NumNegative, NegativePart, Name) :-
-    fail.
-
-
-ionic(Formula) :- cation(Formula) -> true; anion(Formula).
-
-cation(Formula) :-
-    get_net_charge(Formula, NetCharge),
-    NetCharge > 0.
-
-anion(Formula) :-
-    get_net_charge(Formula, NetCharge),
-    NetCharge < 0.
-
-
-monoatomic(Formula) :-
-    get_all_elements(Formula, Elements),
-    length(Elements, 1),
-    Elements = [Element0|_],
-    get_num_atoms(Formula, Element0, NumAtom),
-    NumAtom is 1.
-
-homopolyatomic(Formula) :-
-    get_all_elements(Formula, Elements),
-    length(Elements, 1),
-    Elements = [Element0|_],
-    get_num_atoms(Formula, Element0, NumAtom),
-    NumAtom > 1.
-
-get_charge_str(Formula, ChargeStr) :-
-    get_net_charge(Formula, NetCharge),
-    NetCharge > 0 -> get_ion_part_(NetCharge, "+", ChargeStr),
-    NetCharge < 0 -> get_ion_part_(NetCharge, "-", ChargeStr);
-    fail.
-
-get_ion_part_(NetCharge, IonSign, ChargeStr) :-
-    abs(NetCharge, NC),
-    string_concat("(", NC, ChargeStr1),
-    string_concat(ChargeStr1, IonSign, ChargeStr2),
-    string_concat(ChargeStr2, ")", ChargeStr).
 
 
 ion_cn(Formula, Name) :-
@@ -147,6 +151,7 @@ monoatomic_cation_cn_(Formula, Name) :-
     get_ion_part_(NetCharge, "+", ChargeStr),
     string_concat(ElementName, ChargeStr, Name),
     !.
+
 
 %!  homopolyatomic_cation_cn(+Formula: string, -Name: string) is multi.
 %!  homopolyatomic_cation_cn(+Formula: string, +Name: string) is nondet.
@@ -192,6 +197,7 @@ monoatomic_anion_cn_(Formula, Name) :-
     abs(NetCharge_, NetCharge),
     get_ion_part_(NetCharge, "-", ChargeStr),
     string_concat(IdeName, ChargeStr, Name).
+
 
 %!  homopolyatomic_anion_cn(+Formula: string, -Name: string) is multi.
 %!  homopolyatomic_anion_cn(+Formula: string, +Name: string) is nondet.
@@ -338,11 +344,10 @@ anion_name(Formula, Name) :-
         string_concat(MulPrefix, IdeName, Name)
     ).
 
+
 boron_hydride(Formula) :-
     get_all_elements(Formula,Elements),
-    member(boron, Elements),
-    member(hydrogen, Elements),
-    !.
+    Elements = [boron, hydrogen].
  
 %!  boron_hydride_stoichiometric(+Formula: string, -Name: string) is det.
 %!  boron_hydride_stoichiometric(+Formula: string, +Name: string) is det.
