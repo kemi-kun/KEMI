@@ -62,6 +62,9 @@ idify(ElementName, Result) :-
 idify_(ElementName, Result) :-
     element_name(Element, ElementName),
     (
+        Element = zinc ->
+            string_concat(ElementName, "ide", Result);
+
         group(Element, 18),
         string_concat(_, "on", ElementName) ->
             string_concat(ElementName, "ide", Result);
