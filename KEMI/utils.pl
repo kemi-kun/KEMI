@@ -7,6 +7,7 @@
     add_dict/4,join_dict/3,
     plus_/3,
     multiply/3,
+    divide/3,
     split_digits/2,
     split_decimal/3
     ]).
@@ -158,6 +159,17 @@ multiply(A, B, C) :-
 %     B = 1 -> C = A;
 %     B < 0 -> Y is -B, multiply(A, Y, C).
 
+divide(A, B, C) :-
+    nonvar(A), nonvar(B),
+    C is A / B,
+    !.
+divide(A, B, C) :-
+    nonvar(A), nonvar(C),
+    B is A / C,
+    !.
+divide(A, B, C) :-
+    nonvar(B), nonvar(C),
+    A is B * C.
 
 plus_(Num1, Num2, Result) :-
     Result is Num1 + Num2.
