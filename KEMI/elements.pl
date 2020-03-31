@@ -52,13 +52,15 @@ new_element(Element, Name, Symbol, NumProtons) :-
 new_element_atomic_number(ElementName, Z) :-
     nonvar(ElementName), var(Z) ->
         string_length(ElementName, L),
-        Max is 3 + (4 * N),
-        Min is 3 * N,
-        between(Min, Max, L),
-        string_length(Z, N),
+        Min is round((L - 3) / 4),
+        Max is round(L / 3),
         % MaxL 7, 11, 15, 
         % Length of Z, 1, 2, 3
         % MinL 4, 6, 9,
+        between(Min, Max, N), % N = Num Digits of Z
+        Max2 is 10 ^ N,
+        Min2 is 10 ^ (N-1),
+        between(Min2, Max2, Z),
         new_element_atomic_number_(ElementName, Z), !;
     new_element_atomic_number_(ElementName, Z).
 new_element_atomic_number_(ElementName, Z) :-
