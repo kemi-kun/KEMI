@@ -51,9 +51,15 @@ get_root_name_re_(ElementName, SuffixList, Result) :-
 %!  idify(-ElementName:string, -Result:string) is multi.
 %!  idify(-ElementName:string, +Result:string) is semidet.
 %
-%   Add suffix -ide to the name of `Element`
+%   Add suffix -ide to the name of `Element`.
 %
 idify(ElementName, Result) :-
+    var(ElementName), nonvar(Result),
+    idify_(ElementName, Result),
+    !.
+idify(ElementName, Result) :-
+    idify_(ElementName, Result).
+idify_(ElementName, Result) :-
     element_name(Element, ElementName),
     (
         group(Element, 18),
@@ -77,7 +83,7 @@ latin_name_exception(mercury).
 latin_name_exception(potassium).
 latin_name_exception(sodium).
 latin_name_exception(tungsten).
-latin_name_exception(caeside).
+latin_name_exception(caesium).
 
 
 %!  anify(+ElementName:string, +Result:string) is semidet.
@@ -88,15 +94,24 @@ latin_name_exception(caeside).
 %   Add suffix -ane to `ElementName
 %
 anify(ElementName, Result) :-
+    var(ElementName), nonvar(Result),
+    anify_(ElementName, Result),
+    !.
+anify(ElementName, Result) :-
+    anify_(ElementName, Result).
+anify_(ElementName, Result) :-
     element_name(Element, ElementName),
     (
-        alternative_element_name(Element, Name) -> true;
+        alternative_element_name(Element, Name), not(latin_name_exception(Element)) -> true;
+        anify_element_root_exception(Element, Name) -> true;
         element_name(Element, Name)
     ),
-    (
-        member(Suffix, ["inium", "onium", "urium", "aium", "eium", "enic",
-                        "icon", "inum", "ogen", "orus", "gen", "ine", "ium",
-                        "on", "um", "ur"]),
+    (   % only 13-17 suffixes are considred
+        member(Suffix, ["anium", "inium", "onium", "urium",
+                        "aium", "eium", "enic", "icon", "inum", "orus", "ogen", % "ogen" is not in 13-17
+                        "gen", "ine", "ium",
+                        "on", "um", "ur",
+                        ""]),
         string_concat(Root_, Suffix, Name) ->
             (
                 string_concat(Temp, "y", Root_) ->
@@ -113,6 +128,8 @@ anify(ElementName, Result) :-
     ],
     not(member(Result, ExcludedNames)).
 
+anify_element_root_exception(nitrogen, "az"). % from "azote"
+anify_element_root_exception(indium, "indig"). % from "indigo"
 
 %! ylify(+ElementName: string, -Result: string) is det.
 %! ylify(+ElementName: string, +Result: string) is semidet.
