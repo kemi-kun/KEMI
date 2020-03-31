@@ -11,7 +11,6 @@ Implements:
 :- use_module(utils,[split_digits/2]).
 :- use_module(facts,[
     element_fact/5,
-    alternative_element_name_fact/2,
     numerical_root_fact/2
     ]).
 
@@ -21,8 +20,7 @@ Implements:
 %!  element_name(-Element:atom, +ElementName:string) is multi.      # TODO: Remove last false choice point
 %
 element_name(Element, ElementName) :-
-    element_fact(Element, ElementName, _, _, _);
-    alternative_element_name_fact(Element, ElementName);
+    element_fact(Element, ElementName, _, _, _) -> true;
     new_element_name(Element, ElementName).
 
 element_symbol(Element, Symbol) :-

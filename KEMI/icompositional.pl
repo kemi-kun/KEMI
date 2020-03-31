@@ -1,7 +1,7 @@
 :- module(icompositional,[boron_hydride_stoichiometric/2,general_stoichiometric/2,addition_compound_cn/2,ion_cn/2,binary_compound_cn/2,homonuclear_cn/2]).
 
 :- use_module(elements,[element_name/2,element_symbol/2,group/2]).
-:- use_module(facts,[addition_compound_exception/2]).
+:- use_module(facts,[addition_compound_exception/2,alternative_element_name_fact/2]).
 :- use_module(nomenclature,[iupac_name/2]).
 :- use_module(predicate,[append_suffix/3]).
 :- use_module(inorganic,[additive/2,substitutive/2,compositional/2]).
@@ -11,17 +11,19 @@
 :- use_module(ustr,[join/3]).
 :- use_module(ialternative,[alternative/2]).
 
-
 homonuclear_cn(Formula, Name) :-
+    homonuclear_cn_(element_name, Formula, Name);
+    homonuclear_cn_(alternative_element_name_fact, Formula, Name).
+
+homonuclear_cn_(ElementNameFunction, Formula, Name) :-
     % check
     homonuclear(Formula),
-    not(cation(Formula)),
-    not(anion(Formula)),
+    not(ionic(Formula)),
 
     get_all_elements(Formula, Elements),
     memberchk(Element, Elements),
     get_num_atoms(Formula, Element, Amount),
-    element_name(Element, ElementName),
+    call(ElementNameFunction, Element, ElementName),
     (
         group(Element, 18) -> mul_prefix_except_mono(Amount, MulPrefix);
         multiplicative_prefix(Amount, MulPrefix)
@@ -78,6 +80,8 @@ get_various_name_(Formula, EPos, NumNegative, NegativePart, Name) :-
     fail.
 
 
+ionic(Formula) :- cation(Formula) -> true; anion(Formula).
+
 cation(Formula) :-
     get_net_charge(Formula, NetCharge),
     NetCharge > 0.
@@ -85,6 +89,7 @@ cation(Formula) :-
 anion(Formula) :-
     get_net_charge(Formula, NetCharge),
     NetCharge < 0.
+
 
 monoatomic(Formula) :-
     get_all_elements(Formula, Elements),
@@ -100,8 +105,15 @@ homopolyatomic(Formula) :-
     get_num_atoms(Formula, Element0, NumAtom),
     NumAtom > 1.
 
+get_charge_str(Formula, ChargeStr) :-
+    get_net_charge(Formula, NetCharge),
+    NetCharge > 0 -> get_ion_part_(NetCharge, "+", ChargeStr),
+    NetCharge < 0 -> get_ion_part_(NetCharge, "-", ChargeStr);
+    fail.
+
 get_ion_part_(NetCharge, IonSign, ChargeStr) :-
-    string_concat("(", NetCharge, ChargeStr1),
+    abs(NetCharge, NC),
+    string_concat("(", NC, ChargeStr1),
     string_concat(ChargeStr1, IonSign, ChargeStr2),
     string_concat(ChargeStr2, ")", ChargeStr).
 
@@ -249,13 +261,24 @@ re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 %
 %
 general_stoichiometric(Formula, Name) :-
-    split_generalized_salt_formula(Formula, EPCs, ENCs),
-    maplist(homonuclear_atom_formula, EPCs, EPCFormulas),
-    maplist(homonuclear_atom_formula, ENCs, ENCFormulas),
-    maplist(cation_name, EPCFormulas, EPCNames),
-    maplist(anion_name, ENCFormulas, ENCNames),
-    append(EPCNames, ENCNames, PCNames),
-    join(" ", PCNames, Name).
+    ionic(Formula) ->
+        general_stoichiometric_ion(Formula, Name);
+    general_stoichiometric_(Formula, Name).
+
+general_stoichiometric_(Formula, Name) :-
+        split_generalized_salt_formula(Formula, EPCs, ENCs),
+        maplist(homonuclear_atom_formula, EPCs, EPCFormulas),
+        maplist(homonuclear_atom_formula, ENCs, ENCFormulas),
+        maplist(cation_name, EPCFormulas, EPCNames),
+        maplist(anion_name, ENCFormulas, ENCNames),
+        append(EPCNames, ENCNames, PCNames),
+        join(" ", PCNames, Name).
+
+general_stoichiometric_ion(Formula, Name) :-
+    get_neutral_specie(Formula, NeutralSpecie),
+    general_stoichiometric_(NeutralSpecie, NeutralName),
+    get_charge_str(Formula, ChargeStr),
+    join("", ["(", NeutralName, ")", ChargeStr], Name).
 
 %!  split_generalized_salt_formula(+Formula:string, -EPCs:list(Element-Amount), -ENCs:list(Element-Amount)) is mutli.
 %
@@ -276,20 +299,17 @@ split_generalized_salt_formula(Formula, EPCs, ENCs) :-
 %!  cation_name(+Formula, -Name) is nondet.
 %!  cation_name(+Formula, +Name) is nondet.
 cation_name(Formula, Name) :-
-    cation_cn(Formula, Name);
     substitutive(Formula, Name);
     additive(Formula, Name);
     alternative(Formula, Name).
 cation_name(Formula, Name) :-
     (
-        not(cation_cn(Formula, Name)),
         monoatomic(Formula),
         get_all_elements(Formula, Elements),
         Elements = [Element|_],
         element_name(Element, Name)
     );
     (
-        not(cation_cn(Formula, Name)),
         homopolyatomic(Formula),
         compositional(Formula, Name)
     ).
@@ -297,13 +317,11 @@ cation_name(Formula, Name) :-
 %!  anion_name(+Formula, -Name) is nondet.
 %!  anion_name(+Formula, +Name) is nondet.
 anion_name(Formula, Name) :-
-    anion_cn(Formula, Name);
     substitutive(Formula, Name);
     additive(Formula, Name);
     alternative(Formula, Name).
 anion_name(Formula, Name) :-
     (
-        not(anion_cn(Formula, Name)),
         monoatomic(Formula),
         get_all_elements(Formula, Elements),
         Elements = [Element|_],
@@ -311,7 +329,6 @@ anion_name(Formula, Name) :-
         append_suffix(ElementName, "ide", Name)
     );
     (
-        not(anion_cn(Formula, Name)),
         homopolyatomic(Formula),
         get_all_elements(Formula, Elements),
         Elements = [Element|_],
