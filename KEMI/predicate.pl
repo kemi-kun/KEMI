@@ -88,10 +88,10 @@ idify2(ElementName, Result) :-
         string_concat(_, "on", ElementName) ->
             string_concat(ElementName, "ide", Result);
 
+        not(latin_name_exception(Element)),
         latin_element_name_fact(Element, AltName),
         member(X, ["ium", "um"]),
-        string_concat(Root, X, AltName),
-        not(latin_name_exception(Element)) ->
+        string_concat(Root, X, AltName) ->
             string_concat(Root, "ide", Result), !;
 
         member(Y, ["ogen", "orus", "ygen", "ese", "ine", "ium",
