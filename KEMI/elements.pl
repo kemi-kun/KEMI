@@ -31,24 +31,75 @@ atomic_number(Element, Z) :-
     element_fact(Element, _, _, Z, _) -> true;
     new_element_atomic_number(Element, Z).
 
+%!  new_element(+Element:atom, +Name:string, +Symbol:string, +NumProtons:int) is semidet.
+%
+new_element(Element, Name, Symbol, NumProtons) :-
+    nonvar(NumProtons) ->
+        new_element_atomic_number(Name, NumProtons),
+        atom_string(Element, Name)
+        ;
+    fail.
+    
 
-%!  new_element_atomic_number(+Element:atom, +Z:int) is semidet.
-%!  new_element_atomic_number(+Element:atom, -Z:int) is failure.    # TODO: fix
-%!  new_element_atomic_number(-Element:atom, -Z:int) is failure.
-%!  new_element_atomic_number(-Element:atom, +Z:int) is det.
+
+%!  new_element_atomic_number(+ElementName:string, +Z:int) is semidet.
+%!  new_element_atomic_number(+ElementName:string, -Z:int) is failure.    # TODO: fix
+%!  new_element_atomic_number(-ElementName:string, -Z:int) is failure.
+%!  new_element_atomic_number(-ElementName:string, +Z:int) is det.
 %
 %   True when `Z` is the atomic number of "new" element `Element`.
 %
-new_element_atomic_number(Element, Z) :-
+new_element_atomic_number(ElementName, Z) :-
+    nonvar(ElementName), var(Z) ->
+        string_length(ElementName, L),
+        Max is 3 + (4 * N),
+        Min is 3 * N,
+        between(Min, Max, L),
+        string_length(Z, N),
+        % MaxL 7, 11, 15, 
+        % Length of Z, 1, 2, 3
+        % MinL 4, 6, 9,
+        new_element_atomic_number_(ElementName, Z), !;
+    new_element_atomic_number_(ElementName, Z).
+new_element_atomic_number_(ElementName, Z) :-
+    between(1, infinite, Z),
     split_digits(Z, L0),
     maplist(numerical_root_fact, L0, L1),
     join("", L1, T0),
     (
         sub_string(T0, _, 1, 0, "i") ->
-            string_concat(T0, um, Element_);
-        string_concat(T0, ium, Element_)
-    ),
-    atom_string(Element, Element_).
+            string_concat(T0, um, ElementName);
+        string_concat(T0, ium, ElementName)
+    ).
+
+%!  new_element_symbol_atomic_number(+Symbol:atom, +Z:int) is semidet.
+%!  new_element_symbol_atomic_number(+Symbol:atom, -Z:int) is semidet.
+%!  new_element_symbol_atomic_number(-Symbol:atom, -Z:int) is multi.    % infinite
+%!  new_element_symbol_atomic_number(-Symbol:atom, +Z:int) is det.
+%
+%   True when `Z` is the atomic number of "new" element `Element`.
+%
+new_element_symbol_atomic_number(Symbol, Z) :-
+    nonvar(Symbol), var(Z) ->
+        string_length(Symbol, L),
+        Max is 10 ^ L,
+        Min is 10 ^ (L - 1),
+        between(Min, Max, Z),
+        new_element_symbol_atomic_number_(Symbol, Z), !;
+    new_element_symbol_atomic_number_(Symbol, Z).
+new_element_symbol_atomic_number_(Symbol, Z) :-
+    between(1, infinite, Z),
+    split_digits(Z, L0),
+    maplist(numerical_root_fact, L0, L1),
+    maplist(get_first_char_, L1, L2),
+    join("", L2, Symbol_),
+    capitalize(Symbol_, Symbol).
+
+%!  get_first_char_(+String:string, -Char:string) is det.
+%
+get_first_char_(String, Char) :-
+    sub_string(String, 0, 1, _, Char).
+
 % new_element_atomic_number(Symbol, Z) :-
 %     nonvar(Z),
 %     split_digits(Z, L0),
