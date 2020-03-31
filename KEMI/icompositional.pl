@@ -62,7 +62,8 @@ get_ion_part_(NetCharge, IonSign, ChargeStr) :-
 %!  homonuclear_cn(-Formula:string, -Name:string) is semidet.
 %!  homonuclear_cn(-Formula:string, +Name:string) is semidet.
 %
-%   True when `Name` is the IUPAC name for `Formula`.
+%   True when `Name` is a compostional homonuclear name for the homonuclear 
+%   compound represented by `Formula`. False otherwise.
 %
 homonuclear_cn(Formula, Name) :-
     nonvar(Name) ->
@@ -91,7 +92,7 @@ homonuclear(Formula) :-
 
 %!  homonuclear_name_atom(+Name:string, -Atom:list(Element-Amount)) is semidet.
 %
-%   True when `Atom` is the atoms in the formula denoted by `Name`.
+%   True when `Atom` is the atoms in the formula representted by `Name`.
 %   False when `Name` is not a compositional homonuclear compound name.
 %
 homonuclear_name_atom(Name, Atom) :-
