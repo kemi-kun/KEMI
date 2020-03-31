@@ -1,7 +1,7 @@
 :- module(predicate,[append_suffix/3]).
 
 :- use_module(elements, [group/2, element_name/2, group_/2]).
-:- use_module(facts, [latin_element_name_fact/2]).
+:- use_module(facts, [alternative_element_name/2,latin_element_name_fact/2]).
 
 
 %! append_suffix(+ElementName: string, +Suffix: string, -Result: string) is det.
@@ -46,12 +46,12 @@ get_root_name_re_(ElementName, SuffixList, Result) :-
     ).
 
 
-%! idify(+ElementName:string, +Result:string) is semidet.
-%! idify(+ElementName:string, -Result:string) is semidet.
-%! idify(-ElementName:string, -Result:string) is multi.
-%! idify(-ElementName:string, +Result:string) is semidet.
+%!  idify(+ElementName:string, +Result:string) is semidet.
+%!  idify(+ElementName:string, -Result:string) is semidet.
+%!  idify(-ElementName:string, -Result:string) is multi.
+%!  idify(-ElementName:string, +Result:string) is semidet.
 %
-%  Add suffix -ide to the name of `Element`
+%   Add suffix -ide to the name of `Element`
 %
 idify(ElementName, Result) :-
     element_name(Element, ElementName),
@@ -80,36 +80,38 @@ latin_name_exception(tungsten).
 latin_name_exception(caeside).
 
 
-%! anify(+Element: atom, -Result: string) is det.
-%! anify(+Element: atom, +Result: string) is semidet.
+%!  anify(+ElementName:string, +Result:string) is semidet.
+%!  anify(+ElementName:string, -Result:string) is semidet.
+%!  anify(-ElementName:string, -Result:string) is multi.
+%!  anify(-ElementName:string, +Result:string) is semidet.
 %
-%  Add suffix -ane to `ElementName`
-%  TODO: (-Element, +Result)
+%   Add suffix -ane to `ElementName
+%
 anify(ElementName, Result) :-
     element_name(Element, ElementName),
     (
-        alternative_element_name_fact(Element, Name_) -> Name = Name_;
-        not(alternative_element_name_fact(Element, Name_)),
-        element_name(Element, Name_), Name = Name_
+        alternative_element_name(Element, Name) -> true;
+        element_name(Element, Name)
     ),
-    SuffixList = [
-        "inium", "onium", "urium", "aium", "eium", "enic",
-        "icon", "inum", "ogen", "orus", "gen", "ine", "ium",
-        "on", "um", "ur"
-    ],
-    get_root_name_(Name, SuffixList, Root_),
     (
-        string_concat(TempStr, "e", Root_) ->
-            string_concat(TempStr, "i", Root);
-        Root = Root_
+        member(Suffix, ["inium", "onium", "urium", "aium", "eium", "enic",
+                        "icon", "inum", "ogen", "orus", "gen", "ine", "ium",
+                        "on", "um", "ur"]),
+        string_concat(Root_, Suffix, Name) ->
+            (
+                string_concat(Temp, "y", Root_) ->
+                    string_concat(Temp, "i", Root);
+                Root = Root_
+            ),
+            string_concat(Root, "ane", Result)
     ),
-    string_concat(Root, "ane", Result_),
-    ExcludeNames = [
+
+    % check
+    ExcludedNames = [
         "carbane", "aluminane", "bismane", "oxane", "thiane", 
         "selenane", "tellurane", "polonane"
     ],
-    not(member(Result_, ExcludeNames)),
-    Result = Result_.
+    not(member(Result, ExcludedNames)).
 
 
 %! ylify(+ElementName: string, -Result: string) is det.
