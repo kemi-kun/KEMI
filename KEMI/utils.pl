@@ -4,7 +4,7 @@
     join_pairs_by_keys/4,
     get_dict_optional/3,
     get_dict_or_default/4,
-    add_dict/4,join_dict/3,
+    % add_dict/4,join_dict/3,
     plus_/3,
     multiply/3,
     divide/3,

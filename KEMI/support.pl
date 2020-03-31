@@ -6,26 +6,34 @@
 :- use_module(ustr,[remove_chars/3]).
 
 
-%!	multiplicative_prefix(+Number, +Prefix) det.
-%!	multiplicative_prefix(+Number, -Prefix) det.
-%!	multiplicative_prefix(-Number, -Prefix) det.    # TODO: Fix (returns first fact)
-%!	multiplicative_prefix(-Number, +Prefix) semidet. (ERROR when Prefix is wrong)
+%!	multiplicative_prefix(+Number:int, +Prefix:string) semidet.
+%!	multiplicative_prefix(+Number:int, -Prefix:string) semidet.
+%!	multiplicative_prefix(-Number:int, -Prefix:string) multi.
+%!	multiplicative_prefix(-Number:int, +Prefix:string) semidet.
 %
+%   True when `Prefix` is the multiplicative prefix of `Number`.
+%
+%   @arg Number Integer between 1 and 9999.
 %
 multiplicative_prefix(Number, Prefix) :-
+    var(Number), nonvar(Prefix) ->
+        multiplicative_prefix_(Number, Prefix), !;
+    multiplicative_prefix_(Number, Prefix).
+multiplicative_prefix_(Number, Prefix) :-
     between(1, 9999, Number),
     (
-        multiplicative_prefix_fact(Number, Prefix) -> true;
-        multiplicative_prefix_(Number, Prefix)
-    ).
+        multiplicative_prefix_fact(Number, Prefix_) -> true;
+        gen_mul_prefix(Number, Prefix_)
+    ),
+    Prefix = Prefix_.
 
-multiplicative_prefix_(Number, Prefix) :-
+gen_mul_prefix(Number, Prefix) :-
     Number = 0 -> Prefix = "";
     multiplicative_affix_fact(Number, Prefix) -> true;
     nonvar(Number),
     split_decimal(Number, First, Rest),
     get_affix(First, CurrentPart),
-    multiplicative_prefix_(Rest, RecursePart),
+    gen_mul_prefix(Rest, RecursePart),
     string_concat(RecursePart, CurrentPart, Prefix).
 
 %!  get_affix(+Number, +Affix) is semidet.
