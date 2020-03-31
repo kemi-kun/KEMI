@@ -53,8 +53,7 @@ homonuclear_atom_formula(Atom, Formula) :-
 binary_compound_cn(Formula, Name) :-
     (
         binary_compound(Formula),
-        not(cation(Formula)),
-        not(anion(Formula))
+        not(ionic(Formula))
     ),
     get_element(Formula, 0, EPosElement),
     get_element(Formula, 1, ENegElement),
@@ -64,7 +63,7 @@ binary_compound_cn(Formula, Name) :-
     get_num_atoms(Formula,EPosElement, NumPositive),
     mul_prefix_except_mono(NumPositive, EPosMulPrefix),
     get_num_atoms(Formula, ENegElement,  NumNegative),
-    mul_prefix_except_mono(NumNegative, ENegMulPrefixEx),
+    multiplicative_prefix(NumNegative, ENegMulPrefixEx),
     string_concat(EPosMulPrefix, EPosElementName, EPos),
     string_concat(EPos, " ", EPos_),
     string_concat(ENegMulPrefixEx, NegativePart, ENeg),
