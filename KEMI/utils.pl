@@ -1,4 +1,15 @@
-:- module(utils,[value_is_empty_string/1,dict_remove_on_cond/3,join_pairs_by_keys/4,get_dict_optional/3,get_dict_or_default/4,add_dict/4,join_dict/3,multiply/3,split_digits/2,split_decimal/3]).
+:- module(utils,[
+    value_is_empty_string/1,
+    dict_remove_on_cond/3,
+    join_pairs_by_keys/4,
+    get_dict_optional/3,
+    get_dict_or_default/4,
+    add_dict/4,join_dict/3,
+    plus_/3,
+    multiply/3,
+    split_digits/2,
+    split_decimal/3
+    ]).
 
 
 %!  split_digits(+Number:int, +Digits:list) is semidet.
@@ -146,6 +157,10 @@ multiply(A, B, C) :-
 %     B > 1 -> plus(B, -1, Y), multiply(A, Y, X), plus(X, A, C);
 %     B = 1 -> C = A;
 %     B < 0 -> Y is -B, multiply(A, Y, C).
+
+
+plus_(Num1, Num2, Result) :-
+    Result is Num1 + Num2.
 
 %!	join_pairs_by_keys(:Function, +P1, +P2, -Joined:list(Key-Value)) is det.
 %
