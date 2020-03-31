@@ -13,10 +13,10 @@ inorganic_name(Formula, Name) :-
     alternative(Formula, Name).
 
 compositional(Formula, Name) :-
-    stoichiometric(Formula, Name);
     homonuclear_cn(Formula, Name);
     binary_compound_cn(Formula, Name);
     ion_cn(Formula, Name);
+    stoichiometric(Formula, Name);
     addition_compound_cn(Formula, Name).
 
 stoichiometric(Formula, Name) :-
