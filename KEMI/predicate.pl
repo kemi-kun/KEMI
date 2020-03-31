@@ -1,7 +1,7 @@
 :- module(predicate,[append_suffix/3]).
 
 :- use_module(elements, [group/2, element_name/2, group_/2]).
-:- use_module(facts, [alternative_element_name_fact/2]).
+:- use_module(facts, [latin_element_name_fact/2]).
 
 
 %! append_suffix(+ElementName: string, +Suffix: string, -Result: string) is det.
@@ -80,7 +80,33 @@ idify(ElementName, Result) :-
     ],
     get_root_name_(ElementName, SuffixList, RootName),
     string_concat(RootName, "ide", Result).
-    
+
+idify2(ElementName, Result) :-
+    element_name(Element, ElementName),
+    (
+        group(Element, 18),
+        string_concat(_, "on", ElementName) ->
+            string_concat(ElementName, "ide", Result);
+
+        latin_element_name_fact(Element, AltName),
+        member(X, ["ium", "um"]),
+        string_concat(Root, X, AltName),
+        not(latin_name_exception(Element)) ->
+            string_concat(Root, "ide", Result), !;
+
+        member(Y, ["ogen", "orus", "ygen", "ese", "ine", "ium",
+                   "en", "ic", "on", "um", "ur", "y"]),
+        string_concat(Root, Y, ElementName) ->
+            string_concat(Root, "ide", Result), !
+    ).
+
+latin_name_exception(antimony).
+latin_name_exception(mercury).
+latin_name_exception(potassium).
+latin_name_exception(sodium).
+latin_name_exception(tungsten).
+latin_name_exception(caeside).
+
 
 %! anify(+Element: atom, -Result: string) is det.
 %! anify(+Element: atom, +Result: string) is semidet.
