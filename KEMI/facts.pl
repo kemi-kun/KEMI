@@ -15,7 +15,8 @@ Contents:
     multiplicative_prefix_fact/2,
     multiplicative_affix_fact/2,
     numerical_root_fact/2,
-    alternative_element_name_fact/2,
+    alternative_element_name/2,
+    latin_element_name_fact/2,
     en/2,
     element_fact/5
     ]).
@@ -144,20 +145,25 @@ element_fact(oganesson,     "oganesson",     "Og", 118, 294).
 
 
 % From KEMI base: AlternativeElementNameFact
-% alternative_element_name_fact(Element: atom, Name: string)
-alternative_element_name_fact(antimony,  "stibium").
-alternative_element_name_fact(copper,    "cuprum").
-alternative_element_name_fact(gold,      "aurum").
-alternative_element_name_fact(iron,      "ferrum").
-alternative_element_name_fact(lead,      "plumbum").
-alternative_element_name_fact(mercury,   "hydrargyrum").
-alternative_element_name_fact(potassium, "kalium").
-alternative_element_name_fact(silver,    "argentum").
-alternative_element_name_fact(sodium,    "natrium").
-alternative_element_name_fact(tin,       "stannum").
+% alternative_element_name(Element: atom, Name: string)
+alternative_element_name(Element, Name) :-
+    latin_element_name_fact(Element, Name) -> true;
+    american_element_name_fact(Element, Name) -> true;
+    alternative_element_name_fact(Element, Name).
+
+latin_element_name_fact(antimony,  "stibium").
+latin_element_name_fact(copper,    "cuprum").
+latin_element_name_fact(gold,      "aurum").
+latin_element_name_fact(iron,      "ferrum").
+latin_element_name_fact(lead,      "plumbum").
+latin_element_name_fact(mercury,   "hydrargyrum").
+latin_element_name_fact(potassium, "kalium").   % neo
+latin_element_name_fact(silver,    "argentum").
+latin_element_name_fact(sodium,    "natrium").
+latin_element_name_fact(tin,       "stannum").
 alternative_element_name_fact(tungsten,  "wolfram").
-alternative_element_name_fact(aluminium, "aluminum").
-alternative_element_name_fact(caesium,   "cesium").
+american_element_name_fact(aluminium, "aluminum").
+american_element_name_fact(caesium,   "cesium").
 
 
 % From KEMI base: NumericalRootFact
