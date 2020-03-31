@@ -57,7 +57,10 @@ get_ion_part_(NetCharge, IonSign, ChargeStr) :-
 % # IR-3.4.3 p.61
 % # S8 ⇒ octasulfur
 
-%!  homonuclear_cn(+Formula:string, -Name:string) is det.
+%!  homonuclear_cn(+Formula:string, +Name:string) is semidet.
+%!  homonuclear_cn(+Formula:string, -Name:string) is semidet.
+%!  homonuclear_cn(-Formula:string, -Name:string) is semidet.
+%!  homonuclear_cn(-Formula:string, +Name:string) is semidet.
 %
 %   True when `Name` is the IUPAC name for `Formula`.
 %
