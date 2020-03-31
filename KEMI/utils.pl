@@ -5,6 +5,7 @@
     get_dict_optional/3,
     get_dict_or_default/4,
     % add_dict/4,join_dict/3,
+    num_digits/2,
     plus_/3,
     multiply/3,
     divide/3,
@@ -173,6 +174,15 @@ divide(A, B, C) :-
 
 plus_(Num1, Num2, Result) :-
     Result is Num1 + Num2.
+
+%!  num_digits(+N:int, -Z:int) is multi.
+%
+%   Generator. True when the deciaml representaion of `Z` has `N` digits.
+%
+num_digits(N, Z) :-
+    Max is (10 ^ N) - 1,
+    Min is 10 ^ (N - 1),
+    between(Min, Max, Z).
 
 %!	join_pairs_by_keys(:Function, +P1, +P2, -Joined:list(Key-Value)) is det.
 %
