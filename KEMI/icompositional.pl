@@ -1,6 +1,6 @@
 :- module(icompositional,[boron_hydride_stoichiometric/2,general_stoichiometric/2,addition_compound_cn/2,ion_cn/2,binary_compound_cn/2,homonuclear_cn/2]).
 
-:- use_module(elements,[element_name/2,group/2]).
+:- use_module(elements,[element_name/2,element_symbol/2,group/2]).
 :- use_module(facts,[addition_compound_exception/2]).
 :- use_module(nomenclature,[iupac_name/2]).
 :- use_module(predicate,[append_suffix/3]).
@@ -13,9 +13,11 @@
 
 
 homonuclear_cn(Formula, Name) :-
+    % check
+    homonuclear(Formula),
     not(cation(Formula)),
     not(anion(Formula)),
-    homonuclear(Formula),
+
     get_all_elements(Formula, Elements),
     memberchk(Element, Elements),
     get_num_atoms(Formula, Element, Amount),
@@ -30,6 +32,15 @@ homonuclear(Formula) :-
     get_all_elements(Formula, Elements),
     length(Elements,1).
 
+
+homonuclear_atom_formula(Atom, Formula) :-
+    Atom = Element-Amount,
+    element_symbol(Element, Symbol),
+    (
+        Amount = 1 -> Formula = Symbol;
+            number_string(Amount, AmountStr),
+            string_concat(Symbol, AmountStr, Formula)
+    ).
 
 %!  binary_compound_cn(+Formula: string, -Name: string) is det.
 %!  binary_compound_cn(+Formula: string, +Name: string) is det.
