@@ -112,29 +112,23 @@ homonuclear_name_atom(Name, Atom) :-
 %
 homonuclear_atom_formula(Atom, Formula) :-
     Atom = Element-Amount,
-    between(1, infinite, Amount),
-    element_symbol(Element, Symbol),
     (
         nonvar(Formula) ->
-            haf_string_(Symbol, Amount, Formula), !;
-        haf_string_(Symbol, Amount, Formula)
+            split_symbol_num(Formula, Symbol, Amount),
+            element_symbol(Element, Symbol);
+        between(1, infinite, Amount),
+        element_symbol(Element, Symbol),
+        split_symbol_num(Formula, Symbol, Amount)
     ).
-haf_string_(Symbol, Amount, Formula) :-
-    nonvar(Symbol), nonvar(Formula),
-    string_concat(Symbol, AmountStr, Formula),
-    (
-        AmountStr = "" -> Amount = 1;
-        number_string(Amount, AmountStr)
-    ).
-haf_string_(Symbol, Amount, Formula) :-
-    nonvar(Symbol), nonvar(Amount),
-    (
-        Amount = 1 -> Formula = Symbol;
-        number_string(Amount, AmountStr),
-        string_concat(Symbol, AmountStr, Formula)
-    ).
-
-
+split_symbol_num(String, Symbol, Num) :-
+    nonvar(String) ->
+        re_matchsub("(?<symbol>[A-z]*)(?<num>[0-9]*)?", String, Sub, []),
+        get_dict(symbol, Sub, Symbol),
+        get_dict(num, Sub, NumStr),
+        (number_string(Num, NumStr) -> true; Num is 1);
+    nonvar(Symbol), nonvar(Num) ->
+        string_concat(Symbol, Num, String);
+    fail.
 
 %!  binary_compound_cn(+Formula: string, -Name: string) is det.
 %!  binary_compound_cn(+Formula: string, +Name: string) is det.
