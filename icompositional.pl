@@ -95,31 +95,33 @@ homonuclear(Formula) :-
 %   True when `Atom` is the atoms in the formula representted by `Name`.
 %   False when `Name` is not a compositional homonuclear compound name.
 %
-homonuclear_name_atom(Name, Atom) :-
+homonuclear_name_atom(Name, Element-Amount) :-
+    nonvar(Name) ->
+        homonuclear_name_atom_(Name, Element-Amount), !;
+    nonvar(Element), nonvar(Amount) ->
+        homonuclear_name_atom_(Name, Element-Amount), !;
+    homonuclear_name_atom_(Name, Element-Amount).
+homonuclear_name_atom_(Name, Element-Amount) :-
+    between(1, 9999, Amount),
     (
-        alternative_element_name(Element, ElementName);
-        element_name(Element, ElementName)
+        element_name(Element, ElementName);
+        alternative_element_name(Element, ElementName)
     ),
-    string_concat(MulPrefix, ElementName, Name),
     (
-        group(Element, 18) -> mul_prefix_except_mono(Amount, MulPrefix);
+        Amount = 1, group(Element, 18) -> MulPrefix = "";
         multiplicative_prefix(Amount, MulPrefix)
     ),
-    Atom = Element-Amount,
-    !.
+    string_concat(MulPrefix, ElementName, Name).
 
-%!  homonuclear_atom_formula(+Atom:list(Element-Amount), Formula:string) is det.
+%!  homonuclear_atom_formula(?Element:atom, ?Amount:int, ?Formula:string) is det.
 %
-homonuclear_atom_formula(Atom, Formula) :-
-    Atom = Element-Amount,
-    (
-        nonvar(Formula) ->
-            split_symbol_num(Formula, Symbol, Amount),
-            element_symbol(Element, Symbol);
-        between(1, infinite, Amount),
-        element_symbol(Element, Symbol),
-        split_symbol_num(Formula, Symbol, Amount)
-    ).
+homonuclear_atom_formula(Element-Amount, Formula) :-
+    nonvar(Formula) ->
+        split_symbol_num(Formula, Symbol, Amount),
+        element_symbol(Element, Symbol);
+    between(1, infinite, Amount),
+    element_symbol(Element, Symbol),
+    split_symbol_num(Formula, Symbol, Amount).
 split_symbol_num(String, Symbol, Num) :-
     nonvar(String) ->
         re_matchsub("(?<symbol>[A-z]*)(?<num>[0-9]*)?", String, Sub, []),
