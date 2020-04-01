@@ -69,7 +69,8 @@ homonuclear_cn(Formula, Name) :-
     nonvar(Name) ->
         homonuclear_name_atom(Name, Atom),
         homonuclear_atom_formula(Atom, Formula);
-    homonuclear_cn_(element_name, Formula, Name).
+    homonuclear_atom_formula(Atom, Formula),
+    homonuclear_name_atom(Name, Atom).
 
 homonuclear_cn_(ElementNameFunction, Formula, Name) :-
     % check
@@ -90,9 +91,9 @@ homonuclear(Formula) :-
     get_all_elements(Formula, Elements),
     length(Elements,1).
 
-%!  homonuclear_name_atom(+Name:string, -Atom:list(Element-Amount)) is semidet.
+%!  homonuclear_name_atom(Name:string, Element:atom, Amount:int) is semidet.
 %
-%   True when `Atom` is the atoms in the formula representted by `Name`.
+%   True when `Atom = Element-Amount` is the atoms in the formula representted by `Name`.
 %   False when `Name` is not a compositional homonuclear compound name.
 %
 homonuclear_name_atom(Name, Element-Amount) :-
