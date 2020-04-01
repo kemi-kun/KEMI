@@ -72,20 +72,20 @@ homonuclear_cn(Formula, Name) :-
     homonuclear_atom_formula(Atom, Formula),
     homonuclear_name_atom(Name, Atom).
 
-homonuclear_cn_(ElementNameFunction, Formula, Name) :-
-    % check
-    homonuclear(Formula),
-    not(ionic(Formula)),
+% homonuclear_cn_(ElementNameFunction, Formula, Name) :-
+%     % check
+%     homonuclear(Formula),
+%     not(ionic(Formula)),
 
-    get_all_elements(Formula, Elements),
-    memberchk(Element, Elements),
-    get_num_atoms(Formula, Element, Amount),
-    call(ElementNameFunction, Element, ElementName),
-    (
-        group(Element, 18) -> mul_prefix_except_mono(Amount, MulPrefix);
-        multiplicative_prefix(Amount, MulPrefix)
-    ),
-    string_concat(MulPrefix, ElementName, Name).
+%     get_all_elements(Formula, Elements),
+%     memberchk(Element, Elements),
+%     get_num_atoms(Formula, Element, Amount),
+%     call(ElementNameFunction, Element, ElementName),
+%     (
+%         group(Element, 18) -> mul_prefix_except_mono(Amount, MulPrefix);
+%         multiplicative_prefix(Amount, MulPrefix)
+%     ),
+%     string_concat(MulPrefix, ElementName, Name).
  
 homonuclear(Formula) :-
     get_all_elements(Formula, Elements),
@@ -102,6 +102,7 @@ homonuclear_name_atom(Name, Element-Amount) :-
     nonvar(Element), nonvar(Amount) ->
         homonuclear_name_atom_(Name, Element-Amount), !;
     homonuclear_name_atom_(Name, Element-Amount).
+
 homonuclear_name_atom_(Name, Element-Amount) :-
     between(1, 9999, Amount),
     (
@@ -123,6 +124,7 @@ homonuclear_atom_formula(Element-Amount, Formula) :-
     between(1, infinite, Amount),
     element_symbol(Element, Symbol),
     split_symbol_num(Formula, Symbol, Amount).
+
 split_symbol_num(String, Symbol, Num) :-
     nonvar(String) ->
         re_matchsub("(?<symbol>[A-z]*)(?<num>[0-9]*)?", String, Sub, []),
@@ -130,8 +132,10 @@ split_symbol_num(String, Symbol, Num) :-
         get_dict(num, Sub, NumStr),
         (number_string(Num, NumStr) -> true; Num is 1);
     nonvar(Symbol), nonvar(Num) ->
-        string_concat(Symbol, Num, String);
-    fail.
+        (
+            Num = 1 -> String = Symbol;
+            string_concat(Symbol, Num, String)
+        ).
 
 %!  binary_compound_cn(+Formula: string, -Name: string) is det.
 %!  binary_compound_cn(+Formula: string, +Name: string) is det.
