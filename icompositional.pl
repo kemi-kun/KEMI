@@ -12,7 +12,7 @@
 :- use_module(ialternative,[alternative/2]).
 
 
-ionic(Formula) :- cation(Formula) -> true; anion(Formula).
+ion(Formula) :- cation(Formula) -> true; anion(Formula).
 
 cation(Formula) :-
     get_net_charge(Formula, NetCharge),
@@ -70,12 +70,15 @@ homonuclear_cn(Formula, Name) :-
         homonuclear_name_atom(Name, Atom),
         homonuclear_atom_formula(Atom, Formula);
     homonuclear_atom_formula(Atom, Formula),
-    homonuclear_name_atom(Name, Atom).
+    homonuclear_name_atom(Name, Atom),
+    % chcek formula
+    homonuclear(Formula),
+    not(ion(Formula)).
 
 % homonuclear_cn_(ElementNameFunction, Formula, Name) :-
 %     % check
 %     homonuclear(Formula),
-%     not(ionic(Formula)),
+%     not(ion(Formula)),
 
 %     get_all_elements(Formula, Elements),
 %     memberchk(Element, Elements),
@@ -147,7 +150,7 @@ binary_compound_cn(Formula, Name) :-
     nonvar(Formula),
     (
         binary_compound(Formula),
-        not(ionic(Formula))
+        not(ion(Formula))
     ),
     get_element(Formula, 0, EPosElement),
     get_element(Formula, 1, ENegElement),
@@ -318,7 +321,7 @@ re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 %
 general_stoichiometric(Formula, Name) :-
     nonvar(Formula),
-    ionic(Formula) ->
+    ion(Formula) ->
         general_stoichiometric_ion(Formula, Name);
     general_stoichiometric_(Formula, Name).
 
