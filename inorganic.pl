@@ -1,4 +1,4 @@
-:- module(inorganic,[additive/2,substitutive/2,compositional_name/2,inorganic_name/2]).
+:- module(inorganic,[additive_name/2,substitutive_name/2,compositional_name/2,inorganic_name/2]).
 
 :- use_module(icompositional,[boron_hydride_stoichiometric/2,general_stoichiometric/2,addition_compound_cn/2,ion_cn/2,binary_compound_cn/2,homonuclear_cn/2]).
 :- use_module(isubstitutive,[parent_hydride_anion_sn/2,parent_hydride_cation_sn/2,parent_hydride_sn/2]).
@@ -8,8 +8,8 @@
 
 inorganic_name(Formula, Name) :-
     compositional_name(Formula, Name);
-    substitutive(Formula, Name);
-    additive(Formula, Name);
+    substitutive_name(Formula, Name);
+    additive_name(Formula, Name);
     alternative(Formula, Name).
 
 compositional_name(Formula, Name) :-
@@ -23,11 +23,11 @@ stoichiometric(Formula, Name) :-
     general_stoichiometric(Formula, Name);
     boron_hydride_stoichiometric(Formula, Name).
 
-substitutive(Formula, Name) :-
+substitutive_name(Formula, Name) :-
     parent_hydride_sn(Formula, Name);
     parent_hydride_cation_sn(Formula, Name);
     parent_hydride_anion_sn(Formula, Name).
 
-additive(Formula, Name) :-
+additive_name(Formula, Name) :-
     mononuclear_entity_an(Formula, Name);
     polynulcear_entity_an(Formula, Name).
