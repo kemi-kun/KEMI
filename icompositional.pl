@@ -4,12 +4,12 @@
 :- use_module(facts,[addition_compound_exception/2,alternative_element_name/2]).
 :- use_module(nomenclature,[iupac_name/2]).
 :- use_module(predicate,[append_suffix/3]).
-:- use_module(inorganic,[additive/2,substitutive/2,compositional_name/2]).
+:- use_module(inorganic,[additive_name/2,substitutive_name/2,compositional_name/2]).
 :- use_module(support,[get_neutral_specie/2,multiplicative_prefix/2,mul_prefix_except_mono/2]).
 :- use_module(uchem,[count_atoms/2,get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
 :- use_module(utils,[value_is_empty_string/1,dict_remove_on_cond/3,get_dict_or_default/4]).
 :- use_module(ustr,[join/3]).
-:- use_module(ialternative,[alternative/2]).
+:- use_module(ialternative,[alternative_name/2]).
 
 
 ion(Formula) :- cation(Formula) -> true; anion(Formula).
@@ -359,9 +359,9 @@ split_generalized_salt_formula(Formula, EPCs, ENCs) :-
 %!  cation_name(+Formula, -Name) is nondet.
 %!  cation_name(+Formula, +Name) is nondet.
 cation_name(Formula, Name) :-
-    substitutive(Formula, Name);
-    additive(Formula, Name);
-    alternative(Formula, Name).
+    substitutive_name(Formula, Name);
+    additive_name(Formula, Name);
+    alternative_name(Formula, Name).
 cation_name(Formula, Name) :-
     (
         monoatomic(Formula),
@@ -377,9 +377,9 @@ cation_name(Formula, Name) :-
 %!  anion_name(+Formula, -Name) is nondet.
 %!  anion_name(+Formula, +Name) is nondet.
 anion_name(Formula, Name) :-
-    substitutive(Formula, Name);
-    additive(Formula, Name);
-    alternative(Formula, Name).
+    substitutive_name(Formula, Name);
+    additive_name(Formula, Name);
+    alternative_name(Formula, Name).
 anion_name(Formula, Name) :-
     (
         monoatomic(Formula),
