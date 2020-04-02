@@ -4,7 +4,7 @@
 :- use_module(facts,[addition_compound_exception/2,alternative_element_name/2]).
 :- use_module(nomenclature,[iupac_name/2]).
 :- use_module(predicate,[append_suffix/3]).
-:- use_module(inorganic,[additive/2,substitutive/2,compositional/2]).
+:- use_module(inorganic,[additive/2,substitutive/2,compositional_name/2]).
 :- use_module(support,[get_neutral_specie/2,multiplicative_prefix/2,mul_prefix_except_mono/2]).
 :- use_module(uchem,[count_atoms/2,get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
 :- use_module(utils,[value_is_empty_string/1,dict_remove_on_cond/3,get_dict_or_default/4]).
@@ -214,7 +214,7 @@ homopolyatomic_cation_cn(Formula, Name) :-
     homopolyatomic(Formula),
     cation(Formula),
     get_neutral_specie(Formula, NeutralSpecie),
-    compositional(NeutralSpecie, NeutralSpecieName),
+    compositional_name(NeutralSpecie, NeutralSpecieName),
     get_net_charge(Formula, NetCharge),
     get_ion_part_(NetCharge, "+", ChargeStr),
     string_concat(NeutralSpecieName, ChargeStr, Name).
@@ -265,7 +265,7 @@ homopolyatomic_anion_cn(Formula, Name) :-
     element_name(Element, EName),
     append_suffix(EName, "ide", IdeName),
     get_neutral_specie(Formula, NeutralSpecie),
-    compositional(NeutralSpecie, NeutralSpecieName),
+    compositional_name(NeutralSpecie, NeutralSpecieName),
     string_concat(MulPrefix, EName, NeutralSpecieName),
     string_concat(MulPrefix, IdeName, Name_),
     get_net_charge(Formula, NetCharge_),
@@ -368,7 +368,7 @@ cation_name(Formula, Name) :-
     );
     (
         homopolyatomic(Formula),
-        compositional(Formula, Name)
+        compositional_name(Formula, Name)
     ).
 
 %!  anion_name(+Formula, -Name) is nondet.
@@ -391,7 +391,7 @@ anion_name(Formula, Name) :-
         Elements = [Element|_],
         element_name(Element, EName),
         append_suffix(EName, "ide", IdeName),
-        compositional(Formula, CName),
+        compositional_name(Formula, CName),
         string_concat(MulPrefix, EName, CName),
         string_concat(MulPrefix, IdeName, Name)
     ).
