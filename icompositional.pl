@@ -102,7 +102,7 @@ homonuclear_name_atom_(Name, Element-Amount) :-
     prepend_prefix(ElementName, MulPrefix, Name).
 
 
-%!  homonuclear_atom_formula(?Formula:string, ?Element:atom, ?Amount:int) is det/multi.
+%!  homonuclear_formula_atom(?Formula:string, ?Element:atom, ?Amount:int) is det/multi.
 %
 homonuclear_formula_atom(Formula, Element-Amount) :-
     nonvar(Formula) ->
@@ -329,8 +329,8 @@ general_stoichiometric(Formula, Name) :-
 
 general_stoichiometric_(Formula, Name) :-
         split_generalized_salt_formula(Formula, EPCs, ENCs),
-        maplist(homonuclear_atom_formula, EPCs, EPCFormulas),
-        maplist(homonuclear_atom_formula, ENCs, ENCFormulas),
+        maplist(homonuclear_formula_atom, EPCs, EPCFormulas),
+        maplist(homonuclear_formula_atom, ENCs, ENCFormulas),
         maplist(cation_name, EPCFormulas, EPCNames),
         maplist(anion_name, ENCFormulas, ENCNames),
         append(EPCNames, ENCNames, PCNames),
