@@ -23,7 +23,10 @@ Implements:
 %
 element_name(Element, ElementName) :-
     var(Element), var(ElementName) ->
-        element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight);
+        (
+            element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight)
+            % ;alternative_element_name(Element, ElementName)
+        );
     element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight);
     alternative_element_name(Element, ElementName) ->
         true;
