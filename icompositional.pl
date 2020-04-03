@@ -279,12 +279,17 @@ homopolyatomic_anion_cn(Formula, Name) :-
     string_concat(Name_, ChargeStr, Name).
 
 
-%!  addition_compound_cn(+Formula, +Name) is nondet.
-%!  addition_compound_cn(+Formula, -Name) is multi.
+%!  addition_compound_cn(+Formula, +Name) is semidet.
+%!  addition_compound_cn(+Formula, -Name) is semidet.
+%!  addition_compound_cn(-Formula, +Name) is failure.
+%!  addition_compound_cn(-Formula, -Name) is failure.
 %
 % # IR-5.5 p.92-93 ← IR-4
 % # BF3⋅2H2O ⇒ boron triﬂuoride—water (1/2)
 % # 8Kr⋅46H2O ⇒ krypton—water (8/46)
+%
+%   @arg Formula – the chemical formula of the addition compound
+%        Name – the compositional name of the addition compound
 %
 addition_compound_cn(Formula, Name) :-
     nonvar(Formula),
