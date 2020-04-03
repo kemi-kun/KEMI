@@ -132,4 +132,5 @@ split_decimal_(Number, First, Rest) :-
 num_digits(N, Z) :-
     Max is (10 ^ N) - 1,
     Min is 10 ^ (N - 1),
+    integer(Min), integer(Max),
     between(Min, Max, Z).
