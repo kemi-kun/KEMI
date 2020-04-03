@@ -93,9 +93,9 @@ new_element_name_atomic_number(ElementName, AtomicNumber) :-
 %!  new_element_atomic_number_name_(+Z:int, -ElementName:string) is semidet.
 new_element_atomic_number_name_(Z, ElementName) :-
     between(1, infinite, Z),
-    split_digits(Z, L0),
-    maplist(numerical_root_fact, L0, L1),
-    join("", L1, T0),
+    split_digits(Z, Digits),
+    maplist(numerical_root_fact, Digits, Roots),
+    join("", Roots, T0),
     (
         sub_string(T0, _, 1, 0, "i") ->
             string_concat(T0, um, ElementName);
