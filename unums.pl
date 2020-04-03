@@ -1,4 +1,4 @@
-:- module(ustr,[
+:- module(unums,[
     plus/3,
     multiply/3,
     divide/3,
