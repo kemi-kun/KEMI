@@ -1,10 +1,11 @@
 :- module(uchem,[count_atoms/2,get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
 
-:- use_module(elements,[element_symbol/2]).
-:- use_module(facts,[en/2,element_fact/5]).
-:- use_module(support,[get_neutral_specie/2]).
-:- use_module(ustr,[split/2,remove_chars/3,re_finditer/4,replace/4]).
-:- use_module(utils,[value_is_empty_string/1,dict_remove_on_cond/3,join_pairs_by_keys/4,get_dict_optional/3,get_dict_or_default/4,add_dict/4,join_dict/3,multiply/3,split_digits/2,split_decimal/3]).
+:- use_module(elements).
+:- use_module(facts).
+:- use_module(support).
+:- use_module(ustr).
+:- use_module(ucollections).
+:- use_module(unum).
 
 
 element_quantity(Symbol, Quantity) :-

@@ -1,5 +1,5 @@
-:- module(unums,[
-    plus/3,
+:- module(unum,[
+    plus_/3,
     multiply/3,
     divide/3,
     split_digits/2,
@@ -15,15 +15,15 @@
 %
 %   C = A + B
 %
-plus(A, B, C) :-
+plus_(A, B, C) :-
     nonvar(A), nonvar(B),
     C is A + B,
     !.
-plus(A, B, C) :-
+plus_(A, B, C) :-
     nonvar(A), nonvar(C),
     B is C - A,
     !.
-plus(A, B, C) :-
+plus_(A, B, C) :-
     nonvar(B), nonvar(C),
     A is C - B.
 

@@ -8,7 +8,7 @@
 
 :- use_module(elements).
 :- use_module(facts).
-:- use_module(unums).
+:- use_module(unum).
 :- use_module(ustr).
 :- use_module(ucollections).
 :- use_module(ustr).
