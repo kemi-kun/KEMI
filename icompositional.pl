@@ -1,15 +1,16 @@
 :- module(icompositional,[boron_hydride_stoichiometric/2,general_stoichiometric/2,addition_compound_cn/2,ion_cn/2,binary_compound_cn/2,homonuclear_cn/2]).
 
-:- use_module(elements,[element_name/2,element_symbol/2,group/2]).
-:- use_module(facts,[addition_compound_exception/2,alternative_element_name/2]).
 :- use_module(nomenclature,[iupac_name/2]).
-:- use_module(predicate,[append_suffix/3]).
 :- use_module(inorganic,[additive_name/2,substitutive_name/2,compositional_name/2]).
-:- use_module(support,[get_neutral_specie/2,multiplicative_prefix/2,mul_prefix_except_mono/2]).
-:- use_module(uchem,[count_atoms/2,get_net_charge/2,get_num_atoms/3,get_num_elements/2,get_all_elements/2,get_element/3]).
-:- use_module(utils,[value_is_empty_string/1,dict_remove_on_cond/3,get_dict_or_default/4]).
-:- use_module(ustr,[join/3]).
+:- use_module(elements,[element_name/2,element_symbol/2,group/2]).
 :- use_module(ialternative,[alternative_name/2]).
+
+:- use_module(facts).
+:- use_module(support).
+:- use_module(uchem).
+:- use_module(ucollections).
+:- use_module(unums).
+:- use_module(ustr).
 
 
 ion(Formula) :- cation(Formula) -> true; anion(Formula).
@@ -75,24 +76,6 @@ homonuclear_cn(Formula, Name) :-
     homonuclear(Formula),
     not(ion(Formula)).
 
-% homonuclear_cn_(ElementNameFunction, Formula, Name) :-
-%     % check
-%     homonuclear(Formula),
-%     not(ion(Formula)),
-
-%     get_all_elements(Formula, Elements),
-%     memberchk(Element, Elements),
-%     get_num_atoms(Formula, Element, Amount),
-%     call(ElementNameFunction, Element, ElementName),
-%     (
-%         group(Element, 18) -> mul_prefix_except_mono(Amount, MulPrefix);
-%         multiplicative_prefix(Amount, MulPrefix)
-%     ),
-%     string_concat(MulPrefix, ElementName, Name).
- 
-homonuclear(Formula) :-
-    get_all_elements(Formula, Elements),
-    length(Elements,1).
 
 %!  homonuclear_name_atom(Name:string, Element:atom, Amount:int) is semidet.
 %
@@ -118,6 +101,7 @@ homonuclear_name_atom_(Name, Element-Amount) :-
     ),
     string_concat(MulPrefix, ElementName, Name).
 
+
 %!  homonuclear_atom_formula(?Element:atom, ?Amount:int, ?Formula:string) is det.
 %
 homonuclear_atom_formula(Element-Amount, Formula) :-
@@ -139,6 +123,16 @@ split_symbol_num(String, Symbol, Num) :-
             Num = 1 -> String = Symbol;
             string_concat(Symbol, Num, String)
         ).
+
+
+%
+%
+%
+%
+homonuclear(Formula) :-
+    get_all_elements(Formula, Elements),
+    length(Elements,1).
+
 
 %!  binary_compound_cn(+Formula: string, -Name: string) is det.
 %!  binary_compound_cn(+Formula: string, +Name: string) is det.

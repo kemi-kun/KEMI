@@ -11,7 +11,9 @@
     capitalize/2,
     replace/4
     ]).
-    
+
+:- use_module(library(pcre)).
+
 
 % contains(String, Substring) :-
 %     sub_string(String, _,_,_, Substring), !.
@@ -87,6 +89,7 @@ remove_chars(String, CharsToRemove, Result) :-
     split(String, Strings),
     exclude(is_(CharsToRemove), Strings, Result_),
     atomics_to_string(Result_, Result).
+
 is_(String, Elem) :- split(String, X), member(Elem, X).
 
 
@@ -103,6 +106,7 @@ join(Sep, Subs, String) :-
     nonvar(Sep), nonvar(String),
     split_string(String, Sep, "", Subs),
     !.
+
 join_(Sep, [H|T], String) :-
     nonvar(Sep), nonvar(H),
     T = [] ->
