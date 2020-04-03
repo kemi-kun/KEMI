@@ -279,10 +279,10 @@ homopolyatomic_anion_cn(Formula, Name) :-
     string_concat(Name_, ChargeStr, Name).
 
 
-%!  addition_compound_cn(+Formula, +Name) is semidet.
-%!  addition_compound_cn(+Formula, -Name) is semidet.
-%!  addition_compound_cn(-Formula, +Name) is failure.
-%!  addition_compound_cn(-Formula, -Name) is failure.
+%!  addition_compound_cn(+Formula: string, +Name: string) is semidet.
+%!  addition_compound_cn(+Formula: string, -Name: string) is semidet.
+%!  addition_compound_cn(-Formula: string, +Name: string) is failure.
+%!  addition_compound_cn(-Formula: string, -Name: string) is failure.
 %
 % # IR-5.5 p.92-93 ← IR-4
 % # BF3⋅2H2O ⇒ boron triﬂuoride—water (1/2)
@@ -319,12 +319,14 @@ split_addition_compound(Formula, Compounds, Amounts) :-
 
 re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 
+
+%!  general_stoichiometric(+Formula: string, +Name: string) is semidet.
+%!  general_stoichiometric(+Formula: string, -Name: string) is semidet.
+%!  general_stoichiometric(-Formula: string, +Name: string) is failure.
+%!  general_stoichiometric(-Formula: string, -Name: string) is failure.
 %
-%
-%
-%
-%
-%
+%   @arg Formula – the generalized salt formula
+%        Name –  the stoichiometric name of the generalized salt formula
 %
 general_stoichiometric(Formula, Name) :-
     nonvar(Formula),
