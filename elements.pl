@@ -11,22 +11,47 @@ Implements:
 :- use_module(unums,[split_digits/2,num_digits/2]).
 :- use_module(facts).
 
+
 %!  element_name(+Element:atom, +ElementName:string) is semidet.
 %!  element_name(+Element:atom, -ElementName:string) is multi.
-%!  element_name(-Element:atom, -ElementName:string) is multi.      # TODO: fix (shows only one element fact)
-%!  element_name(-Element:atom, +ElementName:string) is multi.      # TODO: Remove last false choice point
+%!  element_name(-Element:atom, -ElementName:string) is multi.
+%!  element_name(-Element:atom, +ElementName:string) is multi.
+%
+%   True when `ElementName` is the name of element `Element`.
+%   Generates element facts when both `Element` and `ElementName` is unbound.
 %
 element_name(Element, ElementName) :-
-    new_element_name(Element, ElementName);
-    element_fact(Element, ElementName, _, _, _).
+    var(Element), var(ElementName) ->
+        element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight);
+    element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight);
+    new_element(Element, ElementName, _Symbol, _AtomicNumber).
 
+
+%!  element_symbol(+Element:atom, +Symbol:string) is semidet.
+%!  element_symbol(+Element:atom, -Symbol:string) is multi.
+%!  element_symbol(-Element:atom, -Symbol:string) is multi.
+%!  element_symbol(-Element:atom, +Symbol:string) is multi.
+%
+%
 element_symbol(Element, Symbol) :-
-    new_element_symbol(Element, Symbol);
-    element_fact(Element, _, Symbol, _, _).
+    var(Element), var(Symbol) ->
+        element_fact(Element, _ElementName, Symbol, _AtomicNumber, _AtomicWeight);
+    element_fact(Element, _ElementName, Symbol, _AtomicNumber, _AtomicWeight);
+    new_element(Element, _ElementName, Symbol, _AtomicNumber).
 
-atomic_number(Element, Z) :-
-    element_fact(Element, _, _, Z, _) -> true;
-    new_element_atomic_number(Element, Z).
+
+%!  atomic_number(+Element:atom, +AtomicNumber:string) is semidet.
+%!  atomic_number(+Element:atom, -AtomicNumber:string) is multi.
+%!  atomic_number(-Element:atom, -AtomicNumber:string) is multi.
+%!  atomic_number(-Element:atom, +AtomicNumber:string) is multi.
+%
+%
+atomic_number(Element, AtomicNumber) :-
+    var(Element), var(AtomicNumber) ->
+        element_fact(Element, _ElementName, _Symbol, AtomicNumber, _AtomicWeight);
+    element_fact(Element, _ElementName, _Symbol, AtomicNumber, _AtomicWeight);
+    new_element(Element, _ElementName, _Symbol, AtomicNumber).
+
 
 %!  new_element(?Element:atom, ?Name:string, ?Symbol:string, ?NumProtons:int) is det/multi.
 %
@@ -75,7 +100,7 @@ new_element_name_atomic_number_(ElementName, Z) :-
     % MinL         4,  6,  9, ...
     between(Min, Max, N),
     num_digits(N, Z),
-    new_element_atomic_number_name_(ElementName, Z), !.
+    new_element_atomic_number_name_(Z, ElementName), !.
 
 
 %!  new_element_symbol_atomic_number(+Symbol:atom, +Z:int) is semidet.
@@ -91,6 +116,7 @@ new_element_symbol_atomic_number(Symbol, Z) :-
         num_digits(L, Z),
         new_element_symbol_atomic_number_(Symbol, Z), !;
     new_element_symbol_atomic_number_(Symbol, Z).
+
 new_element_symbol_atomic_number_(Symbol, Z) :-
     between(1, infinite, Z),
     split_digits(Z, L0),
@@ -118,17 +144,6 @@ numerical_root_symbol(Number, Symbol) :-
     numerical_root_fact(Number, Root),
     string_chars(Root, [Symbol|_]),
     !.
-
-
-new_element_name(Element, ElementName) :-
-    not(element_fact(Element, ElementName, _, _, _)),
-    new_element_atomic_number(Element, Z),
-    split_digits(Z, L0),
-    maplist(numerical_root_fact, L0, L1),
-    ElementName = L1.
-
-new_element_symbol(Element, Symbol) :-
-    fail.
 
 
 %!  period(+Element:atom, -Period:int) is det.
