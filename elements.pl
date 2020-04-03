@@ -95,11 +95,11 @@ new_element_atomic_number_name_(Z, ElementName) :-
     between(1, infinite, Z),
     split_digits(Z, Digits),
     maplist(numerical_root_fact, Digits, Roots),
-    join("", Roots, T0),
+    join("", Roots, Root),
     (
-        sub_string(T0, _, 1, 0, "i") ->
-            string_concat(T0, um, ElementName);
-        string_concat(T0, ium, ElementName)
+        sub_string(Root, _, 1, 0, "i") ->
+            string_concat(Root, um, ElementName);
+        string_concat(Root, ium, ElementName)
     ).
 
 %!  new_element_name_atomic_number_(+ElementName:string, -Z:int) is semidet.
@@ -115,26 +115,26 @@ new_element_name_atomic_number_(ElementName, Z) :-
     new_element_atomic_number_name_(Z, ElementName), !.
 
 
-%!  new_element_symbol_atomic_number(+Symbol:atom, +Z:int) is semidet.
-%!  new_element_symbol_atomic_number(+Symbol:atom, -Z:int) is semidet.
-%!  new_element_symbol_atomic_number(-Symbol:atom, -Z:int) is multi.    % infinite
-%!  new_element_symbol_atomic_number(-Symbol:atom, +Z:int) is det.
+%!  new_element_symbol_atomic_number(+Symbol:atom, +AtomicNumber:int) is semidet.
+%!  new_element_symbol_atomic_number(+Symbol:atom, -AtomicNumber:int) is semidet.
+%!  new_element_symbol_atomic_number(-Symbol:atom, -AtomicNumber:int) is multi.    % infinite
+%!  new_element_symbol_atomic_number(-Symbol:atom, +AtomicNumber:int) is det.
 %
 %   True when `Z` is the atomic number of "new" element `Element`.
 %
-new_element_symbol_atomic_number(Symbol, Z) :-
-    nonvar(Symbol), var(Z) ->
+new_element_symbol_atomic_number(Symbol, AtomicNumber) :-
+    nonvar(Symbol), var(AtomicNumber) ->
         string_length(Symbol, L),
-        num_digits(L, Z),
-        new_element_symbol_atomic_number_(Symbol, Z), !;
-    new_element_symbol_atomic_number_(Symbol, Z).
+        num_digits(L, AtomicNumber),
+        new_element_symbol_atomic_number_(Symbol, AtomicNumber), !;
+    new_element_symbol_atomic_number_(Symbol, AtomicNumber).
 
 new_element_symbol_atomic_number_(Symbol, Z) :-
     between(1, infinite, Z),
-    split_digits(Z, L0),
-    maplist(numerical_root_fact, L0, L1),
-    maplist(get_first_char_, L1, L2),
-    join("", L2, Symbol_),
+    split_digits(Z, Digits),
+    maplist(numerical_root_fact, Digits, Roots),
+    maplist(get_first_char_, Roots, Chars),
+    join("", Chars, Symbol_),
     capitalize(Symbol_, Symbol).
 
 %!  get_first_char_(+String:string, -Char:string) is det.
