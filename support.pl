@@ -6,7 +6,7 @@
     get_neutral_specie/2
     ]).
 
-:- use_module(elements).
+:- use_module(elements, [group_/2]).
 :- use_module(facts).
 :- use_module(unum).
 :- use_module(ustr).
@@ -27,6 +27,7 @@ multiplicative_prefix(Number, Prefix) :-
     var(Number), nonvar(Prefix) ->
         multiplicative_prefix_(Number, Prefix), !;
     multiplicative_prefix_(Number, Prefix).
+
 multiplicative_prefix_(Number, Prefix) :-
     between(1, 9999, Number),
     (
@@ -166,6 +167,7 @@ get_root_name_(ElementName, [], Result) :-
     % ElemntName doesn't match any suffix in SuffixList
     Result = ElementName,
     !.
+
 get_root_name_(ElementName, SuffixList, Result) :-
     var(ElementName), nonvar(Result) -> 
         get_root_name_re_(ElementName, SuffixList, Result);
@@ -174,6 +176,7 @@ get_root_name_(ElementName, SuffixList, Result) :-
         string_concat(Root, ESuffixH, ElementName) -> Result = Root, !;
         get_root_name_(ElementName, ESuffixT, Result)
     ).
+
 get_root_name_re_(ElementName, SuffixList, Result) :-
     var(ElementName),
     SuffixList = [ESuffixH|ESuffixT],
@@ -197,6 +200,7 @@ idify(ElementName, Result) :-
     !.
 idify(ElementName, Result) :-
     idify_(ElementName, Result).
+
 idify_(ElementName, Result) :-
     element_name(Element, ElementName),
     (
@@ -240,6 +244,7 @@ anify(ElementName, Result) :-
     !.
 anify(ElementName, Result) :-
     anify_(ElementName, Result).
+
 anify_(ElementName, Result) :-
     element_name(Element, ElementName),
     (
