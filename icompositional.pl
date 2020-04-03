@@ -338,8 +338,10 @@ general_stoichiometric(Formula, Name) :-
 
 general_stoichiometric_(Formula, Name) :-
         split_generalized_salt_formula(Formula, EPCs, ENCs),
-        maplist(homonuclear_formula_atom, EPCs, EPCFormulas),
-        maplist(homonuclear_formula_atom, ENCs, ENCFormulas),
+        % maplist(homonuclear_formula_atom, EPCs, EPCFormulas),
+        % maplist(homonuclear_formula_atom, ENCs, ENCFormulas),
+        maplist(homonuclear_formula_atom, EPCFormulas, EPCs),
+        maplist(homonuclear_formula_atom, ENCFormulas, ENCs),
         maplist(cation_name, EPCFormulas, EPCNames),
         maplist(anion_name, ENCFormulas, ENCNames),
         append(EPCNames, ENCNames, PCNames),
