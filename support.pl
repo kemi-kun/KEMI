@@ -122,14 +122,14 @@ get_neutral_specie(Formula, NeutralSpecie) :-
 %
 prepend_prefix(String, Prefix, Result) :-
     (
-        prepend_prefix_exception(String, Prefix, Result) -> true;
+        prepend_prefix_alternative(String, Prefix, Result);
         prepend_prefix_(String, Prefix, Result)
     ).
 
 prepend_prefix_(String, Prefix, Result) :-
     string_concat(Prefix, String, Result).
 
-prepend_prefix_exception("oxide", "mono", "monoxide").
+prepend_prefix_alternative("oxide", "mono", "monoxide").
 
 % %! prepend_prefix_mono(+String:string, +Prefix:string, -Result:string) is det.
 % %! prepend_prefix_mono(+String:string, +Prefix:string, +Result:string) is semidet.

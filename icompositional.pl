@@ -162,9 +162,8 @@ binary_compound_cn(Formula, Name) :-
     multiplicative_prefix(NumNegative, ENegMulPrefixEx),
     string_concat(EPosMulPrefix, EPosElementName, EPos),
     string_concat(EPos, " ", EPos_),
-    string_concat(ENegMulPrefixEx, NegativePart, ENeg),
-    string_concat(EPos_, ENeg, Name),
-    !.
+    prepend_prefix(NegativePart, ENegMulPrefixEx, ENeg),
+    string_concat(EPos_, ENeg, Name).
  
 binary_compound(Formula) :-
     get_all_elements(Formula, Elements),
