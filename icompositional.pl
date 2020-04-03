@@ -166,7 +166,14 @@ binary_compound(Formula) :-
     length(Elements, 2),
     !.
 
-
+%!  ion_cn(+Formula: string, +Name: string) is semidet.
+%!  ion_cn(+Formula: string, -Name: string) is semidet.
+%!  ion_cn(-Formula: string, +Name: string) is failure.
+%!  ion_cn(-Formula: string, -Name: string) is failure.
+%
+%   @arg Formula – the chemical formula of the cationic or anionic compound
+%        Name – the compositional name of the cationic or anionic compound
+%
 ion_cn(Formula, Name) :-
     nonvar(Formula),
     cation_cn(Formula, Name);
