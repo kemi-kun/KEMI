@@ -191,28 +191,36 @@ period2(Element, Period) :-
         Z > Proton0,
         Z =< Proton.
 
-% Group(Element, Number) ← {
-% 	Group(Noble, 18) ∧ 
-% 	AtomicNumber(Element, Proton) ∧
-% 	AtomicNumber(Noble, NProton) ∧ [ (
-% 			Proton = NProton + Number ∧
-% 			1 ≤ Number ≤ 3
-% 		) ∨ (
-% 			Proton = NProton - 18 + Number ∧
-% 			4 ≤ Number ≤ 17
-% 		) ∨ (
-% 			Element = "H" ∧ Number = 1
-% 		)
-% 	]
-% } ∨ {
-% 	AtomicNumber(Element, Proton) ∧
-% 	FullOrbital(Proton) ∧
-% 	Number = 18
-% }
- 
-% FullOrbital(Proton) ← {
-% 	Proton in {2, 10, 18, 36, 54, 86, 118}
-% }
+%!  group(+Element:atom, +Group:int) is semidet.
+%!  group(+Element:atom, -Group:int) is semidet.
+%!  group(-Element:atom, -Group:int) is multi.
+%!  group(-Element:atom, +Group:int) is multi.
+%
+%   True if element Element is in group `Group`.
+%
+group(Element, Group) :-
+    FullOrbital = [0, 2, 10, 18, 36, 54, 86, 118],
+    nth0(Index, FullOrbital, NProton),
+    nth1(Index, FullOrbital, NProton_),
+    T is NProton+3,
+    between(NProton_, T, Proton),
+    element_fact(Element, _, _, Proton, _),
+    (
+        Element = hydrogen ->
+            Group is 1;
+
+        Proton is NProton,
+        Group is 18 ->
+            true;
+
+        between(1, 3, Group),
+        Proton is NProton + Group ->
+            true;
+
+        between(4, 17, Group),
+        Proton is NProton -18 + Group ->
+            true
+    ).
 
 % group(Element, Group) :-
 %     Element = hydrogen, 
@@ -247,11 +255,6 @@ period2(Element, Period) :-
 %     element_fact(Element, _, _, Z, _),
 %     full_orbital(Z).
 
-
-full_orbital(NumProtons) :-
-    member(NumProtons, [2, 10, 18, 36, 54, 86, 118]),
-    !.
-
 %! group(+Element:atom, +Group:int) is semidet.
 %! group(+Element:atom, -Group:int) is det.
 %! group(-Element:atom, +Group:int) is multi.
@@ -259,63 +262,63 @@ full_orbital(NumProtons) :-
 %
 %  True if element `Element` is group `Group`.
 %
-group(Element, Group) :-
-    nonvar(Element) ->
-        Element = hydrogen,
-        Group is 1,
-        !;
-    Element = hydrogen,
-    Group is 1.
-group(Element, Group) :-
-    var(Element),
-    group_(Element, Group).
-group(Element, Group) :-
-    nonvar(Element),
-    group_(Element, Group),
-    !.
-group(Element, Group) :-
-    element_fact(Element, _, _, Z, _),
-    full_orbital(Z),
-    Group is 18.
-group_(Element, Group) :-
-    (nonvar(Group) -> Group \= 18; true),   % skip this if Group is given = 18
-    element_fact(Element, _, _, Z, _),
-    not(full_orbital(Z)),                   % skip if is group 18
-    group(NobleElement, 18),
-    element_fact(NobleElement, _, _, Z2, _),
-    T1 is Z2 + 1,
-    T2 is Z2 + 2,
-    T3 is Z2 + 3,
-    T17 is Z2 - 1,
-    T16 is Z2 - 2,
-    T15 is Z2 - 3,
-    T14 is Z2 - 4,
-    T13 is Z2 - 5,
-    T12 is Z2 - 6,
-    T11 is Z2 - 7,
-    T10 is Z2 - 8,
-    T9 is Z2 - 9,
-    T8 is Z2 - 10,
-    T7 is Z2 - 11,
-    T6 is Z2 - 12,
-    T5 is Z2 - 13,
-    T4 is Z2 - 14,
-    (  
-        Z = T1 -> Group is 1;
-        Z = T2 -> Group is 2;
-        Z = T3 -> Group is 3;
-        Z = T17 -> Group is 17;
-        Z = T16 -> Group is 16;
-        Z = T15 -> Group is 15;
-        Z = T14 -> Group is 14;
-        Z = T13-> Group is 13;
-        Z = T12 -> Group is 12;
-        Z = T11 -> Group is 11;
-        Z = T10 -> Group is 10;
-        Z = T9 -> Group is 9;
-        Z = T8 -> Group is 8;
-        Z = T7 -> Group is 7;
-        Z = T6 -> Group is 6;
-        Z = T5 -> Group is 5;
-        Z = T4 -> Group is 4      
-    ).
+% group(Element, Group) :-
+%     nonvar(Element) ->
+%         Element = hydrogen,
+%         Group is 1,
+%         !;
+%     Element = hydrogen,
+%     Group is 1.
+% group(Element, Group) :-
+%     var(Element),
+%     group_(Element, Group).
+% group(Element, Group) :-
+%     nonvar(Element),
+%     group_(Element, Group),
+%     !.
+% group(Element, Group) :-
+%     element_fact(Element, _, _, Z, _),
+%     full_orbital(Z),
+%     Group is 18.
+% group_(Element, Group) :-
+%     (nonvar(Group) -> Group \= 18; true),   % skip this if Group is given = 18
+%     element_fact(Element, _, _, Z, _),
+%     not(full_orbital(Z)),                   % skip if is group 18
+%     group(NobleElement, 18),
+%     element_fact(NobleElement, _, _, Z2, _),
+%     T1 is Z2 + 1,
+%     T2 is Z2 + 2,
+%     T3 is Z2 + 3,
+%     T17 is Z2 - 1,
+%     T16 is Z2 - 2,
+%     T15 is Z2 - 3,
+%     T14 is Z2 - 4,
+%     T13 is Z2 - 5,
+%     T12 is Z2 - 6,
+%     T11 is Z2 - 7,
+%     T10 is Z2 - 8,
+%     T9 is Z2 - 9,
+%     T8 is Z2 - 10,
+%     T7 is Z2 - 11,
+%     T6 is Z2 - 12,
+%     T5 is Z2 - 13,
+%     T4 is Z2 - 14,
+%     (  
+%         Z = T1 -> Group is 1;
+%         Z = T2 -> Group is 2;
+%         Z = T3 -> Group is 3;
+%         Z = T17 -> Group is 17;
+%         Z = T16 -> Group is 16;
+%         Z = T15 -> Group is 15;
+%         Z = T14 -> Group is 14;
+%         Z = T13-> Group is 13;
+%         Z = T12 -> Group is 12;
+%         Z = T11 -> Group is 11;
+%         Z = T10 -> Group is 10;
+%         Z = T9 -> Group is 9;
+%         Z = T8 -> Group is 8;
+%         Z = T7 -> Group is 7;
+%         Z = T6 -> Group is 6;
+%         Z = T5 -> Group is 5;
+%         Z = T4 -> Group is 4      
+%     ).
