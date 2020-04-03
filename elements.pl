@@ -177,13 +177,19 @@ period(Element, Period) :-
         Period is 8
     ).
 
-%! period2(+Element:atom, -Period:int) is multi.
-%! period2(-Element:atom, +Period:int) is multi.
+%! period2(+Element:atom, +Period:int) is semidet.
+%! period2(+Element:atom, -Period:int) is semidet.
 %! period2(-Element:atom, -Period:int) is multi.
+%! period2(-Element:atom, +Period:int) is semidet.
 %
 %  True if element Element is in period Period.
 %
 period2(Element, Period) :-
+    nonvar(Element), var(Period) ->
+        period2_(Element, Period), !;
+    period2_(Element, Period).
+
+period2_(Element, Period) :-
     element_fact(Element, _, _, Z, _),
     List = [0, 2, 10, 18, 36, 54, 86, 118],
         nth0(Period, List, Proton),
