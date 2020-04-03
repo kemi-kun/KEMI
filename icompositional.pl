@@ -66,6 +66,9 @@ get_ion_part_(NetCharge, IonSign, ChargeStr) :-
 %   True when `Name` is a compostional homonuclear name for the homonuclear 
 %   compound represented by `Formula`. False otherwise.
 %
+%   @arg Formula – the chemical formula of the homonuclear molecule
+%        Name –  the stoichiometric name of the homonuclear molecule
+%
 homonuclear_cn(Formula, Name) :-
     nonvar(Name) ->
         homonuclear_name_atom(Name, Atom),
