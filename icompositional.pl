@@ -67,7 +67,7 @@ get_ion_part_(NetCharge, IonSign, ChargeStr) :-
 %   compound represented by `Formula`. False otherwise.
 %
 %   @arg Formula – the chemical formula of the homonuclear molecule
-%        Name –  the stoichiometric name of the homonuclear molecule
+%   @arg Name –  the stoichiometric name of the homonuclear molecule
 %
 homonuclear_cn(Formula, Name) :-
     nonvar(Name) ->
@@ -106,7 +106,6 @@ homonuclear_name_atom_(Name, Element-Amount) :-
 
 
 %!  homonuclear_formula_atom(?Formula:string, ?Element:atom, ?Amount:int) is det/multi.
-%
 homonuclear_formula_atom(Formula, Element-Amount) :-
     nonvar(Formula) ->
         split_symbol_num(Formula, Symbol, Amount),
@@ -141,6 +140,9 @@ homonuclear(Formula) :-
 %!  binary_compound_cn(+Formula: string, +Name: string) is det.
 %!  binary_compound_cn(-Formula: string, +Name: string) is ERROR.
 %
+%   @arg Formula – the chemical formula of the binary compound
+%   @arg Name – the compositional name of the binary compound
+%   
 %   IR-5.2 p.81-82
 %
 binary_compound_cn(Formula, Name) :-
@@ -175,7 +177,7 @@ binary_compound(Formula) :-
 %!  ion_cn(-Formula: string, -Name: string) is failure.
 %
 %   @arg Formula – the chemical formula of the cationic or anionic compound
-%        Name – the compositional name of the cationic or anionic compound
+%   @arg Name – the compositional name of the cationic or anionic compound
 %
 ion_cn(Formula, Name) :-
     nonvar(Formula),
@@ -291,7 +293,7 @@ homopolyatomic_anion_cn(Formula, Name) :-
 % # 8Kr⋅46H2O ⇒ krypton—water (8/46)
 %
 %   @arg Formula – the chemical formula of the addition compound
-%        Name – the compositional name of the addition compound
+%   @arg Name – the compositional name of the addition compound
 %
 addition_compound_cn(Formula, Name) :-
     nonvar(Formula),
@@ -328,7 +330,7 @@ re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 %!  general_stoichiometric(-Formula: string, -Name: string) is failure.
 %
 %   @arg Formula – the generalized salt formula
-%        Name –  the stoichiometric name of the generalized salt formula
+%   @arg Name –  the stoichiometric name of the generalized salt formula
 %
 general_stoichiometric(Formula, Name) :-
     nonvar(Formula),
@@ -352,7 +354,6 @@ general_stoichiometric_ion(Formula, Name) :-
     join("", ["(", NeutralName, ")", ChargeStr], Name).
 
 %!  split_generalized_salt_formula(+Formula:string, -EPCs:list(Element-Amount), -ENCs:list(Element-Amount)) is mutli.
-%
 split_generalized_salt_formula(Formula, EPCs, ENCs) :-
     count_atoms(Formula, Atoms),
     append(EPCs_, ENCs_, Atoms),
