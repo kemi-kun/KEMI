@@ -69,8 +69,8 @@ get_ion_part_(NetCharge, IonSign, ChargeStr) :-
 homonuclear_cn(Formula, Name) :-
     nonvar(Name) ->
         homonuclear_name_atom(Name, Atom),
-        homonuclear_atom_formula(Atom, Formula);
-    homonuclear_atom_formula(Atom, Formula),
+        homonuclear_formula_atom(Formula, Atom);
+    homonuclear_formula_atom(Formula, Atom),
     homonuclear_name_atom(Name, Atom),
     % chcek formula
     homonuclear(Formula),
@@ -99,12 +99,12 @@ homonuclear_name_atom_(Name, Element-Amount) :-
         Amount = 1, group(Element, 18) -> MulPrefix = "";
         multiplicative_prefix(Amount, MulPrefix)
     ),
-    string_concat(MulPrefix, ElementName, Name).
+    prepend_prefix(ElementName, MulPrefix, Name).
 
 
 %!  homonuclear_atom_formula(?Element:atom, ?Amount:int, ?Formula:string) is det.
 %
-homonuclear_atom_formula(Element-Amount, Formula) :-
+homonuclear_formula_atom(Formula, Element-Amount) :-
     nonvar(Formula) ->
         split_symbol_num(Formula, Symbol, Amount),
         element_symbol(Element, Symbol);
@@ -114,9 +114,10 @@ homonuclear_atom_formula(Element-Amount, Formula) :-
 
 split_symbol_num(String, Symbol, Num) :-
     nonvar(String) ->
-        re_matchsub("(?<symbol>[A-z]*)(?<num>[0-9]*)?", String, Sub, []),
+        re_matchsub("(?<symbol>[A-z]*)(?<numstr>[0-9]*)?", String, Sub, []),
         get_dict(symbol, Sub, Symbol),
-        get_dict(num, Sub, NumStr),
+        get_dict(numstr, Sub, NumStr),
+        NumStr \= "1",
         (number_string(Num, NumStr) -> true; Num is 1);
     nonvar(Symbol), nonvar(Num) ->
         (
