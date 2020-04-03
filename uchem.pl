@@ -5,7 +5,7 @@
 :- use_module(support).
 :- use_module(ustr).
 :- use_module(ucollections).
-:- use_module(unum).
+:- use_module(unums).
 
 
 element_quantity(Symbol, Quantity) :-

@@ -9,10 +9,7 @@ Implements:
 :- module(elements,[group/2,element_name/2,element_symbol/2]).
 :- use_module(ustr,[capitalize/2,join/3]).
 :- use_module(utils,[split_digits/2,num_digits/2]).
-:- use_module(facts,[
-    element_fact/5,
-    numerical_root_fact/2
-    ]).
+:- use_module(facts).
 
 %!  element_name(+Element:atom, +ElementName:string) is semidet.
 %!  element_name(+Element:atom, -ElementName:string) is multi.

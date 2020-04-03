@@ -9,7 +9,7 @@
 :- use_module(support).
 :- use_module(uchem).
 :- use_module(ucollections).
-:- use_module(unum).
+:- use_module(unums).
 :- use_module(ustr).
 
 

@@ -6,9 +6,9 @@
     get_neutral_specie/2
     ]).
 
-:- use_module(elements, [group_/2]).
+:- use_module(elements, [element_name/2, group/2, group_/2]).
 :- use_module(facts).
-:- use_module(unum).
+:- use_module(unums).
 :- use_module(ustr).
 :- use_module(ucollections).
 :- use_module(ustr).
