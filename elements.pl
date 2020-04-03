@@ -25,6 +25,7 @@ element_name(Element, ElementName) :-
     var(Element), var(ElementName) ->
         (
             element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight)
+            % uncomment to include alternative element name in generation
             % ;alternative_element_name(Element, ElementName)
         );
     element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight);
