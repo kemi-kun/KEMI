@@ -60,7 +60,7 @@ get_ion_part_(NetCharge, IonSign, ChargeStr) :-
 
 %!  homonuclear_cn(+Formula:string, +Name:string) is semidet.
 %!  homonuclear_cn(+Formula:string, -Name:string) is semidet.
-%!  homonuclear_cn(-Formula:string, -Name:string) is semidet.
+%!  homonuclear_cn(-Formula:string, -Name:string) is multi.
 %!  homonuclear_cn(-Formula:string, +Name:string) is semidet.
 %
 %   True when `Name` is a compostional homonuclear name for the homonuclear 
@@ -77,7 +77,7 @@ homonuclear_cn(Formula, Name) :-
     not(ion(Formula)).
 
 
-%!  homonuclear_name_atom(Name:string, Element:atom, Amount:int) is semidet.
+%!  homonuclear_name_atom(?Name:string, ?Element:atom, ?Amount:int) is det/multi.
 %
 %   True when `Atom = Element-Amount` is the atoms in the formula representted by `Name`.
 %   False when `Name` is not a compositional homonuclear compound name.
@@ -102,7 +102,7 @@ homonuclear_name_atom_(Name, Element-Amount) :-
     prepend_prefix(ElementName, MulPrefix, Name).
 
 
-%!  homonuclear_atom_formula(?Element:atom, ?Amount:int, ?Formula:string) is det.
+%!  homonuclear_atom_formula(?Formula:string, ?Element:atom, ?Amount:int) is det/multi.
 %
 homonuclear_formula_atom(Formula, Element-Amount) :-
     nonvar(Formula) ->
