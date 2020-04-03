@@ -126,9 +126,8 @@ split_symbol_num(String, Symbol, Num) :-
         ).
 
 
-%
-%
-%
+%!  homonulcear(+Formula) is semidet.
+%!  homonulcear(-Formula) is failure.
 %
 homonuclear(Formula) :-
     get_all_elements(Formula, Elements),
