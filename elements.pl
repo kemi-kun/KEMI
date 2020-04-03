@@ -50,13 +50,15 @@ element_symbol(Element, Symbol) :-
 %!  atomic_number(+Element:atom, +AtomicNumber:string) is semidet.
 %!  atomic_number(+Element:atom, -AtomicNumber:string) is multi.
 %!  atomic_number(-Element:atom, -AtomicNumber:string) is multi.
-%!  atomic_number(-Element:atom, +AtomicNumber:string) is multi.
+%!  atomic_number(-Element:atom, +AtomicNumber:string) is semidet.
 %
+%   True when element `Element` has `AtomicNumber` protons.
+%   Generates element facts when both `Element` and `AtomicNumber` is unbound.
 %
 atomic_number(Element, AtomicNumber) :-
     var(Element), var(AtomicNumber) ->
         element_fact(Element, _ElementName, _Symbol, AtomicNumber, _AtomicWeight);
-    element_fact(Element, _ElementName, _Symbol, AtomicNumber, _AtomicWeight);
+    element_fact(Element, _ElementName, _Symbol, AtomicNumber, _AtomicWeight) -> true;
     new_element(Element, _ElementName, _Symbol, AtomicNumber).
 
 
