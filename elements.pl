@@ -8,7 +8,7 @@ Implements:
 */
 :- module(elements,[group/2,element_name/2,element_symbol/2]).
 :- use_module(ustr,[capitalize/2,join/3]).
-:- use_module(utils,[split_digits/2,num_digits/2]).
+:- use_module(unums,[split_digits/2,num_digits/2]).
 :- use_module(facts).
 
 %!  element_name(+Element:atom, +ElementName:string) is semidet.
@@ -28,37 +28,33 @@ atomic_number(Element, Z) :-
     element_fact(Element, _, _, Z, _) -> true;
     new_element_atomic_number(Element, Z).
 
-%!  new_element(+Element:atom, +Name:string, +Symbol:string, +NumProtons:int) is semidet.
+%!  new_element(?Element:atom, ?Name:string, ?Symbol:string, ?NumProtons:int) is det/multi.
+%
+%   True when "new element" `Element` has name `Name`, symbol `Symbol` and `NumProtons` protons.
 %
 new_element(Element, ElementName, Symbol, NumProtons) :-
     (nonvar(Element); nonvar(ElementName)) ->
         atom_string(Element, ElementName),
-        new_element_atomic_number(ElementName, NumProtons),
+        new_element_name_atomic_number(ElementName, NumProtons),
         new_element_symbol_atomic_number(Symbol, NumProtons);
     new_element_symbol_atomic_number(Symbol, NumProtons),
-    new_element_atomic_number(ElementName, NumProtons),
+    new_element_name_atomic_number(ElementName, NumProtons),
     atom_string(Element, ElementName).
 
-%!  new_element_atomic_number(+ElementName:string, +Z:int) is semidet.
-%!  new_element_atomic_number(+ElementName:string, -Z:int) is semidet.
-%!  new_element_atomic_number(-ElementName:string, -Z:int) is multi.
-%!  new_element_atomic_number(-ElementName:string, +Z:int) is det.
+
+%!  new_element_name_atomic_number(+ElementName:string, +AtomicNumber:int) is semidet.
+%!  new_element_name_atomic_number(+ElementName:string, -AtomicNumber:int) is semidet.
+%!  new_element_name_atomic_number(-ElementName:string, -AtomicNumber:int) is multi.
+%!  new_element_name_atomic_number(-ElementName:string, +AtomicNumber:int) is det.
 %
 %   True when `Z` is the atomic number of "new" element `Element`.
 %
-new_element_atomic_number(ElementName, Z) :-
-    nonvar(ElementName), var(Z) ->
-        string_length(ElementName, L),
-        Min is round((L - 3) / 4),
-        Max is round(L / 3),
-        % MaxL         7, 11, 15, ...
-        % Digits of Z: 1,  2,  3, ...
-        % MinL         4,  6,  9, ...
-        between(Min, Max, N),
-        num_digits(N, Z),
-        new_element_atomic_number_(ElementName, Z), !;
-    new_element_atomic_number_(ElementName, Z).
-new_element_atomic_number_(ElementName, Z) :-
+new_element_name_atomic_number(ElementName, AtomicNumber) :-
+    nonvar(ElementName), var(AtomicNumber) ->
+        new_element_name_atomic_number_(ElementName, AtomicNumber);
+    new_element_atomic_number_name_(AtomicNumber, ElementName).
+
+new_element_atomic_number_name_(Z, ElementName) :-
     between(1, infinite, Z),
     split_digits(Z, L0),
     maplist(numerical_root_fact, L0, L1),
@@ -68,6 +64,19 @@ new_element_atomic_number_(ElementName, Z) :-
             string_concat(T0, um, ElementName);
         string_concat(T0, ium, ElementName)
     ).
+
+%!  new_element_name_atomic_number(+ElementName:string, -Z:int) is semidet.
+new_element_name_atomic_number_(ElementName, Z) :-
+    string_length(ElementName, L),
+    Min is round((L - 3) / 4),
+    Max is round(L / 3),
+    % MaxL         7, 11, 15, ...
+    % Digits of Z: 1,  2,  3, ...
+    % MinL         4,  6,  9, ...
+    between(Min, Max, N),
+    num_digits(N, Z),
+    new_element_atomic_number_name_(ElementName, Z), !.
+
 
 %!  new_element_symbol_atomic_number(+Symbol:atom, +Z:int) is semidet.
 %!  new_element_symbol_atomic_number(+Symbol:atom, -Z:int) is semidet.
@@ -91,7 +100,6 @@ new_element_symbol_atomic_number_(Symbol, Z) :-
     capitalize(Symbol_, Symbol).
 
 %!  get_first_char_(+String:string, -Char:string) is det.
-%
 get_first_char_(String, Char) :-
     sub_string(String, 0, 1, _, Char).
 
