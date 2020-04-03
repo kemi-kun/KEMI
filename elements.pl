@@ -35,15 +35,17 @@ element_name(Element, ElementName) :-
 
 
 %!  element_symbol(+Element:atom, +Symbol:string) is semidet.
-%!  element_symbol(+Element:atom, -Symbol:string) is multi.
+%!  element_symbol(+Element:atom, -Symbol:string) is semidet.
 %!  element_symbol(-Element:atom, -Symbol:string) is multi.
-%!  element_symbol(-Element:atom, +Symbol:string) is multi.
+%!  element_symbol(-Element:atom, +Symbol:string) is semidet.
 %
+%   True when element `Element` has symbol `Symbol`.
+%   Generates element facts when both `Element` and `Symbol` is unbound.
 %
 element_symbol(Element, Symbol) :-
     var(Element), var(Symbol) ->
         element_fact(Element, _ElementName, Symbol, _AtomicNumber, _AtomicWeight);
-    element_fact(Element, _ElementName, Symbol, _AtomicNumber, _AtomicWeight);
+    element_fact(Element, _ElementName, Symbol, _AtomicNumber, _AtomicWeight) -> true;
     new_element(Element, _ElementName, Symbol, _AtomicNumber).
 
 
