@@ -10,6 +10,7 @@ Implements:
 :- use_module(ustr,[capitalize/2,join/3]).
 :- use_module(unums,[split_digits/2,num_digits/2]).
 :- use_module(facts).
+:- use_module(library(arithmetic)).
 
 
 %!  element_name(+Element:atom, +ElementName:string) is semidet.
@@ -24,6 +25,8 @@ element_name(Element, ElementName) :-
     var(Element), var(ElementName) ->
         element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight);
     element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight);
+    alternative_element_name(Element, ElementName) ->
+        true;
     new_element(Element, ElementName, _Symbol, _AtomicNumber).
 
 
