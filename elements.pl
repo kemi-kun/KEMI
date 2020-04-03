@@ -199,15 +199,19 @@ period2(Element, Period) :-
 %   True if element Element is in group `Group`.
 %
 group(Element, Group) :-
-    FullOrbital = [0, 2, 10, 18, 36, 54, 86, 118],
-    nth0(Index, FullOrbital, NProton),
-    nth1(Index, FullOrbital, NProton_),
-    T is min(NProton+3, 118),
-    between(NProton_, T, Proton),
+    element_fact(Element, _, _, _, _),
+    group_(Element, Group_),
+    Group = Group_.
+
+%!  group(+Element:atom, -Group:int) is semidet.
+group_(Element, Group) :-
     element_fact(Element, _, _, Proton, _),
+    member(NProton, [2, 10, 18, 36, 54, 86, 118]),
+    T is min(NProton+3, 118),
+    between(1, T, Proton),
     (
-        Element = hydrogen ->
-            Group is 1;
+        group_exception(Element, Group) ->
+            true;
 
         Proton is NProton,
         Group is 18 ->
@@ -220,7 +224,11 @@ group(Element, Group) :-
         between(4, 17, Group),
         Proton is NProton -18 + Group ->
             true
-    ).
+    ), !.
+
+group_exception(hydrogen, 1).
+group_exception(boron, 13).
+group_exception(aluminium, 13).
 
 % group(Element, Group) :-
 %     Element = hydrogen, 
