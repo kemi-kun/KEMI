@@ -12,6 +12,15 @@ inorganic_name(Formula, Name) :-
     additive_name(Formula, Name);
     alternative_name(Formula, Name).
 
+
+%!  compositional_name(+Formula: string, +Name: string) is semidet.
+%!  compositional_name(+Formula: string, -Name: string) is semidet.
+%!  compositional_name(-Formula: string, +Name: string) is semidet.
+%!  compositional_name(-Formula: string, -Name: string) is ERROR.
+%
+%   @arg Formula – the chemical formula of an element or a compound
+%        Name – the compositional name of an element or a compound
+%
 compositional_name(Formula, Name) :-
     homonuclear_cn(Formula, Name);
     binary_compound_cn(Formula, Name);
