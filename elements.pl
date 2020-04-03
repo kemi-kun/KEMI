@@ -79,6 +79,7 @@ new_element_name_atomic_number(ElementName, AtomicNumber) :-
         new_element_name_atomic_number_(ElementName, AtomicNumber);
     new_element_atomic_number_name_(AtomicNumber, ElementName).
 
+%!  new_element_atomic_number_name_(+Z:int, -ElementName:string) is semidet.
 new_element_atomic_number_name_(Z, ElementName) :-
     between(1, infinite, Z),
     split_digits(Z, L0),
@@ -90,7 +91,7 @@ new_element_atomic_number_name_(Z, ElementName) :-
         string_concat(T0, ium, ElementName)
     ).
 
-%!  new_element_name_atomic_number(+ElementName:string, -Z:int) is semidet.
+%!  new_element_name_atomic_number_(+ElementName:string, -Z:int) is semidet.
 new_element_name_atomic_number_(ElementName, Z) :-
     string_length(ElementName, L),
     Min is round((L - 3) / 4),
