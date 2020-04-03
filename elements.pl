@@ -202,7 +202,7 @@ group(Element, Group) :-
     FullOrbital = [0, 2, 10, 18, 36, 54, 86, 118],
     nth0(Index, FullOrbital, NProton),
     nth1(Index, FullOrbital, NProton_),
-    T is NProton+3,
+    T is min(NProton+3, 118),
     between(NProton_, T, Proton),
     element_fact(Element, _, _, Proton, _),
     (
