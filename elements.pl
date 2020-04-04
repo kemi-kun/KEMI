@@ -213,8 +213,8 @@ group(Element, Group) :-
 group_(Element, Group) :-
     element_fact(Element, _, _, Proton, _),
     member(NProton, [2, 10, 18, 36, 54, 86, 118]),
-    T is min(NProton+3, 118),
-    between(1, T, Proton),
+    T is min(NProton+3, 118),   % for efficiency
+    between(1, T, Proton),      % for efficiency
     (
         group_exception(Element, Group) ->
             true;
