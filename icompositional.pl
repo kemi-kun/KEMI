@@ -105,6 +105,7 @@ homonuclear_name_atom_(Name, Element-Amount) :-
     string_concat(MulPrefix, ElementName, Name).
 
 %!  homonuclear_formula_atom(?Formula:string, ?Element:atom, ?Amount:int) is det/multi.
+%
 homonuclear_formula_atom(Formula, Element-Amount) :-
     nonvar(Formula) ->
         split_symbol_num(Formula, Symbol, Amount),
@@ -164,12 +165,31 @@ binary_compound_cn(Formula, Name) :-
     prepend_prefix(NegativePart, ENegMulPrefixEx, ENeg),
     string_concat(EPos_, ENeg, Name).
 
-
+%!  binary_compound_name_atoms(+Name:string, +Atoms:list(Element:atom-Amount:int) is semidet.
+%!  binary_compound_name_atoms(+Name:string, -Atoms:list(Element:atom-Amount:int) is semidet.
+%!  binary_compound_name_atoms(-Name:string, +Atoms:list(Element:atom-Amount:int) is det.
+%!  binary_compound_name_atoms(-Name:string, -Atoms:list(Element:atom-Amount:int) is failure.
+%
+%
+%
 binary_compound_name_atoms(Name, Atoms) :-
+    nonvar(Name) ->
+        binary_compound_name_atoms_(Name, Atoms);
+    nonvar(Atoms) ->
+        binary_compound_atoms_name_(Atoms, Name);
+    fail.
+
+binary_compound_name_atoms_(Name, Atoms) :-
     split_positive_negative(Name, PositivePart, NegativePart),
     electropositive_name_atom(PositivePart, PosElement-PosAmount),
     electronegative_name_atom(NegativePart, NegElement-NegAmount),
     Atoms = [PosElement-PosAmount, NegElement-NegAmount].
+
+binary_compound_atoms_name_(Atoms, Name) :-
+    Atoms = [PosElement-PosAmount, NegElement-NegAmount],
+    electropositive_name_atom(PositivePart, PosElement-PosAmount),
+    electronegative_name_atom(NegativePart, NegElement-NegAmount),
+    split_positive_negative(Name, PositivePart, NegativePart).
 
 %!  electropositive_name_atom(?Name:string, ?Element:atom, ?Amount:int) is det/multi.
 electropositive_name_atom(Name, Element-Amount) :-
