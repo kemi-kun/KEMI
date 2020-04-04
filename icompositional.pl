@@ -224,7 +224,10 @@ split_positive_negative(Name, PositivePart, NegativePart) :-
     get_dict(negative, Sub, NegativePart).
 
 
-%!  electropositive_name_atom(?Name:string, ?Element:atom, ?Amount:int) is det/multi.
+%!  electropositive_name_atom(+Name:string, +Element:atom-Amount:int) is semidet.
+%!  electropositive_name_atom(+Name:string, -Element:atom-Amount:int) is semidet.
+%!  electropositive_name_atom(-Name:string, -Element:atom-Amount:int) is multi.
+%!  electropositive_name_atom(-Name:string, +Element:atom-Amount:int) is det.
 electropositive_name_atom(Name, Element-Amount) :-
     nonvar(Name) ->
         electropositive_name_atom_(Name, Element-Amount), !;
@@ -242,7 +245,10 @@ electropositive_name_atom_(Name, Element-Amount) :-
     string_concat(MulPrefix, ElementName, Name).
 
 
-%!  electronegative_name_atom(?Name:string, ?Element:atom, ?Amount:int) is det/multi.
+%!  electronegative_name_atom(+Name:string, +Element:atom-Amount:int) is semidet.
+%!  electronegative_name_atom(+Name:string, -Element:atom-Amount:int) is semidet.
+%!  electronegative_name_atom(-Name:string, -Element:atom-Amount:int) is multi.
+%!  electronegative_name_atom(-Name:string, +Element:atom-Amount:int) is det.
 electronegative_name_atom(Name, Element-Amount) :-
     nonvar(Name) ->
         electronegative_name_atom_loose_(Name, Element-Amount), !;
