@@ -141,7 +141,7 @@ homonuclear(Formula) :-
 %!  binary_compound_cn(-Formula: string, +Name: string) is ERROR.
 %
 %   @arg Formula – the chemical formula of the binary compound
-%   @arg Name – the compositional name of the binary compound
+%   @arg Name – the stoichiometric name of the binary compound
 %   
 %   IR-5.2 p.81-82
 %
