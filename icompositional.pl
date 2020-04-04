@@ -136,16 +136,17 @@ homonuclear(Formula) :-
     length(Elements,1).
 
 
-%!  binary_compound_cn(+Formula: string, -Name: string) is det.
-%!  binary_compound_cn(+Formula: string, +Name: string) is det.
-%!  binary_compound_cn(-Formula: string, +Name: string) is ERROR.
+%!  binary_compound_cn(+Formula: string, +Name: string) is semidet.
+%!  binary_compound_cn(+Formula: string, -Name: string) is semidet.
+%!  binary_compound_cn(-Formula: string, -Name: string) is failure.
+%!  binary_compound_cn(-Formula: string, +Name: string) is semidet.
 %
 %   @arg Formula – the chemical formula of the binary compound
 %   @arg Name – the stoichiometric name of the binary compound
 %   
 %   IR-5.2 p.81-82
 %
-homonuclear_cn(Formula, Name) :-
+binary_compound_cn(Formula, Name) :-
     nonvar(Name) ->
         binary_compound_name_atoms(Name, Atom),
         binary_compound_formula_atoms(Formula, Atom);
