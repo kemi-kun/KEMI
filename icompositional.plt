@@ -46,12 +46,12 @@ test(binary_compound_cn) :-
     assertion(binary_compound_name_atoms("triiron tetraoxide", [iron-3, oxygen-4])),
     assertion(binary_compound_name_atoms("silicon tetrachloride", [silicon-1, chlorine-4])),
     assertion(binary_compound_name_atoms("nickel stannide", [nickel-1, tin-1])),
-    assertion(binary_compound_name_atoms("tricosachromium hexacarbide", [chromium-23, carbon-6])).
+    assertion(binary_compound_name_atoms("tricosachromium hexacarbide", [chromium-23, carbon-6])),
 
     % assertion(binary_compound_cn("NaCl", "sodium chloride")),
     % % Red book IR-5.2 tests
     % assertion(binary_compound_cn("HCl", "hydrogen chloride")),
-    % assertion(binary_compound_cn("NO", "nitrogen oxide")),
+    % assertion(binary_compound_cn("NO", "nitrogen monoxide")),
     % assertion(binary_compound_cn("NO2", "nitrogen dioxide")),
     % assertion(binary_compound_cn("N2O4", "dinitrogen tetraoxide")),
     % assertion(binary_compound_cn("OCl2", "oxygen dichloride")),
@@ -62,6 +62,8 @@ test(binary_compound_cn) :-
     % assertion(binary_compound_cn("Ca3P2", "tricalcium diphosphide")),
     % assertion(binary_compound_cn("NiSn", "nickel stannide")),
     % assertion(binary_compound_cn("Cu5Zn8", "pentacopper octazincide")),
-    % assertion(binary_compound_cn("Cr23C6", "tricosachromium hexacarbide")).
+    % assertion(binary_compound_cn("Cr23C6", "tricosachromium hexacarbide")),
+    
+    true.
 
 :- end_tests(test_icompositional).
