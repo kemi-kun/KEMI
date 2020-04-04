@@ -170,7 +170,8 @@ binary_compound_cn(Formula, Name) :-
 %!  binary_compound_name_atoms(-Name:string, +Atoms:list(Element:atom-Amount:int) is det.
 %!  binary_compound_name_atoms(-Name:string, -Atoms:list(Element:atom-Amount:int) is failure.
 %
-%
+%   True when `Atoms` is the list of `Element-Amount` represented by `Name`.
+%   False when `Name` is not a stoichiometric name of binary compound.
 %
 binary_compound_name_atoms(Name, Atoms) :-
     nonvar(Name) ->
