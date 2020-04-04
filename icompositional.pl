@@ -104,7 +104,6 @@ homonuclear_name_atom_(Name, Element-Amount) :-
     ),
     string_concat(MulPrefix, ElementName, Name).
 
-
 %!  homonuclear_formula_atom(?Formula:string, ?Element:atom, ?Amount:int) is det/multi.
 homonuclear_formula_atom(Formula, Element-Amount) :-
     nonvar(Formula) ->
@@ -164,6 +163,76 @@ binary_compound_cn(Formula, Name) :-
     string_concat(EPos, " ", EPos_),
     prepend_prefix(NegativePart, ENegMulPrefixEx, ENeg),
     string_concat(EPos_, ENeg, Name).
+
+
+binary_compound_name_atoms(Name, Atoms) :-
+    split_positive_negative(Name, PositivePart, NegativePart),
+    electropositive_name_atom(PositivePart, PosElement-PosAmount),
+    electronegative_name_atom(NegativePart, NegElement-NegAmount),
+    Atoms = [PosElement-PosAmount, NegElement-NegAmount].
+
+%!  electropositive_name_atom(?Name:string, ?Element:atom, ?Amount:int) is det/multi.
+electropositive_name_atom(Name, Element-Amount) :-
+    nonvar(Name) ->
+        electropositive_name_atom_(Name, Element-Amount), !;
+    nonvar(Element), nonvar(Amount) ->
+        electropositive_name_atom_(Name, Element-Amount), !;
+    electropositive_name_atom_(Name, Element-Amount).
+
+electropositive_name_atom_(Name, Element-Amount) :-
+    between(1, 9999, Amount),
+    element_name(Element, ElementName),
+    (
+        Amount = 1 -> MulPrefix = "";
+        multiplicative_prefix(Amount, MulPrefix)
+    ),
+    string_concat(MulPrefix, ElementName, Name).
+
+%!  electronegative_name_atom(?Name:string, ?Element:atom, ?Amount:int) is det/multi.
+electronegative_name_atom(Name, Element-Amount) :-
+    nonvar(Name) ->
+        electronegative_name_atom_loose_(Name, Element-Amount), !;
+    nonvar(Element), nonvar(Amount) ->
+        electronegative_name_atom_(Name, Element-Amount), !;
+    electronegative_name_atom_(Name, Element-Amount).
+
+electronegative_name_atom_(Name, Element-Amount) :-
+    between(1, 9999, Amount),
+    element_name(Element, ElementName),
+    append_suffix(ElementName, "ide", IdeName),
+    (
+        Amount = 1, Element \= oxygen -> MulPrefix = "";
+        multiplicative_prefix(Amount, MulPrefix)
+    ),
+    prepend_prefix(IdeName, MulPrefix, Name).
+
+electronegative_name_atom_loose_(Name, Element-Amount) :-
+    between(1, 9999, Amount),
+    element_name(Element, ElementName),
+    append_suffix(ElementName, "ide", IdeName),
+    (
+        Amount = 1, Element \= oxygen, MulPrefix = "";
+        multiplicative_prefix(Amount, MulPrefix)
+    ),
+    prepend_prefix(IdeName, MulPrefix, Name).
+
+%!  split_positive_negative(-Name:string, +PositivePart:string, +NegativePart) is semidet.
+split_positive_negative(Name, PositivePart, NegativePart) :-
+    nonvar(PositivePart), nonvar(NegativePart),
+    string_concat(PositivePart, " ", T),
+    string_concat(T, NegativePart, Name),
+    !.
+
+%!  split_positive_negative(+Name:string, -PositivePart:string, -NegativePart) is semidet.
+split_positive_negative(Name, PositivePart, NegativePart) :-
+    nonvar(Name),
+    re_matchsub("(?<positive>[a-z]+) (?<negative>[a-z]+)", Name, Sub, []),
+    get_dict(positive, Sub, PositivePart),
+    get_dict(negative, Sub, NegativePart).
+
+
+binary_compound_formula_atoms(Name, Atoms) :-
+    fail.
  
 binary_compound(Formula) :-
     get_all_elements(Formula, Elements),
