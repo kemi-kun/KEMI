@@ -346,7 +346,7 @@ homoatomic_ion_name_atom(Name, Element-Amount, Charge) :-
 
 homoatomic_ion_name_atom_(Name, Element-Amount, Charge) :-
     nonvar(Name),
-    re_matchsub("(?<name_part>[a-z]+)(?<charge_part>\\([1-9][0-9]*[+-]\\))", Name, Sub, []),
+    re_matchsub("(?<name_part>[a-z]+)\\((?<charge_part>[1-9][0-9]*[+-])\\)", Name, Sub, []),
     get_dict(name_part, Sub, NamePart),
     get_dict(charge_part, Sub, ChargePart),
     charge_string(ChargePart, Charge),
@@ -368,7 +368,7 @@ homoatomic_ion_atom_name_(Element-Amount, Charge, Name) :-
             electronegative_name_atom(NamePart, Element-Amount)
     ),
     charge_string(ChargePart, Charge),
-    string_concat(NamePart, ChargePart, Name).
+    join("", [NamePart, "(", ChargePart, ")"], Name).
 
 charge_string(ChargePart, Charge) :-
     nonvar(Charge),
@@ -376,14 +376,14 @@ charge_string(ChargePart, Charge) :-
     number_string(Charge_, NumStr),
     (
         Charge > 0 ->
-            join("", ["(", NumStr, "+)"], ChargePart);
+            string_concat(NumStr, "+", ChargePart);
         Charge < 0 ->
-            join("", ["(", NumStr, "-)"], ChargePart)
+            string_concat(NumStr, "-", ChargePart)
     ), !.
 
 charge_string(ChargePart, Charge) :-
     nonvar(ChargePart),
-    re_matchsub("\\((?<num>[1-9][0-9]*)(?<sign>[+-])\\)", ChargePart, Sub, []),
+    re_matchsub("(?<num>[1-9][0-9]*)(?<sign>[+-])", ChargePart, Sub, []),
     get_dict(num, Sub, NumStr),
     get_dict('sign', Sub, Sign),
     (
