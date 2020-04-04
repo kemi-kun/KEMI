@@ -306,19 +306,89 @@ cation_cn(Formula, Name) :-
 %
 monoatomic_cation_cn(Formula, Name) :-
     nonvar(Name) ->
-        monoatomic_cation_cn_(Formula, Name), !;
-    monoatomic_cation_cn_(Formula, Name).
+        homoatomic_ion_name_atom(Name, Element-1, Charge),
+        homoatomic_ion_formula_atom(Formula, Element-1, Charge);
+    nonvar(Formula) ->
+        homoatomic_ion_formula_atom(Formula, Element-1, Charge),
+        homoatomic_ion_name_atom(Name, Element-1, Charge);
+    fail.
 % monoatomic_cation_cn("[Na]+", "sodium(1+)")
-monoatomic_cation_cn_(Formula, Name) :-
-    monoatomic(Formula), 
-    cation(Formula),
-    get_element(Formula, 0, Element),
-    element_name(Element, ElementName),
-    get_net_charge(Formula, NetCharge),
-    get_ion_part_(NetCharge, "+", ChargeStr),
-    string_concat(ElementName, ChargeStr, Name),
-    !.
+% monoatomic_cation_cn_(Formula, Name) :-
+%     monoatomic(Formula), 
+%     cation(Formula),
+%     get_element(Formula, 0, Element),
+%     element_name(Element, ElementName),
+%     get_net_charge(Formula, NetCharge),
+%     get_ion_part_(NetCharge, "+", ChargeStr),
+%     string_concat(ElementName, ChargeStr, Name),
+%     !.
 
+homoatomic_ion_formula_atom(Formula, Element-Amount, Charge) :-
+    nonvar(Formula) ->
+        count_atoms(Formula, Atoms),
+        Atoms = [Element-Amount],
+        get_net_charge(Formula, Charge);
+    nonvar(Element), nonvar(Amount), nonvar(Charge) ->
+        homonuclear_formula_atom(Term, Element-Amount),
+        charge_string(Charge, Charge),
+        join("", ["(", Term, ")", ChargePart]) ;
+    fail.
+
+homoatomic_ion_name_atom(Name, Element-Amount, Charge) :-
+    nonvar(Name) ->
+        homoatomic_ion_name_atom_(Name, Element-Amount, Charge);
+    nonvar(Element), nonvar(Amount), nonvar(Charge) ->
+        homoatomic_ion_atom_name_(Element-Amount, Charge, Name).
+
+homoatomic_ion_name_atom_(Name, Element-Amount, Charge) :-
+    nonvar(Name),
+    re_matchsub("(?<name_part>[a-z]+)(?<charge_part>\\([1-9][0-9]*[+-]\\))", Name, Sub, []),
+    get_dict(name_part, Sub, NamePart),
+    get_dict(charge_part, Sub, ChargePart),
+    charge_string(ChargePart, Charge),
+    (
+        Charge > 0 ->
+            electropositive_name_atom(NamePart, Element-Amount);
+        Charge < 0 ->
+            electronegative_name_atom(NamePart, Element-Amount)
+    ).
+
+homoatomic_ion_atom_name_(Element-Amount, Charge, Name) :-
+    between(1, infinite, Amount),
+    MaxCharge is 9 * Amount,        % +9, -5
+    between(1, MaxCharge, Charge_),
+    (
+        Charge is Charge_ ->
+            electropositive_name_atom(NamePart, Element-Amount);
+        Charge is -Charge_ ->
+            electronegative_name_atom(NamePart, Element-Amount)
+    ),
+    charge_string(ChargePart, Charge),
+    string_concat(NamePart, ChargePart, Name).
+
+charge_string(ChargePart, Charge) :-
+    nonvar(Charge),
+    Charge_ is abs(Charge),
+    number_string(Charge_, NumStr),
+    (
+        Charge > 0 ->
+            join("", ["(", NumStr, "+)"], ChargePart);
+        Charge < 0 ->
+            join("", ["(", NumStr, "-)"], ChargePart)
+    ), !.
+
+charge_string(ChargePart, Charge) :-
+    nonvar(ChargePart),
+    re_matchsub("\\((?<num>[1-9][0-9]*)(?<sign>[+-])\\)", ChargePart, Sub, []),
+    get_dict(num, Sub, NumStr),
+    get_dict('sign', Sub, Sign),
+    (
+        Sign = "+" ->
+            number_string(Charge, NumStr);
+        Sign = "-" ->
+            number_string(Num_, NumStr),
+            Charge is -Num_
+    ).
 
 %!  homopolyatomic_cation_cn(+Formula: string, -Name: string) is multi.
 %!  homopolyatomic_cation_cn(+Formula: string, +Name: string) is nondet.
