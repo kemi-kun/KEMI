@@ -335,7 +335,7 @@ homoatomic_ion_formula_atom(Formula, Element-Amount, Charge) :-
     nonvar(Element), nonvar(Amount), nonvar(Charge) ->
         homonuclear_formula_atom(Term, Element-Amount),
         charge_string(ChargePart, Charge),
-        join("", ["(", Term, ")", ChargePart]) ;
+        join("", ["(", Term, ")", ChargePart], Formula) ;
     fail.
 
 homoatomic_ion_name_atom(Name, Element-Amount, Charge) :-
