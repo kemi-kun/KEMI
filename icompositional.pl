@@ -191,6 +191,22 @@ binary_compound_atoms_name_(Atoms, Name) :-
     electronegative_name_atom(NegativePart, NegElement-NegAmount),
     split_positive_negative(Name, PositivePart, NegativePart).
 
+
+%!  split_positive_negative(-Name:string, +PositivePart:string, +NegativePart) is semidet.
+split_positive_negative(Name, PositivePart, NegativePart) :-
+    nonvar(PositivePart), nonvar(NegativePart),
+    string_concat(PositivePart, " ", T),
+    string_concat(T, NegativePart, Name),
+    !.
+
+%!  split_positive_negative(+Name:string, -PositivePart:string, -NegativePart) is semidet.
+split_positive_negative(Name, PositivePart, NegativePart) :-
+    nonvar(Name),
+    re_matchsub("(?<positive>[a-z]+) (?<negative>[a-z]+)", Name, Sub, []),
+    get_dict(positive, Sub, PositivePart),
+    get_dict(negative, Sub, NegativePart).
+
+
 %!  electropositive_name_atom(?Name:string, ?Element:atom, ?Amount:int) is det/multi.
 electropositive_name_atom(Name, Element-Amount) :-
     nonvar(Name) ->
@@ -207,6 +223,7 @@ electropositive_name_atom_(Name, Element-Amount) :-
         multiplicative_prefix(Amount, MulPrefix)
     ),
     string_concat(MulPrefix, ElementName, Name).
+
 
 %!  electronegative_name_atom(?Name:string, ?Element:atom, ?Amount:int) is det/multi.
 electronegative_name_atom(Name, Element-Amount) :-
@@ -235,20 +252,6 @@ electronegative_name_atom_loose_(Name, Element-Amount) :-
         multiplicative_prefix(Amount, MulPrefix)
     ),
     prepend_prefix(IdeName, MulPrefix, Name).
-
-%!  split_positive_negative(-Name:string, +PositivePart:string, +NegativePart) is semidet.
-split_positive_negative(Name, PositivePart, NegativePart) :-
-    nonvar(PositivePart), nonvar(NegativePart),
-    string_concat(PositivePart, " ", T),
-    string_concat(T, NegativePart, Name),
-    !.
-
-%!  split_positive_negative(+Name:string, -PositivePart:string, -NegativePart) is semidet.
-split_positive_negative(Name, PositivePart, NegativePart) :-
-    nonvar(Name),
-    re_matchsub("(?<positive>[a-z]+) (?<negative>[a-z]+)", Name, Sub, []),
-    get_dict(positive, Sub, PositivePart),
-    get_dict(negative, Sub, NegativePart).
 
 
 binary_compound_formula_atoms(Name, Atoms) :-
