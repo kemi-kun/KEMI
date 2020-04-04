@@ -171,11 +171,13 @@ binary_compound(Formula) :-
 %!  binary_compound_formula_atoms(-Formula:string, -Atoms:list(Element:atom-Amount:int) is failure.
 %
 %
+%   Note: doesn't check if `Formula` is in the correct form.
 %
 binary_compound_formula_atoms(Formula, Atoms) :-
     nonvar(Formula) ->
         count_atoms(Formula, Atoms);
     nonvar(Atoms) ->
+        length(Atoms, 2),
         maplist(homonuclear_formula_atom, Terms, Atoms),
         join("", Terms, Formula);
     fail.
