@@ -108,23 +108,23 @@ homonuclear_name_atom_(Name, Element-Amount) :-
 %
 homonuclear_formula_atom(Formula, Element-Amount) :-
     nonvar(Formula) ->
-        split_symbol_num(Formula, Symbol, Amount),
+        split_term(Formula, Symbol, Amount),
         element_symbol(Element, Symbol);
     between(1, infinite, Amount),
     element_symbol(Element, Symbol),
-    split_symbol_num(Formula, Symbol, Amount).
+    split_term(Formula, Symbol, Amount).
 
-split_symbol_num(String, Symbol, Num) :-
+split_term(String, Symbol, Amount) :-
     nonvar(String) ->
         re_matchsub("(?<symbol>[A-z]*)(?<numstr>[0-9]*)?", String, Sub, []),
         get_dict(symbol, Sub, Symbol),
         get_dict(numstr, Sub, NumStr),
         NumStr \= "1",
-        (number_string(Num, NumStr) -> true; Num is 1);
-    nonvar(Symbol), nonvar(Num) ->
+        (number_string(Amount, NumStr) -> true; Amount is 1);
+    nonvar(Symbol), nonvar(Amount) ->
         (
-            Num = 1 -> String = Symbol;
-            string_concat(Symbol, Num, String)
+            Amount = 1 -> String = Symbol;
+            string_concat(Symbol, Amount, String)
         ).
 
 
@@ -145,25 +145,40 @@ homonuclear(Formula) :-
 %   
 %   IR-5.2 p.81-82
 %
-binary_compound_cn(Formula, Name) :-
-    nonvar(Formula),
-    (
-        binary_compound(Formula),
-        not(ion(Formula))
-    ),
-    get_element(Formula, 0, EPosElement),
-    get_element(Formula, 1, ENegElement),
-    element_name(EPosElement,EPosElementName),
-    element_name(ENegElement,ENegElementName),
-    append_suffix(ENegElementName, "ide", NegativePart),
-    get_num_atoms(Formula,EPosElement, NumPositive),
-    mul_prefix_except_mono(NumPositive, EPosMulPrefix),
-    get_num_atoms(Formula, ENegElement,  NumNegative),
-    multiplicative_prefix(NumNegative, ENegMulPrefixEx),
-    string_concat(EPosMulPrefix, EPosElementName, EPos),
-    string_concat(EPos, " ", EPos_),
-    prepend_prefix(NegativePart, ENegMulPrefixEx, ENeg),
-    string_concat(EPos_, ENeg, Name).
+homonuclear_cn(Formula, Name) :-
+    nonvar(Name) ->
+        binary_compound_name_atoms(Name, Atom),
+        binary_compound_formula_atoms(Formula, Atom);
+    binary_compound_formula_atoms(Formula, Atom),
+    binary_compound_name_atoms(Name, Atom),
+    % chcek formula
+    binary_compound(Formula),
+    not(ion(Formula)).
+
+
+%!  binary_compound(+Formula:string) is semidet.
+%!  binary_compound(-Formula:string) is failure.
+%
+binary_compound(Formula) :-
+    get_all_elements(Formula, Elements),
+    length(Elements, 2).
+
+
+%!  binary_compound_formula_atoms(+Formula:string, +Atoms:list(Element:atom-Amount:int) is semidet.
+%!  binary_compound_formula_atoms(+Formula:string, -Atoms:list(Element:atom-Amount:int) is semidet.
+%!  binary_compound_formula_atoms(-Formula:string, +Atoms:list(Element:atom-Amount:int) is det.
+%!  binary_compound_formula_atoms(-Formula:string, -Atoms:list(Element:atom-Amount:int) is failure.
+%
+%
+%
+binary_compound_formula_atoms(Formula, Atoms) :-
+    nonvar(Formula) ->
+        count_atoms(Formula, Atoms);
+    nonvar(Atoms) ->
+        maplist(homonuclear_formula_atom, Terms, Atoms),
+        join("", Terms, Formula);
+    fail.
+
 
 %!  binary_compound_name_atoms(+Name:string, +Atoms:list(Element:atom-Amount:int) is semidet.
 %!  binary_compound_name_atoms(+Name:string, -Atoms:list(Element:atom-Amount:int) is semidet.
@@ -253,14 +268,6 @@ electronegative_name_atom_loose_(Name, Element-Amount) :-
     ),
     prepend_prefix(IdeName, MulPrefix, Name).
 
-
-binary_compound_formula_atoms(Name, Atoms) :-
-    fail.
- 
-binary_compound(Formula) :-
-    get_all_elements(Formula, Elements),
-    length(Elements, 2),
-    !.
 
 %!  ion_cn(+Formula: string, +Name: string) is semidet.
 %!  ion_cn(+Formula: string, -Name: string) is semidet.
