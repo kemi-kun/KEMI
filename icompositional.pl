@@ -102,7 +102,7 @@ homonuclear_name_atom_(Name, Element-Amount) :-
         Amount = 1, group(Element, 18) -> MulPrefix = "";
         multiplicative_prefix(Amount, MulPrefix)
     ),
-    prepend_prefix(ElementName, MulPrefix, Name).
+    string_concat(MulPrefix, ElementName, Name).
 
 
 %!  homonuclear_formula_atom(?Formula:string, ?Element:atom, ?Amount:int) is det/multi.
