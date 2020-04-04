@@ -305,13 +305,17 @@ cation_cn(Formula, Name) :-
 %   IR-5.3.2.2 p.82-83
 %
 monoatomic_cation_cn(Formula, Name) :-
-    nonvar(Name) ->
-        homoatomic_ion_name_atom(Name, Element-1, Charge),
-        homoatomic_ion_formula_atom(Formula, Element-1, Charge);
-    nonvar(Formula) ->
-        homoatomic_ion_formula_atom(Formula, Element-1, Charge),
-        homoatomic_ion_name_atom(Name, Element-1, Charge);
-    fail.
+    (
+        nonvar(Name) ->
+            homoatomic_ion_name_atom(Name, Element-1, Charge),
+            homoatomic_ion_formula_atom(Formula, Element-1, Charge);
+        nonvar(Formula) ->
+            homoatomic_ion_formula_atom(Formula, Element-1, Charge),
+            homoatomic_ion_name_atom(Name, Element-1, Charge)
+    ),
+    % chcek formula
+    monoatomic(Formula),
+    cation(Formula).
 % monoatomic_cation_cn("[Na]+", "sodium(1+)")
 % monoatomic_cation_cn_(Formula, Name) :-
 %     monoatomic(Formula), 
@@ -330,7 +334,7 @@ homoatomic_ion_formula_atom(Formula, Element-Amount, Charge) :-
         get_net_charge(Formula, Charge);
     nonvar(Element), nonvar(Amount), nonvar(Charge) ->
         homonuclear_formula_atom(Term, Element-Amount),
-        charge_string(Charge, Charge),
+        charge_string(ChargePart, Charge),
         join("", ["(", Term, ")", ChargePart]) ;
     fail.
 
