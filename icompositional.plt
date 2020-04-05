@@ -1,4 +1,4 @@
-:- begin_tests(test_icompositional).
+:- begin_tests(icompositional).
 :- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2]).
 
 test(binary_compound_cn) :-
@@ -90,4 +90,4 @@ test(monoatomic_cation_cn) :-
     
     true.
 
-:- end_tests(test_icompositional).
+:- end_tests(icompositional).
