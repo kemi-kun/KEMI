@@ -1,5 +1,5 @@
 :- begin_tests(icompositional).
-:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2,homonuclear_name_atom/2,homonuclear_cn/2,homopolyatomic_cation_cn/2,homopolyatomic_anion_cn/2]).
+:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2,homonuclear_name_atom/2,homonuclear_cn/2,homopolyatomic_cation_cn/2,homopolyatomic_anion_cn/2,monoatomic_anion_cn/2]).
 
 test(homonuclear_cn) :-
     %test + -
@@ -137,6 +137,30 @@ test(homopolyatomic_anion_cn) :-
     assertion(homopolyatomic_anion_cn("(O2)2-", "dioxide(2-)")),
     assertion(homopolyatomic_anion_cn("(I3)-", "triiodide(1-)")),
     assertion(homopolyatomic_anion_cn("(Pb9)4-", "nonaplumbide(4-)")),
+    
+    true.
+
+test(monoatomic_anion_cn) :-
+    % test + -
+    monoatomic_anion_cn("(Cl)-",E0),
+    assertion(E0 == "chloride(1-)"),
+    monoatomic_anion_cn("(O)2-",E1),
+    assertion(E1 == "oxide(2-)"),
+    monoatomic_anion_cn("(N)3-",E2),
+    assertion(E2 == "nitride(3-)"),
+    
+    % test - +
+    monoatomic_anion_cn(G0, "chloride(1-)"),
+    assertion(G0 == "(Cl)-"),
+    monoatomic_anion_cn(G1, "oxide(2-)"),
+    assertion(G1 == "(O)2-"),
+    monoatomic_anion_cn(G2, "nitride(3-)"),
+    assertion(G2 == "(N)3-"),
+ 
+    % test + +
+    assertion(monoatomic_anion_cn("(Cl)-", "chloride(1-)")),
+    assertion(monoatomic_anion_cn("(O)2-", "oxide(2-)")),
+    assertion(monoatomic_anion_cn("(N)3-", "nitride(3-)")),
     
     true.
  
