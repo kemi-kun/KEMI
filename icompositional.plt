@@ -1,5 +1,5 @@
 :- begin_tests(icompositional).
-:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2]).
+:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2,homonuclear_name_atom/2,homonuclear_cn/2]).
 
 test(binary_compound_cn) :-
     %test + -
@@ -89,5 +89,30 @@ test(monoatomic_cation_cn) :-
     assertion(monoatomic_cation_cn("(I)+", "iodine(1+)")),
     
     true.
+ 
+test(homonuclear_cn) :-
+    %test + -
+    homonuclear_name_atom("mononitrogen",C0),
+    assertion(C0 == nitrogen-1),
 
+    homonuclear_cn("N",C1),
+    assertion(C1 == "mononitrogen"),
+    homonuclear_cn("Ar",C2),
+    assertion(C2 == "argon"),
+  
+    %test - +
+    homonuclear_cn(D1, tetraphosphorus),
+    assertion(D1 == "P4"),
+    homonuclear_cn(D2, hexasulfur),
+    assertion(D2 == "S6"),
+ 
+    %test + +
+    assertion(homonuclear_name_atom("monohydrogen", hydrogen-1)),
+    assertion(homonuclear_name_atom("dioxygen", oxygen-2)),
+ 
+    assertion(homonuclear_cn("C60", hexacontacarbon)),
+    assertion(homonuclear_cn("S8", octasulfur)),
+  
+    true.
+ 
 :- end_tests(icompositional).
