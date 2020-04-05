@@ -554,9 +554,9 @@ re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 %
 general_stoichiometric(Formula, Name) :-
     general_stoichiometric_ion(Formula, Name) -> true;
-    general_stoichiometric_(Formula, Name).
+    general_stoichiometric_neutral(Formula, Name).
 
-general_stoichiometric_(Formula, Name) :-
+general_stoichiometric_neutral(Formula, Name) :-
     (
         nonvar(Name) -> (
             generalized_salt_name_atoms(Name, EPCs, ENCs),
@@ -580,13 +580,13 @@ general_stoichiometric_ion(Formula, Name) :-
             ChargePart_ = "1-" -> ChargePart = "-";
             ChargePart = ChargePart_
         ),
-        general_stoichiometric_(NeutralFormula, NamePart),
+        general_stoichiometric_neutral(NeutralFormula, NamePart),
         string_concat(NeutralFormula, ChargePart, Formula)
     );
     nonvar(Formula) -> (
         get_charge_str(Formula, ChargeStr),
         get_neutral_specie(Formula, NeutralSpecie),
-        general_stoichiometric_(NeutralSpecie, NeutralName),
+        general_stoichiometric_neutral(NeutralSpecie, NeutralName),
         join("", ["(", NeutralName, ")", ChargeStr], Name)
     ).
 
