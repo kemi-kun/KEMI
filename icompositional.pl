@@ -456,8 +456,8 @@ homoatomic_ion_atom_name_(Element-Amount, Charge, Name) :-
 
 charge_string(ChargePart, Charge) :-
     nonvar(Charge),
-    Charge_ is abs(Charge),
-    number_string(Charge_, NumStr),
+    AbsCharge is abs(Charge),
+    number_string(AbsCharge, NumStr),
     (
         Charge > 0 ->
             string_concat(NumStr, "+", ChargePart);
