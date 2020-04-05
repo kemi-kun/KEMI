@@ -551,28 +551,88 @@ re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 %   @arg Name –  the stoichiometric name of the generalized salt formula
 %
 general_stoichiometric(Formula, Name) :-
-    nonvar(Formula),
-    ion(Formula) ->
-        general_stoichiometric_ion(Formula, Name);
-    general_stoichiometric_(Formula, Name).
+    general_stoichiometric_ion(Formula, Name) -> true;
+    general_stoichiometric(Formula, Name).
 
 general_stoichiometric_(Formula, Name) :-
-        split_generalized_salt_formula(Formula, EPCs, ENCs),
-        maplist(homonuclear_formula_atom, EPCFormulas, EPCs),
-        maplist(homonuclear_formula_atom, ENCFormulas, ENCs),
-        maplist(cation_name, EPCFormulas, EPCNames),
-        maplist(anion_name, ENCFormulas, ENCNames),
-        append(EPCNames, ENCNames, PCNames),
-        join(" ", PCNames, Name).
+    (
+        nonvar(Name) -> (
+            generalized_salt_name_atoms(Name, EPCs, ENCs),
+            generalized_salt_formula_atoms(Formula, EPCs, ENCs)
+        );
+        nonvar(Formula) -> (
+            generalized_salt_formula_atoms(Formula, EPCs, ENCs),
+            generalized_salt_name_atoms(Name, EPCs, ENCs)
+        )
+    ),
+    % check
+    not(ion(Formula)).
 
 general_stoichiometric_ion(Formula, Name) :-
-    get_neutral_specie(Formula, NeutralSpecie),
-    general_stoichiometric_(NeutralSpecie, NeutralName),
-    get_charge_str(Formula, ChargeStr),
-    join("", ["(", NeutralName, ")", ChargeStr], Name).
+    nonvar(Name) -> (
+        re_matchsub("^\\((?<name_part>.+)\\)\\((?<charge_part>[1-9][0-9]*[+-])\\)$", Name, Sub, []),
+        get_dict(name_part, Sub, NamePart),
+        general_stoichiometric_(NeutralFormula, NamePart),
+        get_dict(charge_part, Sub, ChargePart_),
+        (
+            ChargePart_ = "1+" -> ChargePart = "+";
+            ChargePart_ = "1-" -> ChargePart = "-";
+            ChargePart = ChargePart_
+        ),
+        string_concat(NeutralFormula, ChargePart, Formula)
+    );
+    nonvar(Formula) -> (
+        get_neutral_specie(Formula, NeutralSpecie),
+        general_stoichiometric_(NeutralSpecie, NeutralName),
+        get_charge_str(Formula, ChargeStr),
+        join("", ["(", NeutralName, ")", ChargeStr], Name)
+    ).
 
-%!  split_generalized_salt_formula(+Formula:string, -EPCs:list(Element-Amount), -ENCs:list(Element-Amount)) is mutli.
-split_generalized_salt_formula(Formula, EPCs, ENCs) :-
+
+%!  generalized_salt_name_atoms(+Name:string, +EPCs:list(Element-Amount), +ENCs:list(Element-Amount)) is semidet.
+%!  generalized_salt_name_atoms(+Name:string, -EPCs:list(Element-Amount), -ENCs:list(Element-Amount)) is semidet.
+%!  generalized_salt_name_atoms(-Name:string, -EPCs:list(Element-Amount), -ENCs:list(Element-Amount)) is failure.
+%!  generalized_salt_name_atoms(-Name:string, +EPCs:list(Element-Amount), +ENCs:list(Element-Amount)) is det.
+%
+generalized_salt_name_atoms(Name, EPCs, ENCs) :-
+    nonvar(EPCs), nonvar(ENCs) ->
+        generalized_salt_atoms_name_(EPCs, ENCs, Name);
+    nonvar(Name) ->
+        generalized_salt_name_atoms_(Name, EPCs, ENCs);
+    fail.
+
+%!  generalized_salt_name_atoms_(+Name:string, -EPCs:list(Element-Amount), -ENCs:list(Element-Amount)) is semidet.
+generalized_salt_name_atoms_(Name, EPCs, ENCs) :-
+    split_string(Name, " ", "", SubStrings),
+    append(EPCNames, ENCNames, SubStrings),
+    EPCNames \= [], ENCNames \= [],
+    maplist(electropositive_name_atom, EPCNames, EPCs),
+    maplist(electronegative_name_atom, ENCNames, ENCs),
+    !.
+
+%!  generalized_salt_name_atoms_(+EPCs:list(Element-Amount), +ENCs:list(Element-Amount), -Name:string) is det.
+generalized_salt_atoms_name_(EPCs, ENCs, Name) :-
+    maplist(electropositive_name_atom, EPCNames, EPCs),
+    maplist(electronegative_name_atom, ENCNames, ENCs),
+    append(EPCNames, ENCNames, PCNames),
+    join(" ", PCNames, Name).
+
+
+%!  generalized_salt_formula_atoms(+Formula:string, +EPCs:list(Element-Amount), +ENCs:list(Element-Amount)) is semidet.
+%!  generalized_salt_formula_atoms(+Formula:string, -EPCs:list(Element-Amount), -ENCs:list(Element-Amount)) is multi.
+%!  generalized_salt_formula_atoms(-Formula:string, -EPCs:list(Element-Amount), -ENCs:list(Element-Amount)) is failure.
+%!  generalized_salt_formula_atoms(-Formula:string, +EPCs:list(Element-Amount), +ENCs:list(Element-Amount)) is det.
+%
+generalized_salt_formula_atoms(Formula, EPCs, ENCs) :-
+    nonvar(EPCs), nonvar(ENCs) ->
+        generalized_salt_atoms_formula_(EPCs, ENCs, Formula);
+    nonvar(Formula) ->
+        generalized_salt_formula_atoms_(Formula, EPCs, ENCs);
+    fail.
+
+%!  generalized_salt_formula_atoms_(+Formula:string, +EPCs:list(Element-Amount), +ENCs:list(Element-Amount)) is semidet.
+%!  generalized_salt_formula_atoms_(+Formula:string, -EPCs:list(Element-Amount), -ENCs:list(Element-Amount)) is multi.
+generalized_salt_formula_atoms_(Formula, EPCs, ENCs) :-
     count_atoms(Formula, Atoms),
     append(EPCs_, ENCs_, Atoms),
     EPCs_ \= [], ENCs_ \= [],
@@ -586,48 +646,55 @@ split_generalized_salt_formula(Formula, EPCs, ENCs) :-
     EPCs = EPCs_,
     ENCs = ENCs_.
 
-%!  cation_name(+Formula, -Name) is nondet.
-%!  cation_name(+Formula, +Name) is nondet.
-cation_name(Formula, Name) :-
-    substitutive_name(Formula, Name);
-    additive_name(Formula, Name);
-    alternative_name(Formula, Name).
-cation_name(Formula, Name) :-
-    (
-        monoatomic(Formula),
-        get_all_elements(Formula, Elements),
-        Elements = [Element|_],
-        element_name(Element, Name)
-    );
-    (
-        homopolyatomic(Formula),
-        compositional_name(Formula, Name)
-    ).
+%!  generalized_salt_atoms_formula_(-Formula:string, +EPCs:list(Element-Amount), +ENCs:list(Element-Amount)) is det.
+generalized_salt_atoms_formula_(EPCs, ENCs, Formula) :-
+    append(EPCs, ENCs, Constituents),
+    maplist(homonuclear_formula_atom, Terms, Constituents),
+    join("", Terms, Formula).
 
-%!  anion_name(+Formula, -Name) is nondet.
-%!  anion_name(+Formula, +Name) is nondet.
-anion_name(Formula, Name) :-
-    substitutive_name(Formula, Name);
-    additive_name(Formula, Name);
-    alternative_name(Formula, Name).
-anion_name(Formula, Name) :-
-    (
-        monoatomic(Formula),
-        get_all_elements(Formula, Elements),
-        Elements = [Element|_],
-        element_name(Element, ElementName),
-        append_suffix(ElementName, "ide", Name)
-    );
-    (
-        homopolyatomic(Formula),
-        get_all_elements(Formula, Elements),
-        Elements = [Element|_],
-        element_name(Element, EName),
-        append_suffix(EName, "ide", IdeName),
-        compositional_name(Formula, CName),
-        string_concat(MulPrefix, EName, CName),
-        string_concat(MulPrefix, IdeName, Name)
-    ).
+
+% %!  cation_name(+Formula, -Name) is nondet.
+% %!  cation_name(+Formula, +Name) is nondet.
+% cation_name(Formula, Name) :-
+%     substitutive_name(Formula, Name);
+%     additive_name(Formula, Name);
+%     alternative_name(Formula, Name).
+% cation_name(Formula, Name) :-
+%     (
+%         monoatomic(Formula),
+%         get_all_elements(Formula, Elements),
+%         Elements = [Element|_],
+%         element_name(Element, Name)
+%     );
+%     (
+%         homopolyatomic(Formula),
+%         compositional_name(Formula, Name)
+%     ).
+
+% %!  anion_name(+Formula, -Name) is nondet.
+% %!  anion_name(+Formula, +Name) is nondet.
+% anion_name(Formula, Name) :-
+%     substitutive_name(Formula, Name);
+%     additive_name(Formula, Name);
+%     alternative_name(Formula, Name).
+% anion_name(Formula, Name) :-
+%     (
+%         monoatomic(Formula),
+%         get_all_elements(Formula, Elements),
+%         Elements = [Element|_],
+%         element_name(Element, ElementName),
+%         append_suffix(ElementName, "ide", Name)
+%     );
+%     (
+%         homopolyatomic(Formula),
+%         get_all_elements(Formula, Elements),
+%         Elements = [Element|_],
+%         element_name(Element, EName),
+%         append_suffix(EName, "ide", IdeName),
+%         compositional_name(Formula, CName),
+%         string_concat(MulPrefix, EName, CName),
+%         string_concat(MulPrefix, IdeName, Name)
+%     ).
 
 
 boron_hydride(Formula) :-
