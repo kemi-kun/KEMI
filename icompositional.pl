@@ -43,9 +43,11 @@ heteropolyatomic(Formula) :-
 
 get_charge_str(Formula, ChargeStr) :-
     get_net_charge(Formula, NetCharge),
-    NetCharge > 0 -> get_ion_part_(NetCharge, "+", ChargeStr),
-    NetCharge < 0 -> get_ion_part_(NetCharge, "-", ChargeStr);
-    fail.
+    (
+        NetCharge > 0 -> get_ion_part_(NetCharge, "+", ChargeStr);
+        NetCharge < 0 -> get_ion_part_(NetCharge, "-", ChargeStr);
+        NetCharge = 0 -> fail
+    ).
 
 get_ion_part_(NetCharge, IonSign, ChargeStr) :-
     abs(NetCharge, NC),
@@ -582,9 +584,9 @@ general_stoichiometric_ion(Formula, Name) :-
         string_concat(NeutralFormula, ChargePart, Formula)
     );
     nonvar(Formula) -> (
+        get_charge_str(Formula, ChargeStr),
         get_neutral_specie(Formula, NeutralSpecie),
         general_stoichiometric_(NeutralSpecie, NeutralName),
-        get_charge_str(Formula, ChargeStr),
         join("", ["(", NeutralName, ")", ChargeStr], Name)
     ).
 
