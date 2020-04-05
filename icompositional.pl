@@ -241,7 +241,7 @@ electropositive_name_atom(Name, Element-Amount) :-
 
 electropositive_name_atom_(Name, Element-Amount) :-
     between(1, 9999, Amount),
-    element_fact(Element, ElementName, _, _, _),
+    element_name(Element, ElementName),
     (
         Amount = 1 -> MulPrefix = "";
         multiplicative_prefix(Amount, MulPrefix)
@@ -262,7 +262,7 @@ electronegative_name_atom(Name, Element-Amount) :-
 
 electronegative_name_atom_(Name, Element-Amount) :-
     between(1, 9999, Amount),
-    element_fact(Element, ElementName, _, _, _),
+    element_name(Element, ElementName),
     append_suffix(ElementName, "ide", IdeName),
     (
         Amount = 1 -> MulPrefix = "";
@@ -284,7 +284,7 @@ binary_electronegative_name_atom(Name, Element-Amount) :-
 
 binary_electronegative_name_atom_(Name, Element-Amount) :-
     between(1, 9999, Amount),
-    element_fact(Element, ElementName, _, _, _),
+    element_name(Element, ElementName),
     append_suffix(ElementName, "ide", IdeName),
     (
         Amount = 1, Element \= oxygen -> MulPrefix = "";
@@ -642,7 +642,7 @@ generalized_salt_formula_atoms_(Formula, EPCs, ENCs) :-
         selectchk(hydrogen-_, EPCs_, EPCRest) ->
             sort(0, @=<, EPCRest, EPCRest),
             append(EPCRest, [hydrogen-_], EPCs);
-        sort(0, @=<, EPCs_, EPCs_)
+            sort(0, @=<, EPCs_, EPCs_)
     ),
     sort(0, @=<, ENCs_, ENCs_),
     EPCs = EPCs_,
