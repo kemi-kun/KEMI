@@ -1,5 +1,5 @@
 :- begin_tests(icompositional).
-:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2,homonuclear_name_atom/2,homonuclear_cn/2,homopolyatomic_cation_cn/2,homopolyatomic_anion_cn/2,monoatomic_anion_cn/2]).
+:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2,homonuclear_name_atom/2,homonuclear_cn/2,homopolyatomic_cation_cn/2,homopolyatomic_anion_cn/2,monoatomic_anion_cn/2,general_stoichiometric/2]).
 
 test(homonuclear_cn) :-
     %test + -
@@ -193,6 +193,32 @@ test(homopolyatomic_anion_cn) :-
     assertion(not(homopolyatomic_anion_cn("I-", _))),
     assertion(not(homopolyatomic_anion_cn("NaCl", _))),
     
+    true.
+
+test(general_stoichiometric_neutral) :-
+    % test + -
+    general_stoichiometric_neutral("PBrClI", N0),
+    assertion(N0 == "phosphorus bromide chloride iodide"),
+    general_stoichiometric_neutral("CuK5Sb2", N1),
+    assertion(N1 == "copper pentapotassium diantimonide"),
+    general_stoichiometric_neutral("IBr", N2),
+    assertion(N2 == "iodine bromide"),
+
+    % test - +
+    general_stoichiometric_neutral(F0, "phosphorus bromide chloride iodide"),
+    assertion(F0 == "PBrClI"),
+    general_stoichiometric_neutral(F1, "copper pentapotassium diantimonide"),
+    assertion(F1 == "CuK5Sb2"),
+    general_stoichiometric_neutral(F2, "iodine bromide"),
+    assertion(F2 == "IBr"),
+
+    % % test + +
+    assertion(general_stoichiometric_neutral("PBrClI", "phosphorus bromide chloride iodide")),
+    assertion(general_stoichiometric_neutral("CuK5Sb2", "copper pentapotassium diantimonide")),
+    assertion(general_stoichiometric_neutral("IBr", "iodine bromide")),
+
+    % % test fail case
+    assertion(not(general_stoichiometric_neutral("(O2Cl2)+", _))),
     true.
 
 :- end_tests(icompositional).
