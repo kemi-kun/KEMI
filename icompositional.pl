@@ -281,25 +281,24 @@ electronegative_name_atom_loose_(Name, Element-Amount) :-
 
 %!  ion_cn(+Formula: string, +Name: string) is semidet.
 %!  ion_cn(+Formula: string, -Name: string) is semidet.
-%!  ion_cn(-Formula: string, +Name: string) is failure.
+%!  ion_cn(-Formula: string, +Name: string) is semidet.
 %!  ion_cn(-Formula: string, -Name: string) is failure.
 %
 %   @arg Formula – the chemical formula of the cationic or anionic compound
 %   @arg Name – the compositional name of the cationic or anionic compound
 %
 ion_cn(Formula, Name) :-
-    nonvar(Formula),
-    cation_cn(Formula, Name);
+    cation_cn(Formula, Name) -> true;
     anion_cn(Formula, Name).
 
 
 cation_cn(Formula, Name) :-
-    monoatomic_cation_cn(Formula, Name);
+    monoatomic_cation_cn(Formula, Name) -> true;
     homopolyatomic_cation_cn(Formula, Name).
 
 
 anion_cn(Formula, Name) :-
-    monoatomic_anion_cn(Formula, Name);
+    monoatomic_anion_cn(Formula, Name) -> true;
     homopolyatomic_anion_cn(Formula, Name).
 
 
