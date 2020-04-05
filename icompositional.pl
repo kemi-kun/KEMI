@@ -323,6 +323,7 @@ monoatomic_cation_cn(Formula, Name) :-
     cation(Formula).
 % monoatomic_cation_cn("[Na]+", "sodium(1+)")
 
+
 %!  homopolyatomic_cation_cn(+Formula: string, -Name: string) is multi.
 %!  homopolyatomic_cation_cn(+Formula: string, +Name: string) is nondet.
 %!  homopolyatomic_cation_cn(-Formula: string, +Name: string) is failure.
@@ -331,13 +332,62 @@ monoatomic_cation_cn(Formula, Name) :-
 %   [O2]+ => dioxygen(1+)
 %
 homopolyatomic_cation_cn(Formula, Name) :-
+    (
+        nonvar(Name) ->
+            homoatomic_ion_name_atom(Name, Element-Amount, Charge),
+            Amount \= 1,
+            homoatomic_ion_formula_atom(Formula, Element-Amount, Charge);
+        nonvar(Formula) ->
+            homoatomic_ion_formula_atom(Formula, Element-Amount, Charge),
+            Amount \= 1,
+            homoatomic_ion_name_atom(Name, Element-Amount, Charge)
+    ),
+    % chcek formula
     homopolyatomic(Formula),
-    cation(Formula),
-    get_neutral_specie(Formula, NeutralSpecie),
-    compositional_name(NeutralSpecie, NeutralSpecieName),
-    get_net_charge(Formula, NetCharge),
-    get_ion_part_(NetCharge, "+", ChargeStr),
-    string_concat(NeutralSpecieName, ChargeStr, Name).
+    cation(Formula).
+
+
+%!  monoatomic_anion_cn(+Formula: string, -Name: string) is multi.
+%!  monoatomic_anion_cn(+Formula: string, +Name: string) is semidet.
+%!  monoatomic_anion_cn(-Formula: string, +Name: string) is ERROR.
+%
+%   IR-5.3.3.2 p.84-85
+%
+monoatomic_anion_cn(Formula, Name) :-
+    (
+        nonvar(Name) ->
+            homoatomic_ion_name_atom(Name, Element-1, Charge),
+            homoatomic_ion_formula_atom(Formula, Element-1, Charge);
+        nonvar(Formula) ->
+            homoatomic_ion_formula_atom(Formula, Element-1, Charge),
+            homoatomic_ion_name_atom(Name, Element-1, Charge)
+    ),
+    % chcek formula
+    monoatomic(Formula),
+    anion(Formula).
+
+
+%!  homopolyatomic_anion_cn(+Formula: string, -Name: string) is multi.
+%!  homopolyatomic_anion_cn(+Formula: string, +Name: string) is nondet.
+%!  homopolyatomic_anion_cn(-Formula: string, +Name: string) is failure.
+%
+%   IR-5.3.3.3 p.85
+%   [O2]2- => dioxide(2-)
+%
+homopolyatomic_anion_cn(Formula, Name) :-
+    (
+        nonvar(Name) ->
+            homoatomic_ion_name_atom(Name, Element-Amount, Charge),
+            Amount \= 1,
+            homoatomic_ion_formula_atom(Formula, Element-Amount, Charge);
+        nonvar(Formula) ->
+            homoatomic_ion_formula_atom(Formula, Element-Amount, Charge),
+            Amount \= 1,
+            homoatomic_ion_name_atom(Name, Element-Amount, Charge)
+    ),
+    % chcek formula
+    homopolyatomic(Formula),
+    anion(Formula).
 
 
 %!  homoatomic_ion_formula_atom(+Formula:string, +Element:atom-Amount:int, +Charge:int) is semidet.
@@ -428,55 +478,6 @@ charge_string(ChargePart, Charge) :-
             number_string(Num_, NumStr),
             Charge is -Num_
     ).
-
-
-%!  monoatomic_anion_cn(+Formula: string, -Name: string) is multi.
-%!  monoatomic_anion_cn(+Formula: string, +Name: string) is semidet.
-%!  monoatomic_anion_cn(-Formula: string, +Name: string) is ERROR.
-%
-%   IR-5.3.3.2 p.84-85
-%
-monoatomic_anion_cn(Formula, Name) :-
-    nonvar(Name) ->
-        monoatomic_anion_cn_(Formula, Name), !;
-    monoatomic_anion_cn_(Formula, Name).
-% monoatomic_anion_cn("Cl-", "chloride(1-)").
-monoatomic_anion_cn_(Formula, Name) :-
-    monoatomic(Formula),
-    anion(Formula),
-    get_all_elements(Formula, Elements),
-    Elements = [Element|_],
-    element_name(Element, ElementName),
-    append_suffix(ElementName, "ide", IdeName),
-    get_net_charge(Formula, NetCharge_),
-    abs(NetCharge_, NetCharge),
-    get_ion_part_(NetCharge, "-", ChargeStr),
-    string_concat(IdeName, ChargeStr, Name).
-
-
-%!  homopolyatomic_anion_cn(+Formula: string, -Name: string) is multi.
-%!  homopolyatomic_anion_cn(+Formula: string, +Name: string) is nondet.
-%!  homopolyatomic_anion_cn(-Formula: string, +Name: string) is failure.
-%
-%   IR-5.3.3.3 p.85
-%   [O2]2- => dioxide(2-)
-%
-homopolyatomic_anion_cn(Formula, Name) :-
-    homopolyatomic(Formula),
-    anion(Formula),
-    % to use append_suffix without error
-    get_all_elements(Formula, Elements),
-    Elements = [Element|_],
-    element_name(Element, EName),
-    append_suffix(EName, "ide", IdeName),
-    get_neutral_specie(Formula, NeutralSpecie),
-    compositional_name(NeutralSpecie, NeutralSpecieName),
-    string_concat(MulPrefix, EName, NeutralSpecieName),
-    string_concat(MulPrefix, IdeName, Name_),
-    get_net_charge(Formula, NetCharge_),
-    abs(NetCharge_, NetCharge),
-    get_ion_part_(NetCharge, "-", ChargeStr),
-    string_concat(Name_, ChargeStr, Name).
 
 
 %!  addition_compound_cn(+Formula: string, +Name: string) is semidet.
