@@ -655,50 +655,6 @@ generalized_salt_atoms_formula_(EPCs, ENCs, Formula) :-
     join("", Terms, Formula).
 
 
-% %!  cation_name(+Formula, -Name) is nondet.
-% %!  cation_name(+Formula, +Name) is nondet.
-% cation_name(Formula, Name) :-
-%     substitutive_name(Formula, Name);
-%     additive_name(Formula, Name);
-%     alternative_name(Formula, Name).
-% cation_name(Formula, Name) :-
-%     (
-%         monoatomic(Formula),
-%         get_all_elements(Formula, Elements),
-%         Elements = [Element|_],
-%         element_name(Element, Name)
-%     );
-%     (
-%         homopolyatomic(Formula),
-%         compositional_name(Formula, Name)
-%     ).
-
-% %!  anion_name(+Formula, -Name) is nondet.
-% %!  anion_name(+Formula, +Name) is nondet.
-% anion_name(Formula, Name) :-
-%     substitutive_name(Formula, Name);
-%     additive_name(Formula, Name);
-%     alternative_name(Formula, Name).
-% anion_name(Formula, Name) :-
-%     (
-%         monoatomic(Formula),
-%         get_all_elements(Formula, Elements),
-%         Elements = [Element|_],
-%         element_name(Element, ElementName),
-%         append_suffix(ElementName, "ide", Name)
-%     );
-%     (
-%         homopolyatomic(Formula),
-%         get_all_elements(Formula, Elements),
-%         Elements = [Element|_],
-%         element_name(Element, EName),
-%         append_suffix(EName, "ide", IdeName),
-%         compositional_name(Formula, CName),
-%         string_concat(MulPrefix, EName, CName),
-%         string_concat(MulPrefix, IdeName, Name)
-%     ).
-
-
 boron_hydride(Formula) :-
     get_all_elements(Formula,Elements),
     Elements = [boron, hydrogen].
