@@ -298,6 +298,11 @@ cation_cn(Formula, Name) :-
     homopolyatomic_cation_cn(Formula, Name).
 
 
+anion_cn(Formula, Name) :-
+    monoatomic_anion_cn(Formula, Name);
+    homopolyatomic_anion_cn(Formula, Name).
+
+
 %!  monoatomic_cation_cn(+Formula: string, -Name: string) is multi.
 %!  monoatomic_cation_cn(+Formula: string, +Name: string) is semidet.
 %!  monoatomic_cation_cn(-Formula: string, +Name: string) is ERROR.
@@ -317,6 +322,22 @@ monoatomic_cation_cn(Formula, Name) :-
     monoatomic(Formula),
     cation(Formula).
 % monoatomic_cation_cn("[Na]+", "sodium(1+)")
+
+%!  homopolyatomic_cation_cn(+Formula: string, -Name: string) is multi.
+%!  homopolyatomic_cation_cn(+Formula: string, +Name: string) is nondet.
+%!  homopolyatomic_cation_cn(-Formula: string, +Name: string) is failure.
+%
+%   IR-5.3.2.3 p.83
+%   [O2]+ => dioxygen(1+)
+%
+homopolyatomic_cation_cn(Formula, Name) :-
+    homopolyatomic(Formula),
+    cation(Formula),
+    get_neutral_specie(Formula, NeutralSpecie),
+    compositional_name(NeutralSpecie, NeutralSpecieName),
+    get_net_charge(Formula, NetCharge),
+    get_ion_part_(NetCharge, "+", ChargeStr),
+    string_concat(NeutralSpecieName, ChargeStr, Name).
 
 
 %!  homoatomic_ion_formula_atom(+Formula:string, +Element:atom-Amount:int, +Charge:int) is semidet.
@@ -407,27 +428,6 @@ charge_string(ChargePart, Charge) :-
             number_string(Num_, NumStr),
             Charge is -Num_
     ).
-
-%!  homopolyatomic_cation_cn(+Formula: string, -Name: string) is multi.
-%!  homopolyatomic_cation_cn(+Formula: string, +Name: string) is nondet.
-%!  homopolyatomic_cation_cn(-Formula: string, +Name: string) is failure.
-%
-%   IR-5.3.2.3 p.83
-%   [O2]+ => dioxygen(1+)
-%
-homopolyatomic_cation_cn(Formula, Name) :-
-    homopolyatomic(Formula),
-    cation(Formula),
-    get_neutral_specie(Formula, NeutralSpecie),
-    compositional_name(NeutralSpecie, NeutralSpecieName),
-    get_net_charge(Formula, NetCharge),
-    get_ion_part_(NetCharge, "+", ChargeStr),
-    string_concat(NeutralSpecieName, ChargeStr, Name).
-
-
-anion_cn(Formula, Name) :-
-    monoatomic_anion_cn(Formula, Name);
-    homopolyatomic_anion_cn(Formula, Name).
 
 
 %!  monoatomic_anion_cn(+Formula: string, -Name: string) is multi.
