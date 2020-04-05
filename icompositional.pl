@@ -554,7 +554,7 @@ re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 %
 general_stoichiometric(Formula, Name) :-
     general_stoichiometric_ion(Formula, Name) -> true;
-    general_stoichiometric(Formula, Name).
+    general_stoichiometric_(Formula, Name).
 
 general_stoichiometric_(Formula, Name) :-
     (
