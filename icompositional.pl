@@ -43,9 +43,11 @@ heteropolyatomic(Formula) :-
 
 get_charge_str(Formula, ChargeStr) :-
     get_net_charge(Formula, NetCharge),
-    NetCharge > 0 -> get_ion_part_(NetCharge, "+", ChargeStr),
-    NetCharge < 0 -> get_ion_part_(NetCharge, "-", ChargeStr);
-    fail.
+    (
+        NetCharge > 0 -> get_ion_part_(NetCharge, "+", ChargeStr);
+        NetCharge < 0 -> get_ion_part_(NetCharge, "-", ChargeStr);
+        NetCharge = 0 -> fail
+    ).
 
 get_ion_part_(NetCharge, IonSign, ChargeStr) :-
     abs(NetCharge, NC),
@@ -552,9 +554,9 @@ re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 %
 general_stoichiometric(Formula, Name) :-
     general_stoichiometric_ion(Formula, Name) -> true;
-    general_stoichiometric(Formula, Name).
+    general_stoichiometric_neutral(Formula, Name).
 
-general_stoichiometric_(Formula, Name) :-
+general_stoichiometric_neutral(Formula, Name) :-
     (
         nonvar(Name) -> (
             generalized_salt_name_atoms(Name, EPCs, ENCs),
@@ -572,19 +574,19 @@ general_stoichiometric_ion(Formula, Name) :-
     nonvar(Name) -> (
         re_matchsub("^\\((?<name_part>.+)\\)\\((?<charge_part>[1-9][0-9]*[+-])\\)$", Name, Sub, []),
         get_dict(name_part, Sub, NamePart),
-        general_stoichiometric_(NeutralFormula, NamePart),
         get_dict(charge_part, Sub, ChargePart_),
         (
             ChargePart_ = "1+" -> ChargePart = "+";
             ChargePart_ = "1-" -> ChargePart = "-";
             ChargePart = ChargePart_
         ),
+        general_stoichiometric_neutral(NeutralFormula, NamePart),
         string_concat(NeutralFormula, ChargePart, Formula)
     );
     nonvar(Formula) -> (
-        get_neutral_specie(Formula, NeutralSpecie),
-        general_stoichiometric_(NeutralSpecie, NeutralName),
         get_charge_str(Formula, ChargeStr),
+        get_neutral_specie(Formula, NeutralSpecie),
+        general_stoichiometric_neutral(NeutralSpecie, NeutralName),
         join("", ["(", NeutralName, ")", ChargeStr], Name)
     ).
 
@@ -651,50 +653,6 @@ generalized_salt_atoms_formula_(EPCs, ENCs, Formula) :-
     append(EPCs, ENCs, Constituents),
     maplist(homonuclear_formula_atom, Terms, Constituents),
     join("", Terms, Formula).
-
-
-% %!  cation_name(+Formula, -Name) is nondet.
-% %!  cation_name(+Formula, +Name) is nondet.
-% cation_name(Formula, Name) :-
-%     substitutive_name(Formula, Name);
-%     additive_name(Formula, Name);
-%     alternative_name(Formula, Name).
-% cation_name(Formula, Name) :-
-%     (
-%         monoatomic(Formula),
-%         get_all_elements(Formula, Elements),
-%         Elements = [Element|_],
-%         element_name(Element, Name)
-%     );
-%     (
-%         homopolyatomic(Formula),
-%         compositional_name(Formula, Name)
-%     ).
-
-% %!  anion_name(+Formula, -Name) is nondet.
-% %!  anion_name(+Formula, +Name) is nondet.
-% anion_name(Formula, Name) :-
-%     substitutive_name(Formula, Name);
-%     additive_name(Formula, Name);
-%     alternative_name(Formula, Name).
-% anion_name(Formula, Name) :-
-%     (
-%         monoatomic(Formula),
-%         get_all_elements(Formula, Elements),
-%         Elements = [Element|_],
-%         element_name(Element, ElementName),
-%         append_suffix(ElementName, "ide", Name)
-%     );
-%     (
-%         homopolyatomic(Formula),
-%         get_all_elements(Formula, Elements),
-%         Elements = [Element|_],
-%         element_name(Element, EName),
-%         append_suffix(EName, "ide", IdeName),
-%         compositional_name(Formula, CName),
-%         string_concat(MulPrefix, EName, CName),
-%         string_concat(MulPrefix, IdeName, Name)
-%     ).
 
 
 boron_hydride(Formula) :-
