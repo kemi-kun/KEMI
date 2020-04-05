@@ -1,5 +1,5 @@
 :- begin_tests(test_icompositional).
-:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2]).
+:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2]).
 
 test(binary_compound_cn) :-
     %test + -
@@ -63,6 +63,30 @@ test(binary_compound_cn) :-
     % assertion(binary_compound_cn("NiSn", "nickel stannide")),
     % assertion(binary_compound_cn("Cu5Zn8", "pentacopper octazincide")),
     % assertion(binary_compound_cn("Cr23C6", "tricosachromium hexacarbide")),
+    
+    true.
+
+test(monoatomic_cation_cn) :-
+    % test + -
+    monoatomic_cation_cn("Na+", N0),
+    assertion(N0 == "sodium(1+)"),
+    monoatomic_cation_cn("(Cr)3+", N1),
+    assertion(N1 == "chromium(3+)"),
+    monoatomic_cation_cn("(I)+", N2),
+    assertion(N2 == "iodine(1+)"),
+    
+    % test - +
+    monoatomic_cation_cn(F0, "sodium(1+)"),
+    assertion(F0 == "(Na)+"),
+    monoatomic_cation_cn(F1, "chromium(3+)"),
+    assertion(F1 == "(Cr)3+"),
+    monoatomic_cation_cn(F2, "iodine(1+)"),
+    assertion(F2 == "(I)+"),
+
+    % test + +
+    assertion(monoatomic_cation_cn("Na+", "sodium(1+)")),
+    assertion(monoatomic_cation_cn("(Cr)3+", "chromium(3+)")),
+    assertion(monoatomic_cation_cn("(I)+", "iodine(1+)")),
     
     true.
 
