@@ -1,5 +1,5 @@
 :- begin_tests(icompositional).
-:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2,homonuclear_name_atom/2,homonuclear_cn/2,homopolyatomic_cation_cn/2]).
+:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2,homonuclear_name_atom/2,homonuclear_cn/2,homopolyatomic_cation_cn/2,homopolyatomic_anion_cn/2]).
 
 test(homonuclear_cn) :-
     %test + -
@@ -35,16 +35,8 @@ test(binary_compound_cn) :-
     assertion(A1 == [nitrogen-1, oxygen-1]),
     binary_compound_name_atoms("nitrogen dioxide",A2),
     assertion(A2 == [nitrogen-1, oxygen-2]),
-    binary_compound_name_atoms("dioxygen chloride",A3),
-    assertion(A3 == [oxygen-2, chlorine-1]),
-    binary_compound_name_atoms("triiron tetraoxide",A4),
-    assertion(A4 == [iron-3, oxygen-4]),
-    binary_compound_name_atoms("silicon tetrachloride",A5),
-    assertion(A5 == [silicon-1, chlorine-4]),
     binary_compound_name_atoms("nickel stannide",A6),
     assertion(A6 == [nickel-1, tin-1]),
-    binary_compound_name_atoms("tricosachromium hexacarbide",A7),
-    assertion(A7 == [chromium-23, carbon-6]),
   
     %test - +
     binary_compound_name_atoms(B0, [hydrogen-1, chlorine-1]),
@@ -55,38 +47,23 @@ test(binary_compound_cn) :-
     assertion(B2 == "nitrogen dioxide"),
     binary_compound_name_atoms(B3, [oxygen-2, chlorine-1]),
     assertion(B3 == "dioxygen chloride"),
-    binary_compound_name_atoms(B4, [iron-3, oxygen-4]),
-    assertion(B4 == "triiron tetraoxide"),
-    binary_compound_name_atoms(B5, [silicon-1, chlorine-4]),
-    assertion(B5 == "silicon tetrachloride"),
     binary_compound_name_atoms(B6, [nickel-1, tin-1]),
     assertion(B6 == "nickel stannide"),
-    binary_compound_name_atoms(B7, [chromium-23, carbon-6]),
-    assertion(B7 == "tricosachromium hexacarbide"),
  
     %test + +
     assertion(binary_compound_name_atoms("hydrogen chloride", [hydrogen-1, chlorine-1])),
     assertion(binary_compound_name_atoms("nitrogen monoxide", [nitrogen-1, oxygen-1])),
     assertion(binary_compound_name_atoms("dioxygen chloride", [oxygen-2, chlorine-1])),
-    assertion(binary_compound_name_atoms("triiron tetraoxide", [iron-3, oxygen-4])),
-    assertion(binary_compound_name_atoms("silicon tetrachloride", [silicon-1, chlorine-4])),
     assertion(binary_compound_name_atoms("nickel stannide", [nickel-1, tin-1])),
-    assertion(binary_compound_name_atoms("tricosachromium hexacarbide", [chromium-23, carbon-6])),
 
-    assertion(binary_compound_cn("NaCl", "sodium chloride")),
     % Red book IR-5.2 tests
+    assertion(binary_compound_cn("NaCl", "sodium chloride")),
     assertion(binary_compound_cn("HCl", "hydrogen chloride")),
     assertion(binary_compound_cn("NO", "nitrogen monoxide")),
     assertion(binary_compound_cn("NO2", "nitrogen dioxide")),
     assertion(binary_compound_cn("N2O4", "dinitrogen tetraoxide")),
     assertion(binary_compound_cn("OCl2", "oxygen dichloride")),
     assertion(binary_compound_cn("O2Cl", "dioxygen chloride")),
-    assertion(binary_compound_cn("Fe3O4", "triiron tetraoxide")),
-    assertion(binary_compound_cn("SiC", "silicon carbide")),
-    assertion(binary_compound_cn("SiCl4", "silicon tetrachloride")),
-    assertion(binary_compound_cn("Ca3P2", "tricalcium diphosphide")),
-    assertion(binary_compound_cn("NiSn", "nickel stannide")),
-    assertion(binary_compound_cn("Cu5Zn8", "pentacopper octazincide")),
     assertion(binary_compound_cn("Cr23C6", "tricosachromium hexacarbide")),
     
     true.
@@ -136,6 +113,30 @@ test(homopolyatomic_cation_cn) :-
     assertion(homopolyatomic_cation_cn("(S4)2+", "tetrasulfur(2+)")),
     assertion(homopolyatomic_cation_cn("(O2)+", "dioxygen(1+)")),
     assertion(homopolyatomic_cation_cn("(Bi5)4+", "pentabismuth(4+)")),
+    
+    true.
+
+test(homopolyatomic_anion_cn) :-
+    % test + -
+    homopolyatomic_anion_cn("(O2)2-", N0),
+    assertion(N0 == "dioxide(2-)"),
+    homopolyatomic_anion_cn("(I3)-", N1),
+    assertion(N1 == "triiodide(1-)"),
+    homopolyatomic_anion_cn("(Pb9)4-", N2),
+    assertion(N2 == "nonaplumbide(4-)"),
+
+    % test - +
+    homopolyatomic_anion_cn(F0, "dioxide(2-)"),
+    assertion(F0 == "(O2)2-"),
+    homopolyatomic_anion_cn(F1, "triiodide(1-)"),
+    assertion(F1 == "(I3)-"),
+    homopolyatomic_anion_cn(F2, "nonaplumbide(4-)"),
+    assertion(F2 == "(Pb9)4-"),
+    
+    % test + +
+    assertion(homopolyatomic_anion_cn("(O2)2-", "dioxide(2-)")),
+    assertion(homopolyatomic_anion_cn("(I3)-", "triiodide(1-)")),
+    assertion(homopolyatomic_anion_cn("(Pb9)4-", "nonaplumbide(4-)")),
     
     true.
  
