@@ -116,6 +116,30 @@ test(homopolyatomic_cation_cn) :-
     
     true.
 
+test(monoatomic_anion_cn) :-
+    % test + -
+    monoatomic_anion_cn("(Cl)-",E0),
+    assertion(E0 == "chloride(1-)"),
+    monoatomic_anion_cn("(O)2-",E1),
+    assertion(E1 == "oxide(2-)"),
+    monoatomic_anion_cn("(N)3-",E2),
+    assertion(E2 == "nitride(3-)"),
+    
+    % test - +
+    monoatomic_anion_cn(G0, "chloride(1-)"),
+    assertion(G0 == "(Cl)-"),
+    monoatomic_anion_cn(G1, "oxide(2-)"),
+    assertion(G1 == "(O)2-"),
+    monoatomic_anion_cn(G2, "nitride(3-)"),
+    assertion(G2 == "(N)3-"),
+ 
+    % test + +
+    assertion(monoatomic_anion_cn("(Cl)-", "chloride(1-)")),
+    assertion(monoatomic_anion_cn("(O)2-", "oxide(2-)")),
+    assertion(monoatomic_anion_cn("(N)3-", "nitride(3-)")),
+    
+    true.
+
 test(homopolyatomic_anion_cn) :-
     % test + -
     homopolyatomic_anion_cn("(O2)2-", N0),
@@ -140,28 +164,4 @@ test(homopolyatomic_anion_cn) :-
     
     true.
 
-test(monoatomic_anion_cn) :-
-    % test + -
-    monoatomic_anion_cn("(Cl)-",E0),
-    assertion(E0 == "chloride(1-)"),
-    monoatomic_anion_cn("(O)2-",E1),
-    assertion(E1 == "oxide(2-)"),
-    monoatomic_anion_cn("(N)3-",E2),
-    assertion(E2 == "nitride(3-)"),
-    
-    % test - +
-    monoatomic_anion_cn(G0, "chloride(1-)"),
-    assertion(G0 == "(Cl)-"),
-    monoatomic_anion_cn(G1, "oxide(2-)"),
-    assertion(G1 == "(O)2-"),
-    monoatomic_anion_cn(G2, "nitride(3-)"),
-    assertion(G2 == "(N)3-"),
- 
-    % test + +
-    assertion(monoatomic_anion_cn("(Cl)-", "chloride(1-)")),
-    assertion(monoatomic_anion_cn("(O)2-", "oxide(2-)")),
-    assertion(monoatomic_anion_cn("(N)3-", "nitride(3-)")),
-    
-    true.
- 
 :- end_tests(icompositional).
