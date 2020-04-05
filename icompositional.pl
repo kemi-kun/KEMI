@@ -574,13 +574,13 @@ general_stoichiometric_ion(Formula, Name) :-
     nonvar(Name) -> (
         re_matchsub("^\\((?<name_part>.+)\\)\\((?<charge_part>[1-9][0-9]*[+-])\\)$", Name, Sub, []),
         get_dict(name_part, Sub, NamePart),
-        general_stoichiometric_(NeutralFormula, NamePart),
         get_dict(charge_part, Sub, ChargePart_),
         (
             ChargePart_ = "1+" -> ChargePart = "+";
             ChargePart_ = "1-" -> ChargePart = "-";
             ChargePart = ChargePart_
         ),
+        general_stoichiometric_(NeutralFormula, NamePart),
         string_concat(NeutralFormula, ChargePart, Formula)
     );
     nonvar(Formula) -> (
