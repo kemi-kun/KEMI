@@ -573,21 +573,21 @@ general_stoichiometric_neutral(Formula, Name) :-
 general_stoichiometric_ion(Formula, Name) :-
     nonvar(Name) -> (
         re_matchsub("^\\((?<name_part>.+)\\)\\((?<charge_part>[1-9][0-9]*[+-])\\)$", Name, Sub, []),
-        get_dict(name_part, Sub, NamePart),
+        get_dict(name_part, Sub, NeutralName),
         get_dict(charge_part, Sub, ChargePart_),
         (
             ChargePart_ = "1+" -> ChargePart = "+";
             ChargePart_ = "1-" -> ChargePart = "-";
             ChargePart = ChargePart_
         ),
-        general_stoichiometric_neutral(NeutralFormula, NamePart),
-        string_concat(NeutralFormula, ChargePart, Formula)
+        general_stoichiometric_neutral(NeutralFormula, NeutralName),
+        join("", ["(", NeutralFormula, ")", ChargePart], Name)
     );
     nonvar(Formula) -> (
-        get_charge_str(Formula, ChargeStr),
-        get_neutral_specie(Formula, NeutralSpecie),
-        general_stoichiometric_neutral(NeutralSpecie, NeutralName),
-        join("", ["(", NeutralName, ")", ChargeStr], Name)
+        get_charge_str(Formula, ChargePart),
+        get_neutral_specie(Formula, NeutralFormula),
+        general_stoichiometric_neutral(NeutralFormula, NeutralName),
+        join("", ["(", NeutralName, ")", ChargePart], Name)
     ).
 
 
@@ -642,7 +642,7 @@ generalized_salt_formula_atoms_(Formula, EPCs, ENCs) :-
         selectchk(hydrogen-_, EPCs_, EPCRest) ->
             sort(0, @=<, EPCRest, EPCRest),
             append(EPCRest, [hydrogen-_], EPCs);
-        sort(0, @=<, EPCs_, EPCs_)
+            sort(0, @=<, EPCs_, EPCs_)
     ),
     sort(0, @=<, ENCs_, ENCs_),
     EPCs = EPCs_,
