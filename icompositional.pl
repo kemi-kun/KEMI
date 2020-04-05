@@ -201,13 +201,13 @@ binary_compound_name_atoms(Name, Atoms) :-
 binary_compound_name_atoms_(Name, Atoms) :-
     split_positive_negative(Name, PositivePart, NegativePart),
     electropositive_name_atom(PositivePart, PosElement-PosAmount),
-    electronegative_name_atom(NegativePart, NegElement-NegAmount),
+    binary_electronegative_name_atom(NegativePart, NegElement-NegAmount),
     Atoms = [PosElement-PosAmount, NegElement-NegAmount].
 
 binary_compound_atoms_name_(Atoms, Name) :-
     Atoms = [PosElement-PosAmount, NegElement-NegAmount],
     electropositive_name_atom(PositivePart, PosElement-PosAmount),
-    electronegative_name_atom(NegativePart, NegElement-NegAmount),
+    binary_electronegative_name_atom(NegativePart, NegElement-NegAmount),
     split_positive_negative(Name, PositivePart, NegativePart).
 
 
@@ -253,7 +253,7 @@ electropositive_name_atom_(Name, Element-Amount) :-
 %!  electronegative_name_atom(-Name:string, +Element:atom-Amount:int) is det.
 electronegative_name_atom(Name, Element-Amount) :-
     nonvar(Name) ->
-        electronegative_name_atom_loose_(Name, Element-Amount), !;
+        electronegative_name_atom_(Name, Element-Amount), !;
     nonvar(Element), nonvar(Amount) ->
         electronegative_name_atom_(Name, Element-Amount), !;
     electronegative_name_atom_(Name, Element-Amount).
@@ -263,12 +263,34 @@ electronegative_name_atom_(Name, Element-Amount) :-
     element_name(Element, ElementName),
     append_suffix(ElementName, "ide", IdeName),
     (
+        Amount = 1 -> MulPrefix = "";
+        multiplicative_prefix(Amount, MulPrefix)
+    ),
+    prepend_prefix(IdeName, MulPrefix, Name).
+
+
+%!  binary_electronegative_name_atom(+Name:string, +Element:atom-Amount:int) is semidet.
+%!  binary_electronegative_name_atom(+Name:string, -Element:atom-Amount:int) is semidet.
+%!  binary_electronegative_name_atom(-Name:string, -Element:atom-Amount:int) is multi.
+%!  binary_electronegative_name_atom(-Name:string, +Element:atom-Amount:int) is det.
+binary_electronegative_name_atom(Name, Element-Amount) :-
+    nonvar(Name) ->
+        binary_electronegative_name_atom_loose_(Name, Element-Amount), !;
+    nonvar(Element), nonvar(Amount) ->
+        binary_electronegative_name_atom_(Name, Element-Amount), !;
+    binary_electronegative_name_atom_(Name, Element-Amount).
+
+binary_electronegative_name_atom_(Name, Element-Amount) :-
+    between(1, 9999, Amount),
+    element_name(Element, ElementName),
+    append_suffix(ElementName, "ide", IdeName),
+    (
         Amount = 1, Element \= oxygen -> MulPrefix = "";
         multiplicative_prefix(Amount, MulPrefix)
     ),
     prepend_prefix(IdeName, MulPrefix, Name).
 
-electronegative_name_atom_loose_(Name, Element-Amount) :-
+binary_electronegative_name_atom_loose_(Name, Element-Amount) :-
     between(1, 9999, Amount),
     element_name(Element, ElementName),
     append_suffix(ElementName, "ide", IdeName),
