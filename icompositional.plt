@@ -23,6 +23,12 @@ test(homonuclear_cn) :-
  
     assertion(homonuclear_cn("C60", hexacontacarbon)),
     assertion(homonuclear_cn("S8", octasulfur)),
+
+    % test fail cases
+    assertion(not(homonuclear_cn("NaCl", _))),
+    assertion(not(homonuclear_cn("Na+", _))),
+    assertion(not(homonuclear_cn("I-", _))),
+    assertion(not(homonuclear_cn("PBrClI", _))),
   
     true.
  
@@ -65,7 +71,13 @@ test(binary_compound_cn) :-
     assertion(binary_compound_cn("OCl2", "oxygen dichloride")),
     assertion(binary_compound_cn("O2Cl", "dioxygen chloride")),
     assertion(binary_compound_cn("Cr23C6", "tricosachromium hexacarbide")),
-    
+
+    % test fail case
+    assertion(not(binary_compound_cn("Na", _))),
+    assertion(not(binary_compound_cn("PBrClI", _))),
+    assertion(not(binary_compound_cn("H+", _))),
+    assertion(not(binary_compound_cn("(O2)2-", _))),
+
     true.
 
 test(monoatomic_cation_cn) :-
@@ -89,7 +101,11 @@ test(monoatomic_cation_cn) :-
     assertion(monoatomic_cation_cn("Na+", "sodium(1+)")),
     assertion(monoatomic_cation_cn("(Cr)3+", "chromium(3+)")),
     assertion(monoatomic_cation_cn("(I)+", "iodine(1+)")),
-    
+
+    % test fail case
+    assertion(not(monoatomic_cation_cn("Cl-", _))),
+    assertion(not(monoatomic_cation_cn("(Hg2)2+", _))),
+    assertion(not(monoatomic_cation_cn("NaCl", _))),
     true.
 
 test(homopolyatomic_cation_cn) :-
@@ -114,6 +130,11 @@ test(homopolyatomic_cation_cn) :-
     assertion(homopolyatomic_cation_cn("(O2)+", "dioxygen(1+)")),
     assertion(homopolyatomic_cation_cn("(Bi5)4+", "pentabismuth(4+)")),
     
+    % test fail case
+    assertion(not(homopolyatomic_cation_cn("Cl-", _))),
+    assertion(not(homopolyatomic_cation_cn("Na+", _))),
+    assertion(not(homopolyatomic_cation_cn("NaCl", _))),
+
     true.
 
 test(monoatomic_anion_cn) :-
@@ -137,6 +158,11 @@ test(monoatomic_anion_cn) :-
     assertion(monoatomic_anion_cn("(Cl)-", "chloride(1-)")),
     assertion(monoatomic_anion_cn("(O)2-", "oxide(2-)")),
     assertion(monoatomic_anion_cn("(N)3-", "nitride(3-)")),
+
+    % test fail case
+    assertion(not(monoatomic_anion_cn("Na+", _))),
+    assertion(not(monoatomic_anion_cn("(O2)2-", _))),
+    assertion(not(monoatomic_anion_cn("NaCl", _))),
     
     true.
 
@@ -161,6 +187,11 @@ test(homopolyatomic_anion_cn) :-
     assertion(homopolyatomic_anion_cn("(O2)2-", "dioxide(2-)")),
     assertion(homopolyatomic_anion_cn("(I3)-", "triiodide(1-)")),
     assertion(homopolyatomic_anion_cn("(Pb9)4-", "nonaplumbide(4-)")),
+
+    % test fail case
+    assertion(not(homopolyatomic_anion_cn("Na+", _))),
+    assertion(not(homopolyatomic_anion_cn("I-", _))),
+    assertion(not(homopolyatomic_anion_cn("NaCl", _))),
     
     true.
 
