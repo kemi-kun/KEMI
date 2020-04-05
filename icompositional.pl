@@ -294,7 +294,7 @@ binary_electronegative_name_atom_(Name, Element-Amount) :-
 
 binary_electronegative_name_atom_loose_(Name, Element-Amount) :-
     between(1, 9999, Amount),
-    element_fact(Element, ElementName, _, _, _),
+    element_name(Element, ElementName),
     append_suffix(ElementName, "ide", IdeName),
     (
         Amount = 1, Element \= oxygen, MulPrefix = "";
