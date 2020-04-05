@@ -317,32 +317,45 @@ monoatomic_cation_cn(Formula, Name) :-
     monoatomic(Formula),
     cation(Formula).
 % monoatomic_cation_cn("[Na]+", "sodium(1+)")
-% monoatomic_cation_cn_(Formula, Name) :-
-%     monoatomic(Formula), 
-%     cation(Formula),
-%     get_element(Formula, 0, Element),
-%     element_name(Element, ElementName),
-%     get_net_charge(Formula, NetCharge),
-%     get_ion_part_(NetCharge, "+", ChargeStr),
-%     string_concat(ElementName, ChargeStr, Name),
-%     !.
 
+
+%!  homoatomic_ion_formula_atom(+Formula:string, +Element:atom-Amount:int, +Charge:int) is semidet.
+%!  homoatomic_ion_formula_atom(+Formula:string, -Element:atom-Amount:int, -Charge:int) is semidet.
+%!  homoatomic_ion_formula_atom(-Formula:string, -Element:atom-Amount:int, -Charge:int) is failure.
+%!  homoatomic_ion_formula_atom(-Formula:string, +Element:atom-Amount:int, +Charge:int) is det.
+%
 homoatomic_ion_formula_atom(Formula, Element-Amount, Charge) :-
     nonvar(Formula) ->
         count_atoms(Formula, Atoms),
         Atoms = [Element-Amount],
         get_net_charge(Formula, Charge);
     nonvar(Element), nonvar(Amount), nonvar(Charge) ->
-        homonuclear_formula_atom(Term, Element-Amount),
-        charge_string(ChargePart, Charge),
-        join("", ["(", Term, ")", ChargePart], Formula) ;
+        homoatomic_ion_atom_formula_(Element-Amount, Charge, Formula);
     fail.
 
+%   homoatomic_ion_atom_formula_(+Element-Amount, +Charge, -Formula) is det.
+homoatomic_ion_atom_formula_(Element-Amount, Charge, Formula) :-
+    homonuclear_formula_atom(Term, Element-Amount),
+    (
+        Charge = 1 ->
+            ChargePart = "+";
+        Charge = -1 ->
+            ChargePart = "-";
+        charge_string(ChargePart, Charge)
+    ),
+    join("", ["(", Term, ")", ChargePart], Formula).
+
+
+%!  homoatomic_ion_name_atom(+Name:string, +Element:atom-Amount:int, +Charge:int) is semidet.
+%!  homoatomic_ion_name_atom(+Name:string, -Element:atom-Amount:int, -Charge:int) is semidet.
+%!  homoatomic_ion_name_atom(-Name:string, -Element:atom-Amount:int, -Charge:int) is failure.
+%!  homoatomic_ion_name_atom(-Name:string, +Element:atom-Amount:int, +Charge:int) is det.
+%
 homoatomic_ion_name_atom(Name, Element-Amount, Charge) :-
     nonvar(Name) ->
         homoatomic_ion_name_atom_(Name, Element-Amount, Charge);
     nonvar(Element), nonvar(Amount), nonvar(Charge) ->
-        homoatomic_ion_atom_name_(Element-Amount, Charge, Name).
+        homoatomic_ion_atom_name_(Element-Amount, Charge, Name), !.
 
 homoatomic_ion_name_atom_(Name, Element-Amount, Charge) :-
     nonvar(Name),
@@ -369,6 +382,7 @@ homoatomic_ion_atom_name_(Element-Amount, Charge, Name) :-
     ),
     charge_string(ChargePart, Charge),
     join("", [NamePart, "(", ChargePart, ")"], Name).
+
 
 charge_string(ChargePart, Charge) :-
     nonvar(Charge),
