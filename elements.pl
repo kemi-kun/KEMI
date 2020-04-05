@@ -28,9 +28,10 @@ element_name(Element, ElementName) :-
             % uncomment to include alternative element name in generation
             % ;alternative_element_name(Element, ElementName)
         );
-    element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight);
-    alternative_element_name(Element, ElementName) ->
-        true;
+    (
+        element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight);
+        alternative_element_name(Element, ElementName)
+    ) -> true;
     new_element(Element, ElementName, _Symbol, _AtomicNumber).
 
 
