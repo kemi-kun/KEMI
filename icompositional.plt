@@ -1,5 +1,5 @@
 :- begin_tests(icompositional).
-:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2,homonuclear_name_atom/2,homonuclear_cn/2,homopolyatomic_cation_cn/2]).
+:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2,homonuclear_name_atom/2,homonuclear_cn/2,homopolyatomic_cation_cn/2,homopolyatomic_anion_cn/2]).
 
 test(homonuclear_cn) :-
     %test + -
@@ -113,6 +113,30 @@ test(homopolyatomic_cation_cn) :-
     assertion(homopolyatomic_cation_cn("(S4)2+", "tetrasulfur(2+)")),
     assertion(homopolyatomic_cation_cn("(O2)+", "dioxygen(1+)")),
     assertion(homopolyatomic_cation_cn("(Bi5)4+", "pentabismuth(4+)")),
+    
+    true.
+
+test(homopolyatomic_anion_cn) :-
+    % test + -
+    homopolyatomic_anion_cn("(O2)2-", N0),
+    assertion(N0 == "dioxide(2-)"),
+    homopolyatomic_anion_cn("(I3)-", N1),
+    assertion(N1 == "triiodide(1-)"),
+    homopolyatomic_anion_cn("(Pb9)4-", N2),
+    assertion(N2 == "nonaplumbide(4-)"),
+
+    % test - +
+    homopolyatomic_anion_cn(F0, "dioxide(2-)"),
+    assertion(F0 == "(O2)2-"),
+    homopolyatomic_anion_cn(F1, "triiodide(1-)"),
+    assertion(F1 == "(I3)-"),
+    homopolyatomic_anion_cn(F2, "nonaplumbide(4-)"),
+    assertion(F2 == "(Pb9)4-"),
+    
+    % test + +
+    assertion(homopolyatomic_anion_cn("(O2)2-", "dioxide(2-)")),
+    assertion(homopolyatomic_anion_cn("(I3)-", "triiodide(1-)")),
+    assertion(homopolyatomic_anion_cn("(Pb9)4-", "nonaplumbide(4-)")),
     
     true.
  
