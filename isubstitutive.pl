@@ -26,16 +26,16 @@ boron_hydride_structural_descriptor_name(Formula, Name) :-
     nonvar(Formula) ->
         boron_hydride_stoichiometric_name(Formula, StoiName),
         count_atoms(Formula, [boron-NumBoron, hydrogen-NumHydrogen]),
-        boron_hydride_structural_descriptor(NumBoron, NumHydrogen, StructuralDescriptor_),
-        string_concat(StructuralDescriptor_, "-", StructuralDescriptor),
-        string_concat(StructuralDescriptor, StoiName, Name);
+        boron_hydride_structural_descriptor(NumBoron, NumHydrogen, Descriptor_),
+        string_concat(Descriptor_, "-", Descriptor),
+        string_concat(Descriptor, StoiName, Name);
     nonvar(Name) ->
         re_matchsub("^(?<descriptor>[a-z]+-)(?<stoi_name>.*)$", Name, Sub, []),
         get_dict(stoi_name, Sub, StoiName),
         boron_hydride_stoichiometric_name(Formula, StoiName),
         count_atoms(Formula, [boron-NumBoron, hydrogen-NumHydrogen]),
-        get_dict(descriptor, Sub, StructuralDescriptor),
-        boron_hydride_structural_descriptor(NumBoron, NumHydrogen, StructuralDescriptor),
+        get_dict(descriptor, Sub, Descriptor),
+        boron_hydride_structural_descriptor(NumBoron, NumHydrogen, Descriptor),
     fail.
 
 
