@@ -1,4 +1,11 @@
-:- module(icompositional,[boron_hydride_stoichiometric/2,general_stoichiometric/2,addition_compound_cn/2,ion_cn/2,binary_compound_cn/2,homonuclear_cn/2]).
+:- module(icompositional,[
+    boron_hydride_stoichiometric_name/2,
+    general_stoichiometric_name/2,
+    addition_compound_cn/2,
+    ion_cn/2,
+    binary_compound_cn/2,
+    homonuclear_cn/2
+    ]).
 
 :- use_module(nomenclature,[iupac_name/2]).
 :- use_module(inorganic,[additive_name/2,substitutive_name/2,compositional_name/2]).
@@ -663,8 +670,15 @@ generalized_salt_atoms_formula_(EPCs, ENCs, Formula) :-
 %   IR-6.2.3.1
 %
 boron_hydride_stoichiometric_name(Formula, Name) :-
-    boron_hydride_stoichiometric_formula_atoms(Formula, Atoms),
-    boron_hydride_stoichiometric_name_atoms(Name, Atoms),
+    (
+        nonvar(Formula) ->
+            boron_hydride_stoichiometric_formula_atoms(Formula, Atoms),
+            boron_hydride_stoichiometric_name_atoms(Name, Atoms);
+        nonvar(Name) ->
+            boron_hydride_stoichiometric_name_atoms(Name, Atoms),
+            boron_hydride_stoichiometric_formula_atoms(Formula, Atoms);
+        fail
+    ),
     % check
     boron_hydride(Formula).
 
@@ -716,7 +730,8 @@ boron_hydride_stoichiometric_name_atoms(Name, Atoms) :-
 %
 boron_hydride_stoichiometric_formula_atoms(Formula, Atoms) :-
     nonvar(Formula) ->
-        count_atoms(Formula, Atoms);
+        count_atoms(Formula, Atoms),
+        Atoms = [boron-_NumBoron, hydrogen-_NumHydrogen];
     nonvar(Atoms) ->
         Atoms = [boron-_NumBoron, hydrogen-_NumHydrogen],
         maplist(homonuclear_formula_atom, Terms, Atoms),
