@@ -1,5 +1,17 @@
 :- begin_tests(icompositional).
-:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2,homonuclear_name_atom/2,homonuclear_cn/2,homopolyatomic_cation_cn/2,homopolyatomic_anion_cn/2,monoatomic_anion_cn/2,general_stoichiometric_name/2]).
+:- use_module(icompositional, [
+    binary_compound_cn/2, 
+    binary_compound_name_atoms/2, 
+    monoatomic_cation_cn/2,
+    homonuclear_name_atom/2,
+    homonuclear_cn/2,
+    homopolyatomic_cation_cn/2,
+    homopolyatomic_anion_cn/2,
+    monoatomic_anion_cn/2,
+    general_stoichiometric_name/2,
+    general_neutral_stoichiometric_name/2,
+    boron_hydride_stoichiometric_name/2
+    ]).
 
 test(homonuclear_cn) :-
     %test + -
@@ -219,6 +231,32 @@ test(general_neutral_stoichiometric_name) :-
 
     % % test fail case
     assertion(not(general_neutral_stoichiometric_name("(O2Cl2)+", _))),
+    true.
+
+test(boron_hydride_stoichiometric_name) :-
+    % test + -
+    boron_hydride_stoichiometric_name("B2H6", G0),
+    assertion(G0 == "diborane(6)"),
+    boron_hydride_stoichiometric_name("B20H16", G1),
+    assertion(G1 == "icosaborane(16)"),
+    boron_hydride_stoichiometric_name("BH3", G2),
+    assertion(G2 == "borane"),
+ 
+    % test - +
+    boron_hydride_stoichiometric_name(H0, "diborane(6)"),
+    assertion(H0 == "B2H6"),
+    boron_hydride_stoichiometric_name(H1, "icosaborane(16)"),
+    assertion(H1 == "B20H16"),
+    boron_hydride_stoichiometric_name(H2, "borane"),
+    assertion(H2 == "BH3"),
+ 
+    % % test + +
+    assertion(boron_hydride_stoichiometric_name("B2H6", "diborane(6)")),
+    assertion(boron_hydride_stoichiometric_name("B20H16", "icosaborane(16)")),
+    assertion(boron_hydride_stoichiometric_name("BH3", "borane")),
+    
+    % % test fail case
+    assertion(not(boron_hydride_stoichiometric_name("BHe", _))),
     true.
 
 :- end_tests(icompositional).
