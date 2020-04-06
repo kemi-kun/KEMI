@@ -1,4 +1,4 @@
-:- module(icompositional,[boron_hydride_stoichiometric/2,general_stoichiometric/2,addition_compound_cn/2,ion_cn/2,binary_compound_cn/2,homonuclear_cn/2]).
+:- module(icompositional,[boron_hydride_stoichiometric/2,general_stoichiometric_name/2,addition_compound_cn/2,ion_cn/2,binary_compound_cn/2,homonuclear_cn/2]).
 
 :- use_module(nomenclature,[iupac_name/2]).
 :- use_module(inorganic,[additive_name/2,substitutive_name/2,compositional_name/2]).
