@@ -560,7 +560,7 @@ addition_compound_components_name(Compounds, Amounts, Name) :-
 
 addition_compound_components_name_(Compounds, Amounts, Name) :-
     join("/", Amounts, RatioPart),
-    maplist(get_iupac_name_or_addition_compound_exception, Compounds, Names),
+    maplist(get_iupac_name_except_addition_compound, Compounds, Names),
     join("\u2014", Names, NamePart),
     join("", [NamePart, " (", RatioPart, ")"], Name).
 
@@ -571,15 +571,15 @@ addition_compound_name_components_(Name, Compounds, Amounts) :-
     split_string(CompoundsPart, "\u2014", "", Names),
     split_string(RatioPart, "/", "", Amounts_),
     maplist(number_string, Amounts, Amounts_),
-    maplist(get_iupac_name_or_addition_compound_exception, Compounds, Names).
+    maplist(get_iupac_name_except_addition_compound, Compounds, Names).
 
-get_iupac_name_or_addition_compound_exception(Formula, Name) :-
+get_iupac_name_except_addition_compound(Formula, Name) :-
     nonvar(Name) ->
-        get_iupac_name_or_addition_compound_exception_(Formula, Name),
+        get_iupac_name_except_addition_compound_(Formula, Name),
         !;
-    get_iupac_name_or_addition_compound_exception_(Formula, Name). 
+    get_iupac_name_except_addition_compound_(Formula, Name). 
 
-get_iupac_name_or_addition_compound_exception_(Formula, Name) :-
+get_iupac_name_except_addition_compound_(Formula, Name) :-
     (
         alternative_name(Formula, Name);
         homonuclear_cn(Formula, Name);
