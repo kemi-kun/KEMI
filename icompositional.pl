@@ -523,25 +523,71 @@ charge_string(ChargePart, Charge) :-
 %   @arg Name – the compositional name of the addition compound
 %
 addition_compound_cn(Formula, Name) :-
-    nonvar(Formula),
-    addition_compound(Formula),
-    split_addition_compound(Formula, Compounds, Amounts),
-    join("/", Amounts, RatioPart),
-    maplist(get_iupac_name_or_addition_compound_exception, Compounds, Names),
-    join("\u2014", Names, NamePart),
-    join("", [NamePart, " (", RatioPart, ")"], Name).
+    (
+        nonvar(Formula) ->
+            split_addition_compound(Formula, Compounds, Amounts),
+            addition_compound_components_name(Compounds, Amounts, Name);
+        nonvar(Name) ->
+            addition_compound_components_name(Compounds, Amounts, Name),
+            split_addition_compound(Formula, Compounds, Amounts);
+        fail
+    ),
+    % check
+    addition_compound(Formula).
 
-get_iupac_name_or_addition_compound_exception(Formula, Name) :-
-    addition_compound_exception(Formula, Name) -> true;
-    iupac_name(Formula, Name).
-
+%
+%
+%
 addition_compound(Formula) :-
     split_addition_compound(Formula, Compounds, _),
     length(Compounds, X),
     X > 1.
 
-%!  split_addition_compound(+Formula:string, -Compounds:string, -Amounts:int) is semidet.
+%
+%
+%
+addition_compound_components_name(Compounds, Amounts, Name) :-
+    nonvar(Compounds), nonvar(Amounts) ->
+        addition_compound_components_name_(Compounds, Amounts, Name);
+    nonvar(Name) ->
+        addition_compound_name_components_(Name, Compounds, Amounts);
+    fail.
+
+addition_compound_components_name_(Compounds, Amounts, Name) :-
+    join("/", Amounts, RatioPart),
+    maplist(get_iupac_name_or_addition_compound_exception, Compounds, Names),
+    join("\u2014", Names, NamePart),
+    join("", [NamePart, " (", RatioPart, ")"], Name).
+
+addition_compound_name_components_(Name, Compounds, Amounts) :-
+    re_matchsub("^(?<compounds>.+) \\((?<ratio>.*)\\)$", Name, Sub, []),
+    get_dict(compounds, Sub, CompoundsPart),
+    get_dict(ratio, Sub, RatioPart),
+    split_string(CompoundsPart, "—", "", Names),
+    split_string(RatioPart, "/", "", Amounts_),
+    maplist(number_string, Amounts, Amounts_),
+    maplist(get_iupac_name_or_addition_compound_exception, Compounds, Names).
+
+get_iupac_name_or_addition_compound_exception(Formula, Name) :-
+    addition_compound_exception(Formula, Name) -> true;
+    iupac_name(Formula, Name).
+
+
+%!  split_addition_compound_(+Formula:string, +Compounds:string, +Amounts:int) is semidet.
+%!  split_addition_compound_(+Formula:string, -Compounds:string, -Amounts:int) is semidet.
+%!  split_addition_compound_(-Formula:string, -Compounds:string, -Amounts:int) is failure.
+%!  split_addition_compound_(-Formula:string, +Compounds:string, +Amounts:int) is semidet.
+%
+%
 split_addition_compound(Formula, Compounds, Amounts) :-
+    nonvar(Compounds), nonvar(Amounts) ->
+        join_addition_compound_(Formula, Compounds, Amounts);
+    nonvar(Formula) ->
+        split_addition_compound_(Formula, Compounds, Amounts);
+    fail.
+
+%!  split_addition_compound_(+Formula:string, -Compounds:string, -Amounts:int) is semidet.
+split_addition_compound_(Formula, Compounds, Amounts) :-
     split_string(Formula, "\u22C5", "", Components),
     maplist(re_matchsub("(?<amount>[1-9][0-9]*)?(?<compound>.*)"), Components, Matches_),
     maplist(dict_remove_on_cond(value_is_empty_string), Matches_, Matches),
@@ -549,8 +595,8 @@ split_addition_compound(Formula, Compounds, Amounts) :-
     maplist(get_dict_or_default("1", 'amount'), Matches, AmountStrs),
     maplist(number_string, Amounts, AmountStrs).
 
-%!  join_addition_compound(-Formula:string, +Compounds:string, +Amounts:int) is semidet.
-join_addition_compound(Formula, Compounds, Amounts) :-
+%!  join_addition_compound_(-Formula:string, +Compounds:string, +Amounts:int) is semidet.
+join_addition_compound_(Formula, Compounds, Amounts) :-
     maplist(get_component_, Compounds, Amounts, Components),
     join("\u22C5", Components, Formula).
 
