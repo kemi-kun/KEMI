@@ -661,6 +661,8 @@ generalized_salt_atoms_formula_(EPCs, ENCs, Formula) :-
 %!  boron_hydride_stoichiometric_name(-Formula:string, +Name:string) is semidet.
 %
 %   IR-6.2.3.1
+%   @arg Formula – the borin hydride formula
+%   @arg Name –  the stoichiometric name of the boron hydride formula
 %
 boron_hydride_stoichiometric_name(Formula, Name) :-
     boron_hydride_stoichiometric_formula_atoms(Formula, Atoms),
