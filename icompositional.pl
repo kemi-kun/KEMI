@@ -581,7 +581,7 @@ general_stoichiometric_ion(Formula, Name) :-
             ChargePart = ChargePart_
         ),
         general_stoichiometric_neutral(NeutralFormula, NeutralName),
-        join("", ["(", NeutralFormula, ")", ChargePart], Name)
+        join("", ["(", NeutralFormula, ")", ChargePart], Formula)
     );
     nonvar(Formula) -> (
         get_charge_str(Formula, ChargePart),
