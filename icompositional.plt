@@ -1,5 +1,5 @@
 :- begin_tests(icompositional).
-:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2,homonuclear_name_atom/2,homonuclear_cn/2,homopolyatomic_cation_cn/2,homopolyatomic_anion_cn/2,monoatomic_anion_cn/2,general_stoichiometric/2]).
+:- use_module(icompositional, [binary_compound_cn/2, binary_compound_name_atoms/2, monoatomic_cation_cn/2,homonuclear_name_atom/2,homonuclear_cn/2,homopolyatomic_cation_cn/2,homopolyatomic_anion_cn/2,monoatomic_anion_cn/2,general_stoichiometric_name/2]).
 
 test(homonuclear_cn) :-
     %test + -
@@ -195,30 +195,30 @@ test(homopolyatomic_anion_cn) :-
     
     true.
 
-test(general_stoichiometric_neutral) :-
+test(general_neutral_stoichiometric_name) :-
     % test + -
-    general_stoichiometric_neutral("PBrClI", N0),
+    general_neutral_stoichiometric_name("PBrClI", N0),
     assertion(N0 == "phosphorus bromide chloride iodide"),
-    general_stoichiometric_neutral("CuK5Sb2", N1),
+    general_neutral_stoichiometric_name("CuK5Sb2", N1),
     assertion(N1 == "copper pentapotassium diantimonide"),
-    general_stoichiometric_neutral("IBr", N2),
+    general_neutral_stoichiometric_name("IBr", N2),
     assertion(N2 == "iodine bromide"),
 
     % test - +
-    general_stoichiometric_neutral(F0, "phosphorus bromide chloride iodide"),
+    general_neutral_stoichiometric_name(F0, "phosphorus bromide chloride iodide"),
     assertion(F0 == "PBrClI"),
-    general_stoichiometric_neutral(F1, "copper pentapotassium diantimonide"),
+    general_neutral_stoichiometric_name(F1, "copper pentapotassium diantimonide"),
     assertion(F1 == "CuK5Sb2"),
-    general_stoichiometric_neutral(F2, "iodine bromide"),
+    general_neutral_stoichiometric_name(F2, "iodine bromide"),
     assertion(F2 == "IBr"),
 
     % % test + +
-    assertion(general_stoichiometric_neutral("PBrClI", "phosphorus bromide chloride iodide")),
-    assertion(general_stoichiometric_neutral("CuK5Sb2", "copper pentapotassium diantimonide")),
-    assertion(general_stoichiometric_neutral("IBr", "iodine bromide")),
+    assertion(general_neutral_stoichiometric_name("PBrClI", "phosphorus bromide chloride iodide")),
+    assertion(general_neutral_stoichiometric_name("CuK5Sb2", "copper pentapotassium diantimonide")),
+    assertion(general_neutral_stoichiometric_name("IBr", "iodine bromide")),
 
     % % test fail case
-    assertion(not(general_stoichiometric_neutral("(O2Cl2)+", _))),
+    assertion(not(general_neutral_stoichiometric_name("(O2Cl2)+", _))),
     true.
 
 :- end_tests(icompositional).
