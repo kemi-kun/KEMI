@@ -568,7 +568,7 @@ addition_compound_name_components_(Name, Compounds, Amounts) :-
     re_matchsub("^(?<compounds>.+) \\((?<ratio>.*)\\)$", Name, Sub, []),
     get_dict(compounds, Sub, CompoundsPart),
     get_dict(ratio, Sub, RatioPart),
-    split_string(CompoundsPart, "—", "", Names),
+    split_string(CompoundsPart, "\u2014", "", Names),
     split_string(RatioPart, "/", "", Amounts_),
     maplist(number_string, Amounts, Amounts_),
     maplist(get_iupac_name_or_addition_compound_exception, Compounds, Names).
