@@ -25,10 +25,10 @@ compositional_name(Formula, Name) :-
     homonuclear_cn(Formula, Name);
     binary_compound_cn(Formula, Name);
     ion_cn(Formula, Name);
-    stoichiometric(Formula, Name);
+    stoichiometric_name(Formula, Name);
     addition_compound_cn(Formula, Name).
 
-stoichiometric(Formula, Name) :-
+stoichiometric_name(Formula, Name) :-
     general_stoichiometric_name(Formula, Name);
     boron_hydride_stoichiometric_name(Formula, Name).
 

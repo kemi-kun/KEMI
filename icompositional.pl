@@ -510,10 +510,10 @@ charge_string(ChargePart, Charge) :-
     ).
 
 
-%!  addition_compound_cn(+Formula: string, +Name: string) is semidet.
-%!  addition_compound_cn(+Formula: string, -Name: string) is semidet.
-%!  addition_compound_cn(-Formula: string, +Name: string) is failure.
-%!  addition_compound_cn(-Formula: string, -Name: string) is failure.
+%!  addition_compound_cn(+Formula:string, +Name:string) is semidet.
+%!  addition_compound_cn(+Formula:string, -Name:string) is multi.
+%!  addition_compound_cn(-Formula:string, +Name:string) is failure.
+%!  addition_compound_cn(-Formula:string, -Name:string) is failure.
 %
 % # IR-5.5 p.92-93 ← IR-4
 % # BF3⋅2H2O ⇒ boron triﬂuoride—water (1/2)
@@ -524,6 +524,10 @@ charge_string(ChargePart, Charge) :-
 %
 addition_compound_cn(Formula, Name) :-
     (
+        nonvar(Formula), nonvar(Name) ->
+            split_addition_compound(Formula, Compounds, Amounts),
+            addition_compound_components_name(Compounds, Amounts, Name),
+            !;
         nonvar(Formula) ->
             split_addition_compound(Formula, Compounds, Amounts),
             addition_compound_components_name(Compounds, Amounts, Name);
@@ -533,7 +537,7 @@ addition_compound_cn(Formula, Name) :-
         fail
     ),
     % check
-    addition_compound(Formula).
+    addition_compound(Formula). 
 
 %
 %
@@ -541,7 +545,8 @@ addition_compound_cn(Formula, Name) :-
 addition_compound(Formula) :-
     split_addition_compound(Formula, Compounds, _),
     length(Compounds, X),
-    X > 1.
+    X > 1,
+    !.
 
 %
 %
@@ -569,8 +574,22 @@ addition_compound_name_components_(Name, Compounds, Amounts) :-
     maplist(get_iupac_name_or_addition_compound_exception, Compounds, Names).
 
 get_iupac_name_or_addition_compound_exception(Formula, Name) :-
-    addition_compound_exception(Formula, Name) -> true;
-    iupac_name(Formula, Name).
+    nonvar(Name) ->
+        get_iupac_name_or_addition_compound_exception_(Formula, Name),
+        !;
+    get_iupac_name_or_addition_compound_exception_(Formula, Name). 
+
+get_iupac_name_or_addition_compound_exception_(Formula, Name) :-
+    (
+        alternative_name(Formula, Name);
+        homonuclear_cn(Formula, Name);
+        binary_compound_cn(Formula, Name);
+        ion_cn(Formula, Name);
+        general_stoichiometric_name(Formula, Name);
+        boron_hydride_stoichiometric_name(Formula, Name);
+        substitutive_name(Formula, Name);
+        additive_name(Formula, Name)
+    ).
 
 
 %!  split_addition_compound_(+Formula:string, +Compounds:string, +Amounts:int) is semidet.
@@ -634,6 +653,7 @@ general_neutral_stoichiometric_name(Formula, Name) :-
         )
     ),
     % check
+    not(binary_compound(Formula)),
     not(ion(Formula)).
 
 general_ion_stoichiometric_name(Formula, Name) :-
