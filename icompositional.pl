@@ -540,13 +540,26 @@ addition_compound(Formula) :-
     length(Compounds, X),
     X > 1.
 
+%!  split_addition_compound(+Formula:string, -Compounds:string, -Amounts:int) is semidet.
 split_addition_compound(Formula, Compounds, Amounts) :-
-    split_string(Formula, "\u22C5", "", Componenents),
-    maplist(re_matchsub("(?<amount>[1-9][0-9]*)?(?<compound>.*)"), Componenents, Matches_),
+    split_string(Formula, "\u22C5", "", Components),
+    maplist(re_matchsub("(?<amount>[1-9][0-9]*)?(?<compound>.*)"), Components, Matches_),
     maplist(dict_remove_on_cond(value_is_empty_string), Matches_, Matches),
     maplist(get_dict('compound'), Matches, Compounds),
     maplist(get_dict_or_default("1", 'amount'), Matches, AmountStrs),
     maplist(number_string, Amounts, AmountStrs).
+
+%!  join_addition_compound(-Formula:string, +Compounds:string, +Amounts:int) is semidet.
+join_addition_compound(Formula, Compounds, Amounts) :-
+    maplist(get_component_, Compounds, Amounts, Components),
+    join("\u22C5", Components, Formula).
+
+get_component_(Compound, Amount, Component) :-
+    (
+        Amount = 1 -> AmountStr = "";
+        number_string(Amount, AmountStr)
+    ),
+    string_concat(AmountStr, Compound, Component).
 
 re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 
