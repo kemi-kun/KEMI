@@ -544,19 +544,19 @@ split_addition_compound(Formula, Compounds, Amounts) :-
 re_matchsub(Pattern, String, Sub) :- re_matchsub(Pattern, String, Sub, []).
 
 
-%!  general_stoichiometric(+Formula: string, +Name: string) is semidet.
-%!  general_stoichiometric(+Formula: string, -Name: string) is semidet.
-%!  general_stoichiometric(-Formula: string, +Name: string) is failure.
-%!  general_stoichiometric(-Formula: string, -Name: string) is failure.
+%!  general_stoichiometric_name(+Formula: string, +Name: string) is semidet.
+%!  general_stoichiometric_name(+Formula: string, -Name: string) is semidet.
+%!  general_stoichiometric_name(-Formula: string, +Name: string) is failure.
+%!  general_stoichiometric_name(-Formula: string, -Name: string) is failure.
 %
 %   @arg Formula – the generalized salt formula
 %   @arg Name –  the stoichiometric name of the generalized salt formula
 %
-general_stoichiometric(Formula, Name) :-
-    general_stoichiometric_ion(Formula, Name) -> true;
-    general_stoichiometric_neutral(Formula, Name).
+general_stoichiometric_name(Formula, Name) :-
+    general_ion_stoichiometric_name(Formula, Name) -> true;
+    general_neutral_stoichiometric_name(Formula, Name).
 
-general_stoichiometric_neutral(Formula, Name) :-
+general_neutral_stoichiometric_name(Formula, Name) :-
     (
         nonvar(Name) -> (
             generalized_salt_name_atoms(Name, EPCs, ENCs),
@@ -570,7 +570,7 @@ general_stoichiometric_neutral(Formula, Name) :-
     % check
     not(ion(Formula)).
 
-general_stoichiometric_ion(Formula, Name) :-
+general_ion_stoichiometric_name(Formula, Name) :-
     nonvar(Name) -> (
         re_matchsub("^\\((?<name_part>.+)\\)\\((?<charge_part>[1-9][0-9]*[+-])\\)$", Name, Sub, []),
         get_dict(name_part, Sub, NeutralName),
@@ -580,13 +580,13 @@ general_stoichiometric_ion(Formula, Name) :-
             ChargePart_ = "1-" -> ChargePart = "-";
             ChargePart = ChargePart_
         ),
-        general_stoichiometric_neutral(NeutralFormula, NeutralName),
+        general_neutral_stoichiometric_name(NeutralFormula, NeutralName),
         join("", ["(", NeutralFormula, ")", ChargePart], Formula)
     );
     nonvar(Formula) -> (
         get_charge_str(Formula, ChargePart),
         get_neutral_specie(Formula, NeutralFormula),
-        general_stoichiometric_neutral(NeutralFormula, NeutralName),
+        general_neutral_stoichiometric_name(NeutralFormula, NeutralName),
         join("", ["(", NeutralName, ")", ChargePart], Name)
     ).
 
@@ -659,13 +659,14 @@ boron_hydride(Formula) :-
     get_all_elements(Formula,Elements),
     Elements = [boron, hydrogen].
  
-%!  boron_hydride_stoichiometric(+Formula: string, -Name: string) is det.
-%!  boron_hydride_stoichiometric(+Formula: string, +Name: string) is det.
-%!  boron_hydride_stoichiometric(-Formula: string, +Name: string) is ERROR.
+
+%!  boron_hydride_stoichiometric_name(+Formula: string, -Name: string) is det.
+%!  boron_hydride_stoichiometric_name(+Formula: string, +Name: string) is det.
+%!  boron_hydride_stoichiometric_name(-Formula: string, +Name: string) is ERROR.
 %
 %   IR-6.2.3.1
 %
-boron_hydride_stoichiometric(Formula, Name) :-
+boron_hydride_stoichiometric_name(Formula, Name) :-
     (
         boron_hydride(Formula)
     ),
@@ -679,3 +680,11 @@ get_borane_atom_part_(NumAtom,Str) :-
     string_concat("borane(", NumAtom, Str0),
     string_concat(Str0, ")", Str).
 
+
+boron_hydride_stoichiometric_name_atoms(Name, Atoms) :-
+    
+    fail.
+
+
+boron_hydride_stoichiometric_formula_atoms(Formula, Atoms) :-
+    fail.
