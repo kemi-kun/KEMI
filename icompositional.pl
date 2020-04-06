@@ -653,38 +653,72 @@ generalized_salt_atoms_formula_(EPCs, ENCs, Formula) :-
     append(EPCs, ENCs, Constituents),
     maplist(homonuclear_formula_atom, Terms, Constituents),
     join("", Terms, Formula).
+ 
+
+%!  boron_hydride_stoichiometric_name(+Formula:string, +Name:string) is semidet.
+%!  boron_hydride_stoichiometric_name(+Formula:string, -Name:string) is semidet.
+%!  boron_hydride_stoichiometric_name(-Formula:string, -Name:string) is failure.
+%!  boron_hydride_stoichiometric_name(-Formula:string, +Name:string) is semidet.
+%
+%   IR-6.2.3.1
+%
+boron_hydride_stoichiometric_name(Formula, Name) :-
+    boron_hydride_stoichiometric_formula_atoms(Formula, Atoms),
+    boron_hydride_stoichiometric_name_atoms(Name, Atoms),
+    % check
+    boron_hydride(Formula).
 
 
 boron_hydride(Formula) :-
     get_all_elements(Formula,Elements),
     Elements = [boron, hydrogen].
- 
 
-%!  boron_hydride_stoichiometric_name(+Formula: string, -Name: string) is det.
-%!  boron_hydride_stoichiometric_name(+Formula: string, +Name: string) is det.
-%!  boron_hydride_stoichiometric_name(-Formula: string, +Name: string) is ERROR.
+
+%!  boron_hydride_stoichiometric_name_atoms(+Name:string, +Atoms:list(Element:atom-Amount:int)) is semidet.
+%!  boron_hydride_stoichiometric_name_atoms(+Name:string, -Atoms:list(Element:atom-Amount:int)) is semidet.
+%!  boron_hydride_stoichiometric_name_atoms(-Name:string, -Atoms:list(Element:atom-Amount:int)) is failure.
+%!  boron_hydride_stoichiometric_name_atoms(-Name:string, +Atoms:list(Element:atom-Amount:int)) is semidet.
 %
-%   IR-6.2.3.1
+%   Reference: https://en.wikipedia.org/wiki/Borane
 %
-boron_hydride_stoichiometric_name(Formula, Name) :-
-    (
-        boron_hydride(Formula)
-    ),
-    get_num_atoms(Formula, boron, NumAtomB),
-    get_num_atoms(Formula, hydrogen, NumAtomH),
-    multiplicative_prefix(NumAtomB, MulPrefix),
-    get_borane_atom_part_(NumAtomH, BoraneAtom),
-    string_concat(MulPrefix, BoraneAtom, Name).
- 
-get_borane_atom_part_(NumAtom,Str) :-
-    string_concat("borane(", NumAtom, Str0),
-    string_concat(Str0, ")", Str).
-
-
 boron_hydride_stoichiometric_name_atoms(Name, Atoms) :-
-    
+    nonvar(Atoms) ->
+        Atoms = [boron-NumBoron, hydrogen-NumHydrogen],
+        (
+            NumBoron = 1 -> MulPrefix = "";
+            multiplicative_prefix(NumBoron, MulPrefix)
+        ),(
+            NumBoron = 1, NumHydrogen = 3 ->
+                HydrogenPart = "";
+            join("", ["(", NumHydrogen, ")"], HydrogenPart)
+        ),
+        join("", [MulPrefix, "borane", HydrogenPart], Name);
+    nonvar(Name) ->
+        re_matchsub("(?<prefix>[a-z]*)?borane(\\((?<num>[1-9][0-9]*)\\))?", Name, Sub, []),
+        get_dict(prefix, Sub, MulPrefix),
+        (
+            MulPrefix = "" -> NumBoron = 1;
+            multiplicative_prefix(NumBoron, MulPrefix)
+        ),
+        (
+            get_dict(num, Sub, NumHydrogenStr) ->
+                number_string(NumHydrogen, NumHydrogenStr);
+            NumBoron = 1, NumHydrogen = 3
+        ),
+        Atoms = [boron-NumBoron, hydrogen-NumHydrogen];
     fail.
 
 
+%!  boron_hydride_stoichiometric_formula_atoms(+Formula:string, +Atoms:list(Element:atom-Amount:int)) is semidet.
+%!  boron_hydride_stoichiometric_formula_atoms(+Formula:string, -Atoms:list(Element:atom-Amount:int)) is semidet.
+%!  boron_hydride_stoichiometric_formula_atoms(-Formula:string, -Atoms:list(Element:atom-Amount:int)) is failure.
+%!  boron_hydride_stoichiometric_formula_atoms(-Formula:string, +Atoms:list(Element:atom-Amount:int)) is semidet.
+%
 boron_hydride_stoichiometric_formula_atoms(Formula, Atoms) :-
+    nonvar(Formula) ->
+        count_atoms(Formula, Atoms);
+    nonvar(Atoms) ->
+        Atoms = [boron-_NumBoron, hydrogen-_NumHydrogen],
+        maplist(homonuclear_formula_atom, Terms, Atoms),
+        join("",Terms, Formula);
     fail.
