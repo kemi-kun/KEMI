@@ -571,6 +571,7 @@ addition_compound_name_components_(Name, Compounds, Amounts) :-
     split_string(CompoundsPart, "\u2014", "", Names),
     split_string(RatioPart, "/", "", Amounts_),
     maplist(number_string, Amounts, Amounts_),
+    length(Names, L), length(Amounts, L), L > 1,
     maplist(get_iupac_name_except_addition_compound, Compounds, Names).
 
 get_iupac_name_except_addition_compound(Formula, Name) :-
@@ -608,6 +609,7 @@ split_addition_compound(Formula, Compounds, Amounts) :-
 %!  split_addition_compound_(+Formula:string, -Compounds:string, -Amounts:int) is semidet.
 split_addition_compound_(Formula, Compounds, Amounts) :-
     split_string(Formula, "\u22C5", "", Components),
+    length(Components, L), L > 1,
     maplist(re_matchsub("(?<amount>[1-9][0-9]*)?(?<compound>.*)"), Components, Matches_),
     maplist(dict_remove_on_cond(value_is_empty_string), Matches_, Matches),
     maplist(get_dict('compound'), Matches, Compounds),
