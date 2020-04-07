@@ -213,21 +213,16 @@ test(general_neutral_stoichiometric_name) :-
     assertion(N0 == "phosphorus bromide chloride iodide"),
     general_neutral_stoichiometric_name("CuK5Sb2", N1),
     assertion(N1 == "copper pentapotassium diantimonide"),
-    general_neutral_stoichiometric_name("IBr", N2),
-    assertion(N2 == "iodine bromide"),
 
     % test - +
     general_neutral_stoichiometric_name(F0, "phosphorus bromide chloride iodide"),
     assertion(F0 == "PBrClI"),
     general_neutral_stoichiometric_name(F1, "copper pentapotassium diantimonide"),
     assertion(F1 == "CuK5Sb2"),
-    general_neutral_stoichiometric_name(F2, "iodine bromide"),
-    assertion(F2 == "IBr"),
 
     % % test + +
     assertion(general_neutral_stoichiometric_name("PBrClI", "phosphorus bromide chloride iodide")),
     assertion(general_neutral_stoichiometric_name("CuK5Sb2", "copper pentapotassium diantimonide")),
-    assertion(general_neutral_stoichiometric_name("IBr", "iodine bromide")),
 
     % % test fail case
     assertion(not(general_neutral_stoichiometric_name("(O2Cl2)+", _))),
