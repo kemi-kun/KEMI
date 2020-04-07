@@ -10,7 +10,8 @@
     monoatomic_anion_cn/2,
     general_stoichiometric_name/2,
     general_neutral_stoichiometric_name/2,
-    boron_hydride_stoichiometric_name/2
+    boron_hydride_stoichiometric_name/2,
+    addition_compound_cn/2
     ]).
 
 test(homonuclear_cn) :-
@@ -253,5 +254,42 @@ test(boron_hydride_stoichiometric_name) :-
     % % test fail case
     assertion(not(boron_hydride_stoichiometric_name("BHe", _))),
     true.
+
+test(addition_compound_cn) :-
+    % \u22C5 = ·
+    % \u2014 = —
+    % test + -
+    addition_compound_cn("8Kr\u22C546H2O", I0),
+    assertion(I0 == "krypton\u2014water (8/46)"),
+    % addition_compound_cn("2Na2CO3\u22C53H2O2", I1),
+    % assertion(I1 == "sodium carbonate\u2014hydrogen peroxide (2/3)"),
+    % addition_compound_cn("Na2SO4\u22C510H2O", I2),
+    % assertion(I2 == "sodium sulfate\u2014water (1/10)"),
+    % addition_compound_cn("CaCl2\u22C58NH3", I3),
+    % assertion(I3 == "calcium chloride\u2014ammonia(1/8)"),
+    addition_compound_cn("BF3\u22C52H2O", I4),
+    assertion(I4 == "boron trifluoride\u2014water (1/2)"),
+ 
+    % test - +
+    % addition_compound_cn(J0, "cadmium sulfate—water (3/8)"),
+    % assertion(J0 == "3CdSO4⋅8H2O"),
+    addition_compound_cn(J1, "krypton\u2014water (8/46)"),
+    assertion(J1 == "8Kr\u22C546H2O"),
+    % addition_compound_cn(J2, "sodium sulfate—water (1/10)"),
+    % assertion(J2 == "Na2SO4·10H2O"),
+    addition_compound_cn(J3, "boron trifluoride\u2014water (1/2)"),
+    assertion(J3 == "BF3\u22C52H2O"),
+ 
+    % % % test + + 
+    assertion(addition_compound_cn("8Kr\u22C546H2O", "krypton\u2014water (8/46)")),
+    assertion(addition_compound_cn("BF3\u22C52H2O", "boron trifluoride\u2014water (1/2)")),
+    % assertion(addition_compound_cn("3CdSO4\u22C58H2O", "cadmium sulfate\u2014water (3/8)")),
+    % assertion(addition_compound_cn("Na2SO4\u22C510H2O", "sodium sulfate\u2014water (1/10)")),
+    
+    % test fail case
+    assertion(not(addition_compound_cn("BF3-2H2O, _))),
+    assertion(not(addition_compound_cn(_, "boron trifluoridewater (1/2)"))),
+    true.
+
 
 :- end_tests(icompositional).
