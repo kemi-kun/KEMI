@@ -287,7 +287,7 @@ test(addition_compound_cn) :-
     % assertion(addition_compound_cn("Na2SO4\u22C510H2O", "sodium sulfate\u2014water (1/10)")),
     
     % test fail case
-    assertion(not(addition_compound_cn("BF3-2H2O, _))),
+    assertion(not(addition_compound_cn("BF3-2H2O", _))),
     assertion(not(addition_compound_cn(_, "boron trifluoridewater (1/2)"))),
     true.
 
