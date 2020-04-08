@@ -96,6 +96,7 @@ homonuclear_cn(Formula, Name) :-
 %
 homonuclear_name_atom(Name, Element-Amount) :-
     nonvar(Name) ->
+        re_match("^[a-z]+$", Name),
         homonuclear_name_atom_(Name, Element-Amount), !;
     nonvar(Element), nonvar(Amount) ->
         homonuclear_name_atom_(Name, Element-Amount), !;
