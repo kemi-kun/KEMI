@@ -44,6 +44,7 @@ substitutive_name(Formula, Name) :-
     parent_hydride_sn(Formula, Name);
     parent_hydride_cation_sn(Formula, Name);
     parent_hydride_anion_sn(Formula, Name);
+    boron_hydride_stoichiometric_name(Formula, Name);
     boron_hydride_structural_descriptor_name(Formula, Name).
 
 
