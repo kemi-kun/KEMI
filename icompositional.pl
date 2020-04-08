@@ -561,7 +561,7 @@ addition_compound_components_name(Compounds, Amounts, Name) :-
 
 addition_compound_components_name_(Compounds, Amounts, Name) :-
     join("/", Amounts, RatioPart),
-    maplist(get_iupac_name_except_addition_compound, Compounds, Names),
+    maplist(iupac_name, Compounds, Names),
     join("\u2014", Names, NamePart),
     join("", [NamePart, " (", RatioPart, ")"], Name).
 
@@ -573,25 +573,7 @@ addition_compound_name_components_(Name, Compounds, Amounts) :-
     split_string(RatioPart, "/", "", Amounts_),
     maplist(number_string, Amounts, Amounts_),
     length(Names, L), length(Amounts, L), L > 1,
-    maplist(get_iupac_name_except_addition_compound, Compounds, Names).
-
-get_iupac_name_except_addition_compound(Formula, Name) :-
-    nonvar(Name) ->
-        get_iupac_name_except_addition_compound_(Formula, Name),
-        !;
-    get_iupac_name_except_addition_compound_(Formula, Name). 
-
-get_iupac_name_except_addition_compound_(Formula, Name) :-
-    (
-        alternative_name(Formula, Name);
-        homonuclear_cn(Formula, Name);
-        binary_compound_cn(Formula, Name);
-        ion_cn(Formula, Name);
-        general_stoichiometric_name(Formula, Name);
-        boron_hydride_stoichiometric_name(Formula, Name);
-        substitutive_name(Formula, Name);
-        additive_name(Formula, Name)
-    ).
+    maplist(iupac_name, Compounds, Names).
 
 
 %!  split_addition_compound_(+Formula:string, +Compounds:string, +Amounts:int) is semidet.
