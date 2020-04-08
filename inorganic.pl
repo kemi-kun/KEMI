@@ -22,6 +22,14 @@ inorganic_name(Formula, Name) :-
 %        Name – the compositional name of an element or a compound
 %
 compositional_name(Formula, Name) :-
+    nonvar(Name) -> (
+        homonuclear_cn(Formula, Name) -> true;
+        binary_compound_cn(Formula, Name) -> true;
+        ion_cn(Formula, Name) -> true;
+        stoichiometric_name(Formula, Name) -> true;
+        addition_compound_cn(Formula, Name)
+    ), !.
+compositional_name(Formula, Name) :-
     homonuclear_cn(Formula, Name);
     binary_compound_cn(Formula, Name);
     ion_cn(Formula, Name);
