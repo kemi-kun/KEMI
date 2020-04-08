@@ -8,10 +8,12 @@ molar_mass_(Atom, MW) :-
     multiply(Amount, AtomicW, MW).
 
 
-%!  molar_mass(+Formula:string, -MW:real) is det.
+%!  molar_mass(+Formula:string, +MW:real) is semidet.
+%!  molar_mass(+Formula:string, -MW:real) is semidet.
 %!  molar_mass(-Formula:string, +MW:real) is failure.
+%!  molar_mass(-Formula:string, -MW:real) is failure.
 %
-%   Calculate molecular mass of `Formula`.
+%   True when the chemical compound with formula Formula has molar mass MW.
 %
 molar_mass(Formula, MW) :-
     count_atoms(Formula, Elements),
