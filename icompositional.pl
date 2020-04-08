@@ -656,7 +656,7 @@ general_neutral_stoichiometric_name(Formula, Name) :-
         )
     ),
     % check
-    not(binary_compound(Formula)),
+    % not(binary_compound(Formula)),
     not(ion(Formula)).
 
 general_ion_stoichiometric_name(Formula, Name) :-
