@@ -6,7 +6,8 @@ Implements:
 - Group
 - Period
 */
-:- module(elements,[group/2,element_name/2,element_symbol/2]).
+:- module(elements,[period/2,new_element_name_atomic_number/2,new_element_symbol_atomic_number/2,new_element/4,group/2,element_name/2,element_symbol/2]).
+
 :- use_module(ustr,[capitalize/2,join/3]).
 :- use_module(unums,[split_digits/2,num_digits/2]).
 :- use_module(facts).

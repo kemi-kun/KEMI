@@ -3,7 +3,8 @@
     mul_prefix_except_mono/2,
     prepend_prefix/3,
     append_suffix/3,
-    get_neutral_specie/2
+    get_neutral_specie/2,
+    idify/2
     ]).
 
 :- use_module(elements, [element_name/2, group/2, group_/2]).

@@ -1,3 +1,5 @@
+:- module(stoichiometry,[percent_composition/3,percent_composition/2,molar_mass/2]).
+
 :- use_module(uchem,[count_atoms/2]).
 :- use_module(unums,[multiply/3,divide/3,plus_/3]).
 :- use_module(facts,[element_fact/5]).
