@@ -19,7 +19,9 @@ Implements:
 %!  element_name(-Element:atom, +ElementName:string) is multi.
 %
 %   True when `ElementName` is the name of element `Element`.
-%   Generates element facts when both `Element` and `ElementName` is unbound.
+%
+%   Generates element facts with the alternative name right after the 
+%   element, if any, when both Element and ElementName is unbound.
 %
 element_name(Element, ElementName) :-
     var(Element), var(ElementName) -> (
