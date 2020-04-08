@@ -7,6 +7,7 @@ molecular_weight_(Atom, MW) :-
     element_fact(Element, _, _, _, AtomicW),
     multiply(Amount, AtomicW, MW).
 
+
 %!  molecular_weight(+Formula:string, -MW:real) is det.
 %!  molecular_weight(-Formula:string, +MW:real) is failure.
 %
@@ -17,6 +18,7 @@ molecular_weight(Formula, MW) :-
     maplist(molecular_weight_, Elements, MWList),
     foldl(plus_, MWList, 0, MW).
 
+
 %!  percent_composition(+Formula:string, -PercentComps:list(Element-PC)) is det.
 %
 %   Calculate percent composition (weight) of elements in `Formula`.
@@ -25,9 +27,13 @@ percent_composition(Formula, PercentComps) :-
     count_atoms(Formula, Atoms),
     maplist(molecular_weight_, Atoms, MWList),
     foldl(plus_, MWList, 0, TotalMW),
-    maplist(divide(TotalMW), MWList, PCList),
+    maplist(rdivide(TotalMW), MWList, PCList_),
+    maplist(multiply(100), PCList_, PCList),
     pairs_keys_values(Atoms, Elements, _),
     pairs_keys_values(PercentComps, Elements, PCList).
+
+rdivide(A, B, C) :- divide(B, A, C).
+
 
 %!  percent_composition(+Formula:string, -Element:atom, -PercentComps:list(Element-PC)) is multi.
 %!  percent_composition(+Formula:string, +Element:atom, -PercentComps:list(Element-PC)) is semidet.
