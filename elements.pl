@@ -24,15 +24,13 @@ Implements:
 element_name(Element, ElementName) :-
     var(Element), var(ElementName) ->
         (
-            element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight)
+            element_fact(Element, ElementName, _, _, _)
             % uncomment to include alternative element name in generation
             % ;alternative_element_name(Element, ElementName)
         );
-    (
-        element_fact(Element, ElementName, _Symbol, _AtomicNumber, _AtomicWeight);
-        alternative_element_name(Element, ElementName)
-    ) -> true;
-    new_element(Element, ElementName, _Symbol, _AtomicNumber).
+    alternative_element_name(Element, ElementName);
+    element_fact(Element, ElementName, _, _, _), !;
+    new_element(Element, ElementName, _, _).
 
 
 %!  element_symbol(+Element:atom, +Symbol:string) is semidet.
@@ -45,9 +43,9 @@ element_name(Element, ElementName) :-
 %
 element_symbol(Element, Symbol) :-
     var(Element), var(Symbol) ->
-        element_fact(Element, _ElementName, Symbol, _AtomicNumber, _AtomicWeight);
-    element_fact(Element, _ElementName, Symbol, _AtomicNumber, _AtomicWeight) -> true;
-    new_element(Element, _ElementName, Symbol, _AtomicNumber).
+        element_fact(Element, _, Symbol, _, _);
+    element_fact(Element, _, Symbol, _, _), !;
+    new_element(Element, _, Symbol, _).
 
 
 %!  atomic_number(+Element:atom, +AtomicNumber:string) is semidet.
@@ -60,9 +58,9 @@ element_symbol(Element, Symbol) :-
 %
 atomic_number(Element, AtomicNumber) :-
     var(Element), var(AtomicNumber) ->
-        element_fact(Element, _ElementName, _Symbol, AtomicNumber, _AtomicWeight);
-    element_fact(Element, _ElementName, _Symbol, AtomicNumber, _AtomicWeight) -> true;
-    new_element(Element, _ElementName, _Symbol, AtomicNumber).
+        element_fact(Element, _, _, AtomicNumber, _);
+    element_fact(Element, _, _, AtomicNumber, _), !;
+    new_element(Element, _, _, AtomicNumber).
 
 
 %!  new_element(?Element:atom, ?Name:string, ?Symbol:string, ?NumProtons:int) is det/multi.
