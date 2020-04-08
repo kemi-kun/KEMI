@@ -21,9 +21,10 @@ molar_mass(Formula, MW) :-
     foldl(plus_, MWList, 0, MW).
 
 
-%!  percent_composition(+Formula:string, -PercentComps:list(Element-PC)) is det.
+%!  percent_composition(+Formula:string, -PercentComps:list(Element:atom-PC:int)) is det.
 %
-%   Calculate percent composition (weight) of elements in `Formula`.
+%   True when all elements in the chemical compound with formula Formula
+%   have percent composition contained in PercentComps.
 %
 percent_composition(Formula, PercentComps) :-
     count_atoms(Formula, Atoms),
@@ -37,11 +38,12 @@ percent_composition(Formula, PercentComps) :-
 rdivide(A, B, C) :- divide(B, A, C).
 
 
-%!  percent_composition(+Formula:string, -Element:atom, -PercentComps:list(Element-PC)) is multi.
-%!  percent_composition(+Formula:string, +Element:atom, -PercentComps:list(Element-PC)) is semidet.
-%!  percent_composition(-Formula:string, ?Element:atom, ?PercentComps:list(Element-PC)) is failure.
+%!  percent_composition(+Formula:string, -Element:atom, -PercentComp:int) is multi.
+%!  percent_composition(+Formula:string, +Element:atom, -PercentComp:int) is semidet.
+%!  percent_composition(-Formula:string, ?Element:atom, ?PercentComp:int) is failure.
 %
-%   Calculate percent composition (weight) of `Element` in `Formula`.
+%   True when the element Element in the chemical compound with formula Formula
+%   has percent composition equal to PercentComp.
 %
 percent_composition(Formula, Element, PercentComp) :-
     nonvar(Element), var(PercentComp),
