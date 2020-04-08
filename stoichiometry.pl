@@ -2,20 +2,20 @@
 :- use_module(unums,[multiply/3,divide/3,plus_/3]).
 :- use_module(facts,[element_fact/5]).
 
-molecular_weight_(Atom, MW) :-
+molar_mass_(Atom, MW) :-
     Atom = Element-Amount,
     element_fact(Element, _, _, _, AtomicW),
     multiply(Amount, AtomicW, MW).
 
 
-%!  molecular_weight(+Formula:string, -MW:real) is det.
-%!  molecular_weight(-Formula:string, +MW:real) is failure.
+%!  molar_mass(+Formula:string, -MW:real) is det.
+%!  molar_mass(-Formula:string, +MW:real) is failure.
 %
 %   Calculate molecular mass of `Formula`.
 %
-molecular_weight(Formula, MW) :-
+molar_mass(Formula, MW) :-
     count_atoms(Formula, Elements),
-    maplist(molecular_weight_, Elements, MWList),
+    maplist(molar_mass_, Elements, MWList),
     foldl(plus_, MWList, 0, MW).
 
 
@@ -25,7 +25,7 @@ molecular_weight(Formula, MW) :-
 %
 percent_composition(Formula, PercentComps) :-
     count_atoms(Formula, Atoms),
-    maplist(molecular_weight_, Atoms, MWList),
+    maplist(molar_mass_, Atoms, MWList),
     foldl(plus_, MWList, 0, TotalMW),
     maplist(rdivide(TotalMW), MWList, PCList_),
     maplist(multiply(100), PCList_, PCList),
