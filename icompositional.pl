@@ -723,6 +723,7 @@ generalized_salt_formula_atoms(Formula, EPCs, ENCs) :-
 %!  generalized_salt_formula_atoms_(+Formula:string, +EPCs:list(Element-Amount), +ENCs:list(Element-Amount)) is semidet.
 %!  generalized_salt_formula_atoms_(+Formula:string, -EPCs:list(Element-Amount), -ENCs:list(Element-Amount)) is multi.
 generalized_salt_formula_atoms_(Formula, EPCs, ENCs) :-
+    re_match("^([A-z]+([0-9][0-9]*)?)+$", Formula),
     count_atoms(Formula, Atoms),
     append(EPCs_, ENCs_, Atoms),
     EPCs_ \= [], ENCs_ \= [],
