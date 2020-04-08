@@ -231,7 +231,7 @@ split_positive_negative(Name, PositivePart, NegativePart) :-
 %!  split_positive_negative(+Name:string, -PositivePart:string, -NegativePart) is semidet.
 split_positive_negative(Name, PositivePart, NegativePart) :-
     nonvar(Name),
-    re_matchsub("(?<positive>[a-z]+) (?<negative>[a-z]+)", Name, Sub, []),
+    re_matchsub("^(?<positive>[a-z]+) (?<negative>[a-z]+)$", Name, Sub, []),
     get_dict(positive, Sub, PositivePart),
     get_dict(negative, Sub, NegativePart).
 
