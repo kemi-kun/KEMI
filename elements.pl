@@ -22,15 +22,24 @@ Implements:
 %   Generates element facts when both `Element` and `ElementName` is unbound.
 %
 element_name(Element, ElementName) :-
-    var(Element), var(ElementName) ->
+    var(Element), var(ElementName) -> (
+        element_fact(Element, _, _, _, _),
         (
             element_fact(Element, ElementName, _, _, _)
             % uncomment to include alternative element name in generation
             ;alternative_element_name(Element, ElementName)
-        );
-    element_fact(Element, ElementName, _, _, _);
+        )
+    );
+    nonvar(Element), alternative_element_name(Element, _) -> (
+        element_fact(Element, ElementName, _, _, _);
+        alternative_element_name(Element, ElementName), !
+    );
+    nonvar(ElementName),
+    alternative_element_name(Element, ElementName) -> true;
+
     alternative_element_name(Element, ElementName);
-    !, new_element(Element, ElementName, _, _).
+    element_fact(Element, ElementName, _, _, _), !;
+    new_element(Element, ElementName, _, _).
 
 
 %!  element_symbol(+Element:atom, +Symbol:string) is semidet.
