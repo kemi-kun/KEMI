@@ -25,9 +25,10 @@ element_name(Element, ElementName) :-
     var(Element), var(ElementName) -> (
         element_fact(Element, _, _, _, _),
         (
+            alternative_element_name(Element, ElementName) ->
+                element_fact(Element, ElementName, _, _, _),
+                alternative_element_name(Element, ElementName);
             element_fact(Element, ElementName, _, _, _)
-            % uncomment to include alternative element name in generation
-            ;alternative_element_name(Element, ElementName)
         )
     );
     nonvar(Element), alternative_element_name(Element, _) -> (
