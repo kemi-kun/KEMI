@@ -14,10 +14,10 @@
 :- use_module(ustr).
 
 
-%!	multiplicative_prefix(+Number:int, +Prefix:string) semidet.
-%!	multiplicative_prefix(+Number:int, -Prefix:string) semidet.
-%!	multiplicative_prefix(-Number:int, -Prefix:string) multi.
-%!	multiplicative_prefix(-Number:int, +Prefix:string) semidet.
+%!	multiplicative_prefix(+Number:int, +Prefix:string) is semidet.
+%!	multiplicative_prefix(+Number:int, -Prefix:string) is semidet.
+%!	multiplicative_prefix(-Number:int, -Prefix:string) is multi.
+%!	multiplicative_prefix(-Number:int, +Prefix:string) is semidet.
 %
 %   True when `Prefix` is the multiplicative prefix of `Number`.
 %
