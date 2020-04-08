@@ -1,7 +1,7 @@
 :- module(inorganic,[additive_name/2,substitutive_name/2,compositional_name/2,inorganic_name/2]).
 
 :- use_module(icompositional,[boron_hydride_stoichiometric_name/2,general_stoichiometric_name/2,addition_compound_cn/2,ion_cn/2,binary_compound_cn/2,homonuclear_cn/2]).
-:- use_module(isubstitutive,[parent_hydride_anion_sn/2,parent_hydride_cation_sn/2,parent_hydride_sn/2]).
+:- use_module(isubstitutive,[boron_hydride_structural_descriptor_name/2,parent_hydride_anion_sn/2,parent_hydride_cation_sn/2,parent_hydride_sn/2]).
 :- use_module(iadditive,[polynulcear_entity_an/2,mononuclear_entity_an/2]).
 :- use_module(ialternative,[alternative_name/2]).
 
@@ -47,7 +47,8 @@ stoichiometric_name_(Formula, Name) :-
 substitutive_name(Formula, Name) :-
     parent_hydride_sn(Formula, Name);
     parent_hydride_cation_sn(Formula, Name);
-    parent_hydride_anion_sn(Formula, Name).
+    parent_hydride_anion_sn(Formula, Name);
+    boron_hydride_structural_descriptor_name(Formula, Name).
 
 
 additive_name(Formula, Name) :-
