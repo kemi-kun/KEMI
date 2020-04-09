@@ -534,7 +534,8 @@ addition_compound_cn(Formula, Name) :-
             addition_compound_components_name(Compounds, Amounts, Name);
         nonvar(Name) ->
             addition_compound_components_name(Compounds, Amounts, Name),
-            split_addition_compound(Formula, Compounds, Amounts);
+            split_addition_compound(Formula, Compounds, Amounts),
+            !;
         fail
     ),
     % check
