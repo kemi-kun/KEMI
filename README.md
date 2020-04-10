@@ -1,6 +1,6 @@
 # Project KEMI
 
-[Insert description here]
+The knowledge base of chemical nomenclature recommended by IUPAC.
 
 ## Members
 
@@ -13,4 +13,29 @@
 
 ## Documents
 
-- [Documentation](https://docs.google.com/document/d/1oVAO5Ec0O07aKVBQjbCefTHt8IgDOOiH0QsNNldN5rE/edit)
+- [KEMI Documentation](https://drive.google.com/open?id=1Ep3bHHW7OI1jzvwIjI8SIaa24Ib0zISa5FtAzOXnzQI)
+- [KEMI base](https://drive.google.com/open?id=16mJLFHqhvV54c9LXUkrvfl9bqFn8sFCwwNG0PHH2EJw)
+
+## Getting Start
+
+### Installing Prolog
+
+- [Download SWI-Prolog](https://www.swi-prolog.org/Download.html)
+
+### Visual Studio Code Setup
+
+1. Download [VSC-Prolog](https://marketplace.visualstudio.com/items?itemName=arthurwang.vsc-prolog) extension
+
+2. In settings (File > Preferences > Settings), search for "prolog" then set the executable path to point to `swipl.exe` in your computer
+
+### Running
+
+1. Clone this repository
+```
+git clone https://github.com/kemikaru-kun/KEMI.git
+```
+
+2. Use `main.pl` to query the predicates
+
+
+
