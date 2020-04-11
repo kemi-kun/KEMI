@@ -92,7 +92,7 @@ mononuclear_parent_hydride(Formula) :-
 
 parent_name_of(Element, Name) :-
     parent_name_exception(Element, _, Name) -> true;
-        element_name(Element, ElementName),
+        element_fact(Element, ElementName, _, _, _),
         append_suffix(ElementName, "ane", Name).
     % % check
     % ExcludedNames = [
