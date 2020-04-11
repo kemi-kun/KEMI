@@ -1,7 +1,6 @@
 :- module(isubstitutive,[
     boron_hydride_structural_descriptor_name/2,
-    parent_hydride_anion_sn/2,
-    parent_hydride_cation_sn/2,
+    parent_hydride_ion_sn/2,
     parent_hydride_sn/2
     ]).
 

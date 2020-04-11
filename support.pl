@@ -8,7 +8,7 @@
     idify/2
     ]).
 
-:- use_module(elements, [element_name/2, group/2, group_/2]).
+:- use_module(elements, [element_name/2, group/2]).
 :- use_module(facts).
 :- use_module(unums).
 :- use_module(ustr).
