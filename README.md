@@ -16,7 +16,7 @@ The knowledge base of chemical nomenclature recommended by IUPAC.
 - [KEMI Documentation](https://drive.google.com/open?id=1Ep3bHHW7OI1jzvwIjI8SIaa24Ib0zISa5FtAzOXnzQI)
 - [KEMI base](https://drive.google.com/open?id=16mJLFHqhvV54c9LXUkrvfl9bqFn8sFCwwNG0PHH2EJw)
 
-## Getting Start
+## Getting Started
 
 ### Installing Prolog
 
@@ -28,6 +28,8 @@ The knowledge base of chemical nomenclature recommended by IUPAC.
 
 2. In settings (File > Preferences > Settings), search for "prolog" then set the executable path to point to `swipl.exe` in your computer
 
+![picture showing swipl.exe path](https://imgur.com/a/XEji1s8)
+
 ### Running
 
 1. Clone this repository
@@ -36,6 +38,3 @@ git clone https://github.com/kemikaru-kun/KEMI.git
 ```
 
 2. Use `main.pl` to query the predicates
-
-
-
