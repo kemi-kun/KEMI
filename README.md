@@ -28,7 +28,7 @@ The knowledge base of chemical nomenclature recommended by IUPAC.
 
 2. In settings (File > Preferences > Settings), search for "prolog" then set the executable path to point to `swipl.exe` in your computer
 
-![picture showing swipl.exe path](https://imgur.com/a/XEji1s8)
+![picture showing swipl.exe path](https://i.imgur.com/c7a1Iz0.png)
 
 ### Running
 
