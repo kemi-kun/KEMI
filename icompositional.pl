@@ -337,9 +337,9 @@ anion_cn(Formula, Name) :-
     homopolyatomic_anion_cn(Formula, Name).
 
 
-%!  monoatomic_cation_cn(+Formula: string, -Name: string) is multi.
+%!  monoatomic_cation_cn(+Formula: string, -Name: string) is semidet.
 %!  monoatomic_cation_cn(+Formula: string, +Name: string) is semidet.
-%!  monoatomic_cation_cn(-Formula: string, +Name: string) is ERROR.
+%!  monoatomic_cation_cn(-Formula: string, +Name: string) is semidet.
 %
 %   IR-5.3.2.2 p.82-83
 %
@@ -358,9 +358,9 @@ monoatomic_cation_cn(Formula, Name) :-
 % monoatomic_cation_cn("[Na]+", "sodium(1+)")
 
 
-%!  homopolyatomic_cation_cn(+Formula: string, -Name: string) is multi.
-%!  homopolyatomic_cation_cn(+Formula: string, +Name: string) is nondet.
-%!  homopolyatomic_cation_cn(-Formula: string, +Name: string) is failure.
+%!  homopolyatomic_cation_cn(+Formula: string, -Name: string) is semidet.
+%!  homopolyatomic_cation_cn(+Formula: string, +Name: string) is semidet.
+%!  homopolyatomic_cation_cn(-Formula: string, +Name: string) is semidet.
 %
 %   IR-5.3.2.3 p.83
 %   [O2]+ => dioxygen(1+)
@@ -381,9 +381,9 @@ homopolyatomic_cation_cn(Formula, Name) :-
     cation(Formula).
 
 
-%!  monoatomic_anion_cn(+Formula: string, -Name: string) is multi.
 %!  monoatomic_anion_cn(+Formula: string, +Name: string) is semidet.
-%!  monoatomic_anion_cn(-Formula: string, +Name: string) is ERROR.
+%!  monoatomic_anion_cn(+Formula: string, -Name: string) is semidet.
+%!  monoatomic_anion_cn(-Formula: string, +Name: string) is semidet.
 %
 %   IR-5.3.3.2 p.84-85
 %
@@ -401,9 +401,9 @@ monoatomic_anion_cn(Formula, Name) :-
     anion(Formula).
 
 
-%!  homopolyatomic_anion_cn(+Formula: string, -Name: string) is multi.
-%!  homopolyatomic_anion_cn(+Formula: string, +Name: string) is nondet.
-%!  homopolyatomic_anion_cn(-Formula: string, +Name: string) is failure.
+%!  homopolyatomic_anion_cn(+Formula: string, -Name: string) is semidet.
+%!  homopolyatomic_anion_cn(+Formula: string, +Name: string) is semidet.
+%!  homopolyatomic_anion_cn(-Formula: string, +Name: string) is semidet.
 %
 %   IR-5.3.3.3 p.85
 %   [O2]2- => dioxide(2-)
