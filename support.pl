@@ -86,9 +86,12 @@ gen_affix_(Number, Affix) :-
 %   Note: Depends on multiplicative_prefix/2.
 %
 complex_multiplicative_prefix(Number, Prefix) :-
-    complex_multiplicative_prefix_fact(Number, Prefix) -> true;
-    multiplicative_prefix(Number, SimplePrefix),
-    string_concat(SimplePrefix, "kis", Prefix).
+    between(2, 9999, Number),
+    (
+        complex_multiplicative_prefix_fact(Number, Prefix) -> true;
+            multiplicative_prefix(Number, SimplePrefix),
+            string_concat(SimplePrefix, "kis", Prefix)
+    ).
 
 
 %!	mul_prefix_except_mono(+Number, +Prefix) semidet.
