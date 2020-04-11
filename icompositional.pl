@@ -448,7 +448,7 @@ homoatomic_ion_atom_formula_(Element-Amount, Charge, Formula) :-
             ChargePart = "-";
         charge_string(ChargePart, Charge)
     ),
-    join("", ["(", Term, ")", ChargePart], Formula).
+    join("", ["[", Term, "]", ChargePart], Formula).
 
 
 %!  homoatomic_ion_name_atom(+Name:string, +Element:atom-Amount:int, +Charge:int) is semidet.
