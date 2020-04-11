@@ -148,7 +148,7 @@ homonuclear(Formula) :-
 
 %!  binary_compound_cn(+Formula: string, +Name: string) is semidet.
 %!  binary_compound_cn(+Formula: string, -Name: string) is semidet.
-%!  binary_compound_cn(-Formula: string, -Name: string) is failure.
+%!  binary_compound_cn(-Formula: string, -Name: string) is multi.
 %!  binary_compound_cn(-Formula: string, +Name: string) is semidet.
 %
 %   @arg Formula – the chemical formula of the binary compound
@@ -162,9 +162,8 @@ binary_compound_cn(Formula, Name) :-
         nonvar(Formula) ->
             binary_compound_formula_atoms(Formula, Atom),
             binary_compound_name_atoms(Name, Atom);
-        nonvar(Name) ->
-            binary_compound_name_atoms(Name, Atom),
-            binary_compound_formula_atoms(Formula, Atom)
+        binary_compound_name_atoms(Name, Atom),
+        binary_compound_formula_atoms(Formula, Atom)
     ),
     % chcek formula
     binary_compound(Formula),
@@ -200,7 +199,7 @@ binary_compound_formula_atoms(Formula, Atoms) :-
 %!  binary_compound_name_atoms(+Name:string, +Atoms:list(Element:atom-Amount:int) is semidet.
 %!  binary_compound_name_atoms(+Name:string, -Atoms:list(Element:atom-Amount:int) is semidet.
 %!  binary_compound_name_atoms(-Name:string, +Atoms:list(Element:atom-Amount:int) is det.
-%!  binary_compound_name_atoms(-Name:string, -Atoms:list(Element:atom-Amount:int) is failure.
+%!  binary_compound_name_atoms(-Name:string, -Atoms:list(Element:atom-Amount:int) is multi.
 %
 %   True when `Atoms` is the list of `Element-Amount` represented by `Name`.
 %   False when `Name` is not a stoichiometric name of binary compound.
@@ -210,7 +209,7 @@ binary_compound_name_atoms(Name, Atoms) :-
         binary_compound_atoms_name_(Atoms, Name);
     nonvar(Name) ->
         binary_compound_name_atoms_(Name, Atoms);
-    fail.
+    binary_compound_atoms_name_(Atoms, Name).
 
 binary_compound_name_atoms_(Name, Atoms) :-
     split_positive_negative(Name, PositivePart, NegativePart),
