@@ -10,7 +10,7 @@ Contents:
 */
 :- module(facts,[
     addition_compound_exception/2,
-    parent_name_exception/2,
+    parent_name_exception/3,
     complex_multiplicative_prefix_fact/2,
     multiplicative_prefix_fact/2,
     multiplicative_affix_fact/2,
@@ -250,10 +250,11 @@ complex_multiplicative_prefix_fact(3, "tris").
 
 
 % From KEMI base: ParentNameException
-% parent_name_exception(Formula: string, Name: string)
-parent_name_exception("CH4", "methane").
-parent_name_exception("NH3", "azane").
-parent_name_exception("InH3", "indigane").
+% parent_name_exception(Element:atom, Formula:string, Name:string)
+parent_name_exception(carbon, "CH4", "methane").
+% parent_name_exception(nitrogen, "NH3", "azane").
+% parent_name_exception(indium, "InH3", "indigane").
+parent_name_exception(oxygen, "H2O", "oxidane"). % temp bugfix
 
 
 % From KEMI base: EN

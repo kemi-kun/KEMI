@@ -1,4 +1,5 @@
 :- module(suppport,[
+    get_standard_bonding_number/2,
     multiplicative_prefix/2,
     mul_prefix_except_mono/2,
     prepend_prefix/3,
@@ -267,14 +268,7 @@ anify_(ElementName, Result) :-
                 Root = Root_
             ),
             string_concat(Root, "ane", Result)
-    ),
-
-    % check
-    ExcludedNames = [
-        "carbane", "aluminane", "bismane", "oxane", "thiane", 
-        "selenane", "tellurane", "polonane"
-    ],
-    not(member(Result, ExcludedNames)).
+    ).
 
 anify_element_root_exception(nitrogen, "az"). % from "azote"
 anify_element_root_exception(indium, "indig"). % from "indigo"
@@ -355,10 +349,6 @@ replace_prefix(Name1, Name2, Prefix1, Prefix2) :-
 %! get_standard_bonding_number(+Element: atom, -BondingNum: integer) is det.
 %! get_standard_bonding_number(+Element: atom, +BondingNum: integer) is semidet.
 %
-%  X is group of elemnt 
-%  If 13 ≤ X ≤ 15 -> X - 10 
-%  Else If 16 ≤ X ≤ 17 -> 18 - X
-%  Else FAIL
 %
 get_standard_bonding_number(Element, BondingNum):-
     group(Element, X),
