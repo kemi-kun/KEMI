@@ -361,10 +361,10 @@ replace_prefix(Name1, Name2, Prefix1, Prefix2) :-
 %  Else FAIL
 %
 get_standard_bonding_number(Element, BondingNum):-
-    Element \= hydrogen -> group_(Element, X),
+    group(Element, X),
     (
-        13 =< X, X =< 15 -> BondingNum is X - 10;
-        16 =< X, X =< 18 -> BondingNum is 18 - X;
+        between(13, 14, X) -> BondingNum is X - 10;
+        between(15, 17, X) -> BondingNum is 18 - X;
         false
     ),
     !.
