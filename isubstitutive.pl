@@ -13,7 +13,7 @@
 :- use_module(ustr).
 :- use_module(support).
 
-:- use_module(icompositional, [boron_hydride_stoichiometric_name/2]).
+:- use_module(icompositional, [boron_hydride_stoichiometric_name/2,homonuclear_formula_atom/2]).
 
 
 parent_hydride_sn(Formula, Name) :-
@@ -50,9 +50,8 @@ mononuclear_parent_hydride_formula_name(Formula, Name) :-
 
 mononuclear_parent_hydride_atoms_formula(Atoms, Formula) :-
     nonvar(Atoms),
-    selectchk(hydrogen-NumHydrogen, Atoms, [Element-1]),
-    element_symbol(Element, ElementSymbol),
-    join("", [ElementSymbol, "H", NumHydrogen], Formula).
+    maplist(homonuclear_formula_atom, Terms, Atoms),
+    join("", Terms, Formula).
 
 
 mononuclear_parent_hydride_name_atoms(Name, Atoms) :-
@@ -63,13 +62,13 @@ mononuclear_parent_hydride_name_atoms(Name, Atoms) :-
             get_dict(num, Sub, NumHydrogen),
             get_dict(parent_name, Sub, ParentName),
             parent_name_of(Element, ParentName),
-            Atoms = [hydrogen-NumHydrogen, Element-1];
+            sort_atoms_by_en([hydrogen-NumHydrogen, Element-1], Atoms);
 
         % Standard Bonding Number
         parent_name_of(Element, Name),
         get_standard_bonding_number(Element, SBN),
-        Atoms = [hydrogen-SBN, Element-1]
-    ).
+        sort_atoms_by_en([hydrogen-SBN, Element-1], Atoms)
+    ), !.
     % generate
     %
     % element_fact(Element, _, _, _, _),
@@ -93,11 +92,9 @@ mononuclear_parent_hydride(Formula) :-
 
 
 parent_name_of(Element, Name) :-
-    (
-        parent_name_exception(Element, _, Name) -> true;
-            element_name(Element, ElementName),
-            append_suffix(ElementName, "ane", Name)
-    ).
+    parent_name_exception(Element, _, Name) -> true;
+        element_name(Element, ElementName),
+        append_suffix(ElementName, "ane", Name).
     % % check
     % ExcludedNames = [
     %     "carbane", "aluminane", "bismane", "oxane", "thiane", 
