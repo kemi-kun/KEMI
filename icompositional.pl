@@ -157,11 +157,14 @@ homonuclear(Formula) :-
 %   IR-5.2 p.81-82
 %
 binary_compound_cn(Formula, Name) :-
-    nonvar(Name) ->
-        binary_compound_name_atoms(Name, Atom),
-        binary_compound_formula_atoms(Formula, Atom);
-    binary_compound_formula_atoms(Formula, Atom),
-    binary_compound_name_atoms(Name, Atom),
+    (
+        nonvar(Formula) ->
+            binary_compound_formula_atoms(Formula, Atom),
+            binary_compound_name_atoms(Name, Atom);
+        nonvar(Name) ->
+            binary_compound_name_atoms(Name, Atom),
+            binary_compound_formula_atoms(Formula, Atom)
+    ),
     % chcek formula
     binary_compound(Formula),
     not(ion(Formula)).
@@ -202,10 +205,10 @@ binary_compound_formula_atoms(Formula, Atoms) :-
 %   False when `Name` is not a stoichiometric name of binary compound.
 %
 binary_compound_name_atoms(Name, Atoms) :-
-    nonvar(Name) ->
-        binary_compound_name_atoms_(Name, Atoms);
     nonvar(Atoms) ->
         binary_compound_atoms_name_(Atoms, Name);
+    nonvar(Name) ->
+        binary_compound_name_atoms_(Name, Atoms);
     fail.
 
 binary_compound_name_atoms_(Name, Atoms) :-
