@@ -154,7 +154,8 @@ homonuclear(Formula) :-
 %   @arg Formula – the chemical formula of the binary compound
 %   @arg Name – the stoichiometric name of the binary compound
 %   
-%   IR-5.2 p.81-82
+%   True when `Formula` is a chemical formula of the binary compound with the compositional name `Name`.
+%   Part of compositional nomenclature, IR-5.2, Red Book (2005).
 %
 binary_compound_cn(Formula, Name) :-
     (
@@ -252,7 +253,7 @@ electropositive_name_atom(Name, Element-Amount) :-
 
 electropositive_name_atom_(Name, Element-Amount) :-
     between(1, 9999, Amount),
-    element_name(Element, ElementName),
+    (element_fact(Element, ElementName, _, _, _); alternative_element_name(Element, ElementName)),
     (
         Amount = 1 -> MulPrefix = "";
         multiplicative_prefix(Amount, MulPrefix)
@@ -273,7 +274,7 @@ electronegative_name_atom(Name, Element-Amount) :-
 
 electronegative_name_atom_(Name, Element-Amount) :-
     between(1, 9999, Amount),
-    element_name(Element, ElementName),
+    (element_fact(Element, ElementName, _, _, _); alternative_element_name(Element, ElementName)),
     append_suffix(ElementName, "ide", IdeName),
     (
         Amount = 1 -> MulPrefix = "";
@@ -295,7 +296,7 @@ binary_electronegative_name_atom(Name, Element-Amount) :-
 
 binary_electronegative_name_atom_(Name, Element-Amount) :-
     between(1, 9999, Amount),
-    element_name(Element, ElementName),
+    (element_fact(Element, ElementName, _, _, _); alternative_element_name(Element, ElementName)),
     append_suffix(ElementName, "ide", IdeName),
     (
         Amount = 1, Element \= oxygen -> MulPrefix = "";
@@ -305,7 +306,7 @@ binary_electronegative_name_atom_(Name, Element-Amount) :-
 
 binary_electronegative_name_atom_loose_(Name, Element-Amount) :-
     between(1, 9999, Amount),
-    element_name(Element, ElementName),
+    (element_fact(Element, ElementName, _, _, _); alternative_element_name(Element, ElementName)),
     append_suffix(ElementName, "ide", IdeName),
     (
         Amount = 1, Element \= oxygen, MulPrefix = "";
