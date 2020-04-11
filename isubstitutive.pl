@@ -10,12 +10,39 @@
 
 :- use_module(icompositional, [boron_hydride_stoichiometric_name/2]).
 
+
 parent_hydride_sn(Formula, Name) :-
+    (
+        mononuclear_parent_hydride_sn(Formula, Name) -> true;
+        homopolynuclear_parent_hydride_sn(Formula, Name) -> true;
+        heteronuclear_parent_hydride_sn(Formula, Name)
+    ).
+
+
+mononuclear_parent_hydride_sn(Formula, Name) :-
     fail.
+
+homopolynuclear_parent_hydride_sn(Formula, Name) :-
+    fail.
+
+heteronuclear_parent_hydride_sn(Formula, Name) :-
+    fail.
+
+
+
+parent_hydride_ion_sn(Formula, Name) :-
+    (
+        parent_hydride_cation_sn(Formula, Name) -> true;
+        parent_hydride_anion_sn(Formula, Name)
+    ).
+
+
 parent_hydride_cation_sn(Formula, Name) :-
     fail.
+
 parent_hydride_anion_sn(Formula, Name) :-
     fail.
+
 
 %!  boron_hydride_structural_descriptor_name(+Formula:string, +Name:string) is semidet.
 %!  boron_hydride_structural_descriptor_name(+Formula:string, -Name:string) is semidet.
