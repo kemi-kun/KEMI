@@ -118,7 +118,6 @@ sort_atoms_by_en(Atoms, SortedAtoms) :-
     sorted_by_en_(Elements, Sorted),
     map_list_to_pairs(pairs_key_value(Atoms), Sorted, SortedAtoms_),
     transpose_pairs(SortedAtoms_, SortedAtoms).
-    .
 
 pairs_key_value(Pairs, Key, Value) :-
     pairs_keys_values(Pairs, Keys, Values),
