@@ -25,11 +25,11 @@ parent_hydride_sn(Formula, Name) :-
 
 mononuclear_parent_hydride_sn(Formula, Name) :-
     nonvar(Formula) ->
-        count_atoms(Formula, Atoms),
+        mononuclear_parent_hydride_formula_atoms(Formula, Atoms),
         mononuclear_parent_hydride_atoms_name(Atoms, Name);
     nonvar(Name) ->
         mononuclear_parent_hydride_name_atoms(Name, Atoms),
-        mononuclear_parent_hydride_atoms_formula(Atoms, Formula);
+        mononuclear_parent_hydride_formula_atoms(Formula, Atoms);
     fail.
 
 
@@ -47,6 +47,15 @@ mononuclear_parent_hydride_atoms_name(Atoms, Name) :-
     ).
 
 
+mononuclear_parent_hydride_formula_atoms(Formula, Atoms) :-
+    nonvar(Formula) ->
+        count_atoms(Formula, Atoms);
+    nonvar(Atoms) ->
+        mononuclear_parent_hydride_atoms_formula(Atoms, Formula);
+    fail.
+
+
+%`  mononuclear_parent_hydride_atoms_formula(+Atoms:list(Element-Amount), -Formula:string) is det.
 mononuclear_parent_hydride_atoms_formula(Atoms, Formula) :-
     nonvar(Atoms),
     maplist(homonuclear_formula_atom, Terms, Atoms),
