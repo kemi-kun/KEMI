@@ -22,9 +22,18 @@ parent_hydride_sn(Formula, Name) :-
         heteronuclear_parent_hydride_sn(Formula, Name)
     ).
 
+%!  mononuclear_parent_hydride_sn(+Formula, +Name) is semidet.
+%!  mononuclear_parent_hydride_sn(+Formula, -Name) is semidet.
+%!  mononuclear_parent_hydride_sn(-Formula, +Name) is semidet.
+%!  mononuclear_parent_hydride_sn(-Formula, -Name) is failure.
 %
-%
-%
+%   @arg Formula – the chemical formula of the mononuclear parent hydride
+%   @arg Name – the substitutive name of the mononuclear parent hydride
+%   
+%   True when the mononuclear parent hydride formula `Formula` 
+%   has the substitutive name `Name`.
+%   Part of substitutive nomenclature, IR-6.2.1, Red Book (2005).
+%  
 mononuclear_parent_hydride_sn(Formula, Name) :-
     nonvar(Formula) ->
         mononuclear_parent_hydride_formula_atoms(Formula, Atoms),
