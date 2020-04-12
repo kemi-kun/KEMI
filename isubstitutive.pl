@@ -26,14 +26,36 @@ parent_hydride_sn(Formula, Name) :-
 mononuclear_parent_hydride_sn(Formula, Name) :-
     nonvar(Formula) ->
         mononuclear_parent_hydride_formula_atoms(Formula, Atoms),
-        mononuclear_parent_hydride_atoms_name(Atoms, Name);
+        mononuclear_parent_hydride_name_atoms(Name, Atoms);
     nonvar(Name) ->
         mononuclear_parent_hydride_name_atoms(Name, Atoms),
         mononuclear_parent_hydride_formula_atoms(Formula, Atoms);
     fail.
 
 
-mononuclear_parent_hydride_atoms_name(Atoms, Name) :-
+mononuclear_parent_hydride_formula_atoms(Formula, Atoms) :-
+    nonvar(Formula) ->
+        count_atoms(Formula, Atoms);
+    nonvar(Atoms) ->
+        mononuclear_parent_hydride_atoms_formula_(Atoms, Formula);
+    fail.
+
+%`  mononuclear_parent_hydride_atoms_formula_(+Atoms:list(Element-Amount), -Formula:string) is det.
+mononuclear_parent_hydride_atoms_formula_(Atoms, Formula) :-
+    nonvar(Atoms),
+    maplist(homonuclear_formula_atom, Terms, Atoms),
+    join("", Terms, Formula).
+
+
+mononuclear_parent_hydride_name_atoms(Name, Atoms) :-
+    nonvar(Atoms) ->
+        mononuclear_parent_hydride_atoms_name_(Atoms, Name);
+    nonvar(Name) ->
+        mononuclear_parent_hydride_name_atoms_(Name, Atoms);
+    fail.
+
+%`  mononuclear_parent_hydride_atoms_name_(+Atoms:list(Element-Amount), -Name:string) is det.
+mononuclear_parent_hydride_atoms_name_(Atoms, Name) :-
     selectchk(hydrogen-NumHydrogen, Atoms, [Element-1]),
     get_standard_bonding_number(Element, SBN),
     parent_name_of(Element, ParentName),
@@ -46,37 +68,20 @@ mononuclear_parent_hydride_atoms_name(Atoms, Name) :-
         join("", ["\u03bb", NumHydrogen, "-", ParentName], Name)
     ).
 
+%`  mononuclear_parent_hydride_atoms_name_(+Name:string, +Atoms:list(Element-Amount)) is det.
+mononuclear_parent_hydride_name_atoms_(Name, Atoms) :-
+    % Non-Standard Bonding Number
+    re_matchsub("^\u03bb(?<num>[1-9][0-9]*)-(?<parent_name>[a-z]+)$", Name, Sub, []) ->
+        get_dict(num, Sub, NumHydrogen),
+        get_dict(parent_name, Sub, ParentName),
+        parent_name_of(Element, ParentName),
+        sort_atoms_by_en([hydrogen-NumHydrogen, Element-1], Atoms);
 
-mononuclear_parent_hydride_formula_atoms(Formula, Atoms) :-
-    nonvar(Formula) ->
-        count_atoms(Formula, Atoms);
-    nonvar(Atoms) ->
-        mononuclear_parent_hydride_atoms_formula(Atoms, Formula);
-    fail.
+    % Standard Bonding Number
+    parent_name_of(Element, Name),
+    get_standard_bonding_number(Element, SBN),
+    sort_atoms_by_en([hydrogen-SBN, Element-1], Atoms), !.
 
-
-%`  mononuclear_parent_hydride_atoms_formula(+Atoms:list(Element-Amount), -Formula:string) is det.
-mononuclear_parent_hydride_atoms_formula(Atoms, Formula) :-
-    nonvar(Atoms),
-    maplist(homonuclear_formula_atom, Terms, Atoms),
-    join("", Terms, Formula).
-
-
-mononuclear_parent_hydride_name_atoms(Name, Atoms) :-
-    nonvar(Name) ->
-    (
-        % Non-Standard Bonding Number
-        re_matchsub("^\u03bb(?<num>[1-9][0-9]*)-(?<parent_name>[a-z]+)$", Name, Sub, []) ->
-            get_dict(num, Sub, NumHydrogen),
-            get_dict(parent_name, Sub, ParentName),
-            parent_name_of(Element, ParentName),
-            sort_atoms_by_en([hydrogen-NumHydrogen, Element-1], Atoms);
-
-        % Standard Bonding Number
-        parent_name_of(Element, Name),
-        get_standard_bonding_number(Element, SBN),
-        sort_atoms_by_en([hydrogen-SBN, Element-1], Atoms)
-    ), !.
     % generate
     %
     % element_fact(Element, _, _, _, _),
