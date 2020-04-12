@@ -20,12 +20,26 @@
 :- use_module(ustr).
 
 
+%!  ion(+Formula:string) is det.
+%
+%   True when `Formula` is a chemical formula of a homonuclear molecule.
+%
 ion(Formula) :- cation(Formula) -> true; anion(Formula).
 
+
+%!  cation(+Formula:string) is det.
+%
+%   True when `Formula` is a chemical formula of a cationic compound.
+%
 cation(Formula) :-
     get_net_charge(Formula, NetCharge),
     NetCharge > 0.
 
+
+%!  anion(+Formula:string) is det.
+%
+%   True when `Formula` is a chemical formula of an anionic compound.
+%
 anion(Formula) :-
     get_net_charge(Formula, NetCharge),
     NetCharge < 0.
@@ -93,8 +107,8 @@ homonuclear_cn(Formula, Name) :-
 
 %!  homonuclear_name_atom(?Name:string, ?Element:atom, ?Amount:int) is det/multi.
 %
-%   True when `Atom = Element-Amount` is the atoms in the formula representted by `Name`.
-%   False when `Name` is not a compositional homonuclear compound name.
+%   True when `Name` is the name of a homonuclear molecule with `Amount` atoms
+%   of chemical element `Element`.
 %
 homonuclear_name_atom(Name, Element-Amount) :-
     nonvar(Name) ->
@@ -117,6 +131,9 @@ homonuclear_name_atom_(Name, Element-Amount) :-
     string_concat(MulPrefix, ElementName, Name).
 
 %!  homonuclear_formula_atom(?Formula:string, ?Element:atom, ?Amount:int) is det/multi.
+%
+%   True when `Formula` is a chemical formula of a homonuclear molecule with
+%   `Amount` atoms of chemical element `Element.
 %
 homonuclear_formula_atom(Formula, Element-Amount) :-
     nonvar(Formula) ->
@@ -142,6 +159,8 @@ split_term(String, Symbol, Amount) :-
 
 %!  homonulcear(+Formula) is semidet.
 %!  homonulcear(-Formula) is failure.
+%
+%   True when `Formula` is a chemical formula of a homonuclear molecule.
 %
 homonuclear(Formula) :-
     get_all_elements(Formula, Elements),

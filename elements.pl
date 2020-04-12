@@ -19,7 +19,8 @@ Implements:
 %!  element_name(-Element:atom, -ElementName:string) is multi.
 %!  element_name(-Element:atom, +ElementName:string) is multi.
 %
-%   True when `ElementName` is the name of element `Element`.
+%   True when `ElementName` is an acceptable IUPAC name for chemical element
+%   `Element`.
 %
 %   Generates element facts with the alternative name right after the 
 %   element, if any, when both Element and ElementName is unbound.
@@ -78,7 +79,8 @@ atomic_number(Element, AtomicNumber) :-
 
 %!  new_element(?Element:atom, ?Name:string, ?Symbol:string, ?NumProtons:int) is det/multi.
 %
-%   True when "new element" `Element` has name `Name`, symbol `Symbol` and `NumProtons` protons.
+%   True when "new element" `Element` has systematic element name `Name`,
+%   symbol `Symbol` and `NumProtons` protons.
 %
 new_element(Element, ElementName, Symbol, NumProtons) :-
     (nonvar(Element); nonvar(ElementName)) ->
@@ -95,7 +97,8 @@ new_element(Element, ElementName, Symbol, NumProtons) :-
 %!  new_element_name_atomic_number(-ElementName:string, -AtomicNumber:int) is multi.
 %!  new_element_name_atomic_number(-ElementName:string, +AtomicNumber:int) is det.
 %
-%   True when `Z` is the atomic number of "new" element `Element`.
+%   True when “new element” with systematic element name `ElementName` has
+%   `AtomicNumber` protons.
 %
 new_element_name_atomic_number(ElementName, AtomicNumber) :-
     nonvar(ElementName), var(AtomicNumber) ->
@@ -132,7 +135,7 @@ new_element_name_atomic_number_(ElementName, Z) :-
 %!  new_element_symbol_atomic_number(-Symbol:atom, -AtomicNumber:int) is multi.    % infinite
 %!  new_element_symbol_atomic_number(-Symbol:atom, +AtomicNumber:int) is det.
 %
-%   True when `Z` is the atomic number of "new" element `Element`.
+%   True when “new element” with symbol `ElementName` has `AtomicNumber` protons.
 %
 new_element_symbol_atomic_number(Symbol, AtomicNumber) :-
     nonvar(Symbol), var(AtomicNumber) ->
@@ -214,7 +217,7 @@ period2_(Element, Period) :-
 %!  group(-Element:atom, -Group:int) is multi.
 %!  group(-Element:atom, +Group:int) is multi.
 %
-%   True if element Element is in group `Group`.
+%   True if chemical element `Element` is in group `Group`.
 %
 group(Element, Group) :-
     element_fact(Element, _, _, _, _),
@@ -247,104 +250,3 @@ group_(Element, Group) :-
 group_exception(hydrogen, 1).
 group_exception(boron, 13).
 group_exception(aluminium, 13).
-
-% group(Element, Group) :-
-%     Element = hydrogen, 
-%     Group = 1,
-%     !.
-% group(Element, Group) :-
-%     nonvar(Element),
-%     element_fact(Element, _, _, Z, _),
-%     full_orbital(Z),
-%     Group is 18,
-%     !.
-% group(Element, Group) :-
-%     (var(Group);nonvar(Group), Group \= 18),
-%     atomic_number(Element, Z),
-%     group(Noble, 18),
-%     write(Noble),
-%     atomic_number(Noble, NZ),
-%     write(NZ),
-%     ((
-%         plus(NZ, X, Z),
-%         between(1, X, 3),
-%         Group is X
-%     );(
-%         plus(NZ, -18, T0),
-%         plus(T0, Y, Z),
-%         between(4, Y, 17),
-%         Group is Y
-%     )).
-% group(Element, Group) :-
-%     nonvar(Group),
-%     Group = 18,
-%     element_fact(Element, _, _, Z, _),
-%     full_orbital(Z).
-
-%! group(+Element:atom, +Group:int) is semidet.
-%! group(+Element:atom, -Group:int) is det.
-%! group(-Element:atom, +Group:int) is multi.
-%! group(-Element:atom, -Group:int) is WRONG.   # TODO: Fix
-%
-%  True if element `Element` is group `Group`.
-%
-% group(Element, Group) :-
-%     nonvar(Element) ->
-%         Element = hydrogen,
-%         Group is 1,
-%         !;
-%     Element = hydrogen,
-%     Group is 1.
-% group(Element, Group) :-
-%     var(Element),
-%     group_(Element, Group).
-% group(Element, Group) :-
-%     nonvar(Element),
-%     group_(Element, Group),
-%     !.
-% group(Element, Group) :-
-%     element_fact(Element, _, _, Z, _),
-%     full_orbital(Z),
-%     Group is 18.
-% group_(Element, Group) :-
-%     (nonvar(Group) -> Group \= 18; true),   % skip this if Group is given = 18
-%     element_fact(Element, _, _, Z, _),
-%     not(full_orbital(Z)),                   % skip if is group 18
-%     group(NobleElement, 18),
-%     element_fact(NobleElement, _, _, Z2, _),
-%     T1 is Z2 + 1,
-%     T2 is Z2 + 2,
-%     T3 is Z2 + 3,
-%     T17 is Z2 - 1,
-%     T16 is Z2 - 2,
-%     T15 is Z2 - 3,
-%     T14 is Z2 - 4,
-%     T13 is Z2 - 5,
-%     T12 is Z2 - 6,
-%     T11 is Z2 - 7,
-%     T10 is Z2 - 8,
-%     T9 is Z2 - 9,
-%     T8 is Z2 - 10,
-%     T7 is Z2 - 11,
-%     T6 is Z2 - 12,
-%     T5 is Z2 - 13,
-%     T4 is Z2 - 14,
-%     (  
-%         Z = T1 -> Group is 1;
-%         Z = T2 -> Group is 2;
-%         Z = T3 -> Group is 3;
-%         Z = T17 -> Group is 17;
-%         Z = T16 -> Group is 16;
-%         Z = T15 -> Group is 15;
-%         Z = T14 -> Group is 14;
-%         Z = T13-> Group is 13;
-%         Z = T12 -> Group is 12;
-%         Z = T11 -> Group is 11;
-%         Z = T10 -> Group is 10;
-%         Z = T9 -> Group is 9;
-%         Z = T8 -> Group is 8;
-%         Z = T7 -> Group is 7;
-%         Z = T6 -> Group is 6;
-%         Z = T5 -> Group is 5;
-%         Z = T4 -> Group is 4      
-%     ).

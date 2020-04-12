@@ -21,7 +21,7 @@
 %!	multiplicative_prefix(-Number:int, -Prefix:string) is multi.
 %!	multiplicative_prefix(-Number:int, +Prefix:string) is semidet.
 %
-%   True when `Prefix` is the multiplicative prefix of `Number`.
+%   True when `Prefix` is the multiplicative prefix for number `Number`.
 %
 %   @arg Number Integer between 1 and 9999.
 %
@@ -38,6 +38,10 @@ multiplicative_prefix_(Number, Prefix) :-
     ),
     Prefix = Prefix_.
 
+%
+%   True when Prefix is the multiplicative prefix for number Number.
+%   Uses recursion to get the prefix for the current number.
+%
 gen_mul_prefix(Number, Prefix) :-
     Number = 0 -> Prefix = "";
     multiplicative_affix_fact(Number, Prefix) -> true;
