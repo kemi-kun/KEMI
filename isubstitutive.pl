@@ -25,15 +25,15 @@ parent_hydride_sn(Formula, Name) :-
 
 mononuclear_parent_hydride_sn(Formula, Name) :-
     nonvar(Formula) ->
-        mononuclear_parent_hydride_formula_name(Formula, Name);
+        count_atoms(Formula, Atoms),
+        mononuclear_parent_hydride_atoms_name(Atoms, Name);
     nonvar(Name) ->
         mononuclear_parent_hydride_name_atoms(Name, Atoms),
         mononuclear_parent_hydride_atoms_formula(Atoms, Formula);
     fail.
 
 
-mononuclear_parent_hydride_formula_name(Formula, Name) :-
-    count_atoms(Formula, Atoms),
+mononuclear_parent_hydride_atoms_name(Atoms, Name) :-
     selectchk(hydrogen-NumHydrogen, Atoms, [Element-1]),
     get_standard_bonding_number(Element, SBN),
     parent_name_of(Element, ParentName),
