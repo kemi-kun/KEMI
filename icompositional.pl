@@ -79,11 +79,13 @@ get_ion_part_(NetCharge, IonSign, ChargeStr) :-
 %   @arg Name –  the stoichiometric name of the homonuclear molecule
 %
 homonuclear_cn(Formula, Name) :-
-    nonvar(Name) ->
-        homonuclear_name_atom(Name, Atom),
-        homonuclear_formula_atom(Formula, Atom);
-    homonuclear_formula_atom(Formula, Atom),
-    homonuclear_name_atom(Name, Atom),
+    (
+        nonvar(Name) ->
+            homonuclear_name_atom(Name, Atom),
+            homonuclear_formula_atom(Formula, Atom);
+        homonuclear_formula_atom(Formula, Atom),
+        homonuclear_name_atom(Name, Atom)
+    ),
     % chcek formula
     homonuclear(Formula),
     not(ion(Formula)).
