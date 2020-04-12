@@ -22,7 +22,9 @@ parent_hydride_sn(Formula, Name) :-
         heteronuclear_parent_hydride_sn(Formula, Name)
     ).
 
-
+%
+%
+%
 mononuclear_parent_hydride_sn(Formula, Name) :-
     nonvar(Formula) ->
         mononuclear_parent_hydride_formula_atoms(Formula, Atoms),
@@ -33,6 +35,9 @@ mononuclear_parent_hydride_sn(Formula, Name) :-
     fail.
 
 
+%
+%
+%
 mononuclear_parent_hydride_formula_atoms(Formula, Atoms) :-
     nonvar(Formula) ->
         count_atoms(Formula, Atoms);
@@ -47,6 +52,9 @@ mononuclear_parent_hydride_atoms_formula_(Atoms, Formula) :-
     join("", Terms, Formula).
 
 
+%
+%
+%
 mononuclear_parent_hydride_name_atoms(Name, Atoms) :-
     nonvar(Atoms) ->
         mononuclear_parent_hydride_atoms_name_(Atoms, Name);
