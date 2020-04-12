@@ -15,6 +15,11 @@ def print_element_names(data: dict):
         print(f'element_name_fact({val[0].lower()}, "{val[0].lower()}").')
 
 
+def print_element_constants(data: dict):
+    for symbol, val in data.items():
+        print(f'{val[0].lower()}, ', end='')
+
+
 def print_element_symbols(data: dict):
     for symbol, val in data.items():
         print(f'element_symbol_fact({val[0].lower()}, "{symbol}").')
