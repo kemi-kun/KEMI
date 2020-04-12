@@ -102,10 +102,11 @@ mononuclear_parent_hydride_name_atoms_(Name, Atoms) :-
 
 
 mononuclear_parent_hydride(Formula) :-
-    count_atoms(Formula, [hydrogen-NumHydrogen, Element-NumElement]),
+    count_atoms(Formula, Atoms),
+    selectchk(hydrogen-NumHydrogen, Atoms, [Element-NumElement]),
     element_fact(Element, _, _, _, _),
     between(1, infinite, NumHydrogen),
-    between(1, infinite, NumElement),
+    NumElement is 1,
     Element \= boron,
     Element \= carbon,
     group(Element, X),
