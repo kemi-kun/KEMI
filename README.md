@@ -34,7 +34,7 @@ The knowledge base of chemical nomenclature recommended by IUPAC.
 
 1. Clone this repository
 ```
-git clone https://github.com/kemikaru-kun/KEMI.git
+git clone https://github.com/kemi-kun/KEMI.git
 ```
 
 2. Use `main.pl` to query the predicates
